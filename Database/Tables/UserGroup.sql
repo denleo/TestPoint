@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[UserGroup]
 (
-	[UserGroupId] INT NOT NULL, 
+	[UserGroupId] INT NOT NULL IDENTITY(1,1), 
     [AdministratorId] INT NOT NULL, 
     [Name] NVARCHAR(64) NOT NULL
 

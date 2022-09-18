@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[UserUserGroupBridge]
 (
-	[UserUserGroupBridgeId] INT NOT NULL, 
+	[UserUserGroupBridgeId] INT NOT NULL IDENTITY(1,1), 
     [UserId] INT NOT NULL, 
     [UserGroupId] INT NOT NULL
 

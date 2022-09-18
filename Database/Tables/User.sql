@@ -1,9 +1,10 @@
 ﻿CREATE TABLE [dbo].[User]
 (
-	[UserId] INT NOT NULL, 
-    [LoginId] INT NOT NULL, 
-    [FIO] NVARCHAR(64) NOT NULL, 
-    [Email] NVARCHAR(254) NOT NULL, 
+	[UserId] INT NOT NULL IDENTITY(1,1), 
+    [LoginId] INT NOT NULL,  
+    [Email] NVARCHAR(254) NOT NULL,
+    [FirstName] NVARCHAR(64) NOT NULL,
+    [LastName] NVARCHAR(64) NOT NULL,
     [Avatar] VARBINARY(MAX) NULL
 
     CONSTRAINT PK_User_UserId PRIMARY KEY (UserId),
