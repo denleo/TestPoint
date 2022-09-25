@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "testpoint",
   "version": "0.0.1",
   "author": "Rojkov Maxim",
   "license": "MIT",
@@ -8,6 +8,10 @@
     "build": "webpack --config webpack.prod.config.ts"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.10.6",
+    "@mui/material": "^5.10.6",
     "eslint-plugin-prettier": "^4.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -37,6 +41,7 @@
     "html-webpack-plugin": "^5.5.0",
     "prettier": "^2.7.1",
     "ts-node": "^10.9.1",
+    "tsconfig-paths-webpack-plugin": "^4.0.0",
     "typescript": "^4.8.3",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",

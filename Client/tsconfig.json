@@ -1,9 +1,14 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["/*"],
-      "@components/*": ["components/*"],
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@containers/*": ["src/containers/*"],
+      "@layout/*": ["src/layout/*"],
+      "@constants/*": ["src/constants/*"],
+      "@common/*": ["src/common/*"],
+      "@api/*": ["src/api/*"],
     },
     "target": "es5",
     "outDir": "./build",

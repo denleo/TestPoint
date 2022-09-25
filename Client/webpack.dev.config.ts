@@ -5,6 +5,7 @@ import {
 } from "webpack";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
 import HtmlWebpackPlugin from "html-webpack-plugin";
+import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 
 interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
@@ -42,6 +43,7 @@ const config: Configuration = {
       template: "public/index.html",
     }),
     new HotModuleReplacementPlugin(),
+    // new TsconfigPathsPlugin(),
   ],
   devtool: "inline-source-map",
   devServer: {

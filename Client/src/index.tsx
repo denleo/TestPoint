@@ -1,7 +1,17 @@
 import React from "react";
+
 import ReactDOM from "react-dom";
 
-const App = () => <h1>TestPoint</h1>;
+import Max from "@components/Max";
+
+const App = () => {
+  return (
+    <>
+      <Max />
+      <h1>TestPoint</h1>
+    </>
+  );
+};
 
 ReactDOM.render(
   <React.StrictMode>
