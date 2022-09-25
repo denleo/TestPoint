@@ -2,7 +2,7 @@
 
 namespace TestPoint.WebAPI.Models;
 
-public class LoginDto
+public class UserLoginDto
 {
     [Required(ErrorMessage = "{0} field is required")]
     [MinLength(5, ErrorMessage = "{0} field must be at least {1} characters long")]

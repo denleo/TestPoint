@@ -3,7 +3,7 @@ using System.Text;
 
 namespace TestPoint.Application.Common.Encryption;
 
-internal static class PasswordEncryptionHelper
+internal static class PasswordHelper
 {
     public static string ComputeHash(string password)
     {
@@ -24,5 +24,19 @@ internal static class PasswordEncryptionHelper
         using var hmac = new HMACSHA256(salt);
         var inputHash = hmac.ComputeHash(Encoding.Unicode.GetBytes(password));
         return inputHash.SequenceEqual(databaseHash);
+    }
+
+    public static string CreateRandomPassword(int length = 10)
+    {
+        const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&?_";
+        var random = new Random();
+
+        var chars = new char[length];
+        for (var i = 0; i < length; i++)
+        {
+            chars[i] = validChars[random.Next(0, validChars.Length)];
+        }
+
+        return new string(chars);
     }
 }

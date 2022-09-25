@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TestPoint.Application.Common.Encryption;
-using TestPoint.Application.Common.Enums;
 using TestPoint.Application.Interfaces;
 using TestPoint.Domain;
 
@@ -36,7 +35,7 @@ internal class CheckUserLoginHandler : IRequestHandler<CheckUserLoginQuery, Chec
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        if (user is null || !PasswordEncryptionHelper.VerifyPassword(request.Password, user.Login.PasswordHash))
+        if (user is null || !PasswordHelper.VerifyPassword(request.Password, user.Login.PasswordHash))
         {
             return null;
         }
@@ -45,7 +44,7 @@ internal class CheckUserLoginHandler : IRequestHandler<CheckUserLoginQuery, Chec
         {
             Username = user.Login.Username,
             Email = user.Email,
-            Role = AccessRole.User
+            Role = LoginType.User
         };
     }
 }

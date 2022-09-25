@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TestPoint.Application.Users.Commands.CreateUser;
 using TestPoint.WebAPI.Models;
 
 namespace TestPoint.WebAPI.Controllers;
 
+[AllowAnonymous]
 public class UserController : BaseController
 {
     [HttpPost("users")]

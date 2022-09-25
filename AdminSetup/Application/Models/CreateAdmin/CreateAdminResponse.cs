@@ -1,4 +1,4 @@
-﻿namespace TestPoint.Application.Admins.Commands.CreateAdmin;
+﻿namespace Core.Models.CreateAdmin;
 
 public class CreateAdminResponse
 {

@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TestPoint.Application.Common.Encryption;
-using TestPoint.Application.Common.Enums;
 using TestPoint.Application.Interfaces;
+using TestPoint.Domain;
 
 namespace TestPoint.Application.Admins.Queries.CheckAdminLogin;
 
@@ -24,7 +24,7 @@ public class CheckAdminLoginHandler : IRequestHandler<CheckAdminLoginQuery, Chec
             .FirstOrDefaultAsync(cancellationToken);
 
 
-        if (admin is null || !PasswordEncryptionHelper.VerifyPassword(request.Password, admin.Login.PasswordHash))
+        if (admin is null || !PasswordHelper.VerifyPassword(request.Password, admin.Login.PasswordHash))
         {
             return null;
         }
@@ -32,7 +32,7 @@ public class CheckAdminLoginHandler : IRequestHandler<CheckAdminLoginQuery, Chec
         return new CheckAdminLoginResponse
         {
             Username = admin.Login.Username,
-            Role = AccessRole.Administrator
+            Role = LoginType.Administrator
         };
     }
 }

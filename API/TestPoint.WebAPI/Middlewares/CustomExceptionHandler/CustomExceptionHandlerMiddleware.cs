@@ -40,6 +40,10 @@ public class CustomExceptionHandlerMiddleware
             case EntityExistsException existsException:
                 code = HttpStatusCode.Conflict;
                 break;
+
+            case EntityNotFoundException notFoundException:
+                code = HttpStatusCode.NotFound;
+                break;
         }
 
         context.Response.ContentType = "application/json";
@@ -50,6 +54,7 @@ public class CustomExceptionHandlerMiddleware
             result = JsonSerializer.Serialize(new { Status = (int)code, Error = exception.Message }, JsonOptions);
         }
 
+        //TODO logging
         return context.Response.WriteAsync(result);
     }
 }

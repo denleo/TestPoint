@@ -19,4 +19,9 @@ public class CreateUserDto : CreateAdminDto
     [MinLength(1, ErrorMessage = "{0} field must be at least {1} characters long")]
     [MaxLength(64, ErrorMessage = "{0} field can be maximum {1} characters long")]
     public string LastName { get; set; }
+
+    [Required(ErrorMessage = "{0} field is required")]
+    [MinLength(10, ErrorMessage = "{0} field must be at least {1} characters long")]
+    [MaxLength(64, ErrorMessage = "{0} field can be maximum {1} characters long")]
+    public string Password { get; set; }
 }

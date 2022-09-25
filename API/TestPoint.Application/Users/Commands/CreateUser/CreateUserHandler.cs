@@ -17,23 +17,23 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserRe
 
     public async Task<CreateUserResponse> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var usersWithSameLogin = await _userDbContext.Users
+        var userWithSameLogin = await _userDbContext.Users
             .Include(x => x.Login)
             .Where(u => u.Login.Username == request.Username)
             .AsNoTracking()
-            .ToListAsync(cancellationToken);
+            .FirstOrDefaultAsync(cancellationToken);
 
-        if (usersWithSameLogin.Count != 0)
+        if (userWithSameLogin is not null)
         {
             throw new EntityExistsException("Username is already taken");
         }
 
-        var usersWithSameEmail = await _userDbContext.Users
+        var userWithSameEmail = await _userDbContext.Users
             .Where(u => u.Email == request.Email)
             .AsNoTracking()
-            .ToListAsync(cancellationToken);
+            .FirstOrDefaultAsync(cancellationToken);
 
-        if (usersWithSameEmail.Count != 0)
+        if (userWithSameEmail is not null)
         {
             throw new EntityExistsException("User with such email already exists");
         }
@@ -42,8 +42,9 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserRe
         {
             Login = new SystemLogin
             {
+                LoginType = LoginType.User,
                 Username = request.Username,
-                PasswordHash = PasswordEncryptionHelper.ComputeHash(request.Password),
+                PasswordHash = PasswordHelper.ComputeHash(request.Password),
                 RegistryDate = DateTime.Now
             },
             Email = request.Email,

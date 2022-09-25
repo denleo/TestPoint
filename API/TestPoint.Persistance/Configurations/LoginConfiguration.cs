@@ -12,6 +12,7 @@ internal class LoginConfiguration : IEntityTypeConfiguration<SystemLogin>
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).HasColumnName("LoginId");
+        builder.Property(x => x.LoginType).HasColumnName("LoginType");
         builder.Property(x => x.Username).HasColumnName("Username");
         builder.Property(x => x.PasswordHash).HasColumnName("PasswordHash");
         builder.Property(x => x.RegistryDate).HasColumnName("RegistryDate");

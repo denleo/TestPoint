@@ -1,26 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TestPoint.Application.Admins.Queries.CheckAdminLogin;
+using TestPoint.Application.Interfaces;
 using TestPoint.Application.Users.Queries.CheckUserLogin;
 using TestPoint.WebAPI.Models;
 
 namespace TestPoint.WebAPI.Controllers.Auth;
 
+[AllowAnonymous]
 public class AuthController : BaseController
 {
-    private readonly IConfiguration _configuration;
-    private const int UserTokenExpiration = 2;
-    private const int AdminTokenExpiration = 3;
+    private readonly IJwtService _jwtService;
 
-    public AuthController(IConfiguration configuration)
+    public AuthController(IJwtService jwtService)
     {
-        _configuration = configuration;
+        _jwtService = jwtService;
     }
 
     [HttpPost("auth/user/token")]
-    public async Task<ActionResult<string>> UserLogin([FromBody] LoginDto login)
+    public async Task<ActionResult<string>> UserLogin([FromBody] UserLoginDto login)
     {
         var checkUserLoginQuery = new CheckUserLoginQuery
         {
@@ -35,15 +34,15 @@ public class AuthController : BaseController
             return Unauthorized(new { Status = StatusCodes.Status401Unauthorized, Error = "Incorrect username or password" });
         }
 
-        return CreateAccessToken(CreateUserClaims(loginResponse), UserTokenExpiration);
+        return _jwtService.GetToken(CreateUserClaims(loginResponse));
     }
 
     [HttpPost("auth/admin/token")]
-    public async Task<ActionResult<string>> AdminLogin([FromBody] LoginDto login)
+    public async Task<ActionResult<string>> AdminLogin([FromBody] AdminLoginDto login)
     {
         var checkAdminLoginQuery = new CheckAdminLoginQuery
         {
-            Username = login.Login,
+            Username = login.Username,
             Password = login.Password
         };
 
@@ -54,7 +53,7 @@ public class AuthController : BaseController
             return Unauthorized(new { Status = StatusCodes.Status401Unauthorized, Error = "Incorrect username or password" });
         }
 
-        return CreateAccessToken(CreateAdminClaims(loginResponse), AdminTokenExpiration);
+        return _jwtService.GetToken(CreateAdminClaims(loginResponse));
     }
 
     private static IEnumerable<Claim> CreateUserClaims(CheckUserLoginResponse user)
@@ -74,20 +73,5 @@ public class AuthController : BaseController
             new(ClaimTypes.Name, admin.Username),
             new(ClaimTypes.Role, admin.Role.ToString())
         };
-    }
-
-    private string CreateAccessToken(IEnumerable<Claim> claims, int duration)
-    {
-        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-            _configuration.GetSection("AppSettings:TokenSecurityKey").Value));
-
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-        var token = new JwtSecurityToken(
-            claims: claims,
-            expires: DateTime.Now.AddHours(duration),
-            signingCredentials: creds);
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

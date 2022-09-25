@@ -1,4 +1,4 @@
-﻿using TestPoint.Application.Common.Enums;
+﻿using TestPoint.Domain;
 
 namespace TestPoint.Application.Users.Queries.CheckUserLogin;
 
@@ -6,5 +6,5 @@ public class CheckUserLoginResponse
 {
     public string Username { get; set; }
     public string Email { get; set; }
-    public AccessRole Role { get; set; }
+    public LoginType Role { get; set; }
 }

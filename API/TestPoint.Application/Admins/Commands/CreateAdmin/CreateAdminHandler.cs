@@ -18,23 +18,26 @@ public class CreateAdminHandler : IRequestHandler<CreateAdminCommand, CreateAdmi
 
     public async Task<CreateAdminResponse> Handle(CreateAdminCommand request, CancellationToken cancellationToken)
     {
-        var adminsWithSameLogin = await _adminDbContext.Administrators
+        var adminWithSameLogin = await _adminDbContext.Administrators
             .Include(x => x.Login)
             .Where(a => a.Login.Username == request.Username)
             .AsNoTracking()
-            .ToListAsync(cancellationToken);
+            .FirstOrDefaultAsync(cancellationToken);
 
-        if (adminsWithSameLogin.Count != 0)
+        if (adminWithSameLogin is not null)
         {
             throw new EntityExistsException("Username is already taken");
         }
+
+        var tempPassword = PasswordHelper.CreateRandomPassword();
 
         var newAdmin = new Administrator
         {
             Login = new SystemLogin
             {
+                LoginType = LoginType.Administrator,
                 Username = request.Username,
-                PasswordHash = PasswordEncryptionHelper.ComputeHash(request.Password),
+                PasswordHash = PasswordHelper.ComputeHash(tempPassword),
                 RegistryDate = DateTime.Now
             },
             IsPasswordReset = true
@@ -45,7 +48,8 @@ public class CreateAdminHandler : IRequestHandler<CreateAdminCommand, CreateAdmi
 
         return new CreateAdminResponse
         {
-            AdminId = newAdmin.Id
+            AdminId = newAdmin.Id,
+            TempPassword = tempPassword
         };
     }
 }
