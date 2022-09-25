@@ -58,6 +58,7 @@
     <Folder Include="Properties" />
     <Folder Include="Tables" />
     <Folder Include="Publish" />
+    <Folder Include="PostDeploy" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Login.sql" />
@@ -65,8 +66,12 @@
     <Build Include="Tables\User.sql" />
     <Build Include="Tables\UserGroup.sql" />
     <Build Include="Tables\UserUserGroupBridge.sql" />
+    <Build Include="Tables\LoginType.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish\Database.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="PostDeploy\Script.PostDeployment1.sql" />
   </ItemGroup>
 </Project>

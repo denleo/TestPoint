@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Administrator]
 (
-	[AdministratorId] INT NOT NULL,
+	[AdministratorId] INT NOT NULL IDENTITY(1,1),
 	[LoginId] INT NOT NULL,
 	[IsPasswordReset] BIT NOT NULL
 
