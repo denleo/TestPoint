@@ -1,4 +1,4 @@
-﻿namespace Core.Models.ResetAdminPassword;
+﻿namespace Core.Models.Api.ResetAdminPassword;
 
 public class ResetAdminPasswordRequest
 {

@@ -1,8 +1,8 @@
 ﻿using System.Net;
 
-namespace Core.Models;
+namespace Core.Models.Api;
 
-public class ResponseBag<T> where T: class
+public class ResponseBag<T> where T : class
 {
     public HttpStatusCode Code { get; set; }
 
