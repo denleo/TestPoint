@@ -1,4 +1,4 @@
-﻿namespace Core.Models;
+﻿namespace Core.Models.Api;
 
 public enum RequestMethod : byte
 {

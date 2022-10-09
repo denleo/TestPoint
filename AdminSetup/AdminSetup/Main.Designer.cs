@@ -28,83 +28,78 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.UsernameTB = new System.Windows.Forms.TextBox();
-            this.CreateButton = new System.Windows.Forms.Button();
-            this.ResetButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            this.MainMenuStrip = new System.Windows.Forms.MenuStrip();
+            this.SetupMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AdminSetupMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.LoggingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MainPanel = new System.Windows.Forms.Panel();
+            this.MainMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // UsernameTB
+            // MainMenuStrip
             // 
-            this.UsernameTB.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.UsernameTB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.UsernameTB.Location = new System.Drawing.Point(35, 38);
-            this.UsernameTB.MaxLength = 16;
-            this.UsernameTB.Name = "UsernameTB";
-            this.UsernameTB.Size = new System.Drawing.Size(207, 27);
-            this.UsernameTB.TabIndex = 0;
-            this.UsernameTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MainMenuStrip.BackColor = System.Drawing.Color.Transparent;
+            this.MainMenuStrip.Font = new System.Drawing.Font("Arial Unicode MS", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.MainMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.MainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.SetupMenuItem,
+            this.LoggingMenuItem});
+            this.MainMenuStrip.Location = new System.Drawing.Point(0, 0);
+            this.MainMenuStrip.Name = "MainMenuStrip";
+            this.MainMenuStrip.Size = new System.Drawing.Size(732, 31);
+            this.MainMenuStrip.TabIndex = 0;
+            this.MainMenuStrip.Text = "MainMenuStrip";
             // 
-            // CreateButton
+            // SetupMenuItem
             // 
-            this.CreateButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.CreateButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CreateButton.Location = new System.Drawing.Point(35, 73);
-            this.CreateButton.Name = "CreateButton";
-            this.CreateButton.Size = new System.Drawing.Size(94, 29);
-            this.CreateButton.TabIndex = 1;
-            this.CreateButton.Text = "Create";
-            this.CreateButton.UseVisualStyleBackColor = false;
-            this.CreateButton.Click += new System.EventHandler(this.CreateButton_Click);
+            this.SetupMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AdminSetupMenuItem});
+            this.SetupMenuItem.Name = "SetupMenuItem";
+            this.SetupMenuItem.Size = new System.Drawing.Size(67, 27);
+            this.SetupMenuItem.Text = "Setup";
             // 
-            // ResetButton
+            // AdminSetupMenuItem
             // 
-            this.ResetButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ResetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ResetButton.Location = new System.Drawing.Point(148, 73);
-            this.ResetButton.Name = "ResetButton";
-            this.ResetButton.Size = new System.Drawing.Size(94, 29);
-            this.ResetButton.TabIndex = 2;
-            this.ResetButton.Text = "Reset";
-            this.ResetButton.UseVisualStyleBackColor = false;
-            this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click);
+            this.AdminSetupMenuItem.Name = "AdminSetupMenuItem";
+            this.AdminSetupMenuItem.Size = new System.Drawing.Size(186, 28);
+            this.AdminSetupMenuItem.Text = "Admin setup";
+            this.AdminSetupMenuItem.Click += new System.EventHandler(this.AdminSetupMenuItem_Click);
             // 
-            // label1
+            // LoggingMenuItem
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label1.Location = new System.Drawing.Point(31, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(126, 20);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Enter username:";
+            this.LoggingMenuItem.Name = "LoggingMenuItem";
+            this.LoggingMenuItem.Size = new System.Drawing.Size(81, 27);
+            this.LoggingMenuItem.Text = "Logging";
+            this.LoggingMenuItem.Click += new System.EventHandler(this.LoggingMenuItem_Click);
             // 
-            // errorProvider1
+            // MainPanel
             // 
-            this.errorProvider1.BlinkRate = 100;
-            this.errorProvider1.ContainerControl = this;
+            this.MainPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainPanel.Location = new System.Drawing.Point(0, 31);
+            this.MainPanel.Margin = new System.Windows.Forms.Padding(10);
+            this.MainPanel.Name = "MainPanel";
+            this.MainPanel.Padding = new System.Windows.Forms.Padding(10);
+            this.MainPanel.Size = new System.Drawing.Size(732, 422);
+            this.MainPanel.TabIndex = 1;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.ClientSize = new System.Drawing.Size(275, 121);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.ResetButton);
-            this.Controls.Add(this.CreateButton);
-            this.Controls.Add(this.UsernameTB);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(732, 453);
+            this.Controls.Add(this.MainPanel);
+            this.Controls.Add(this.MainMenuStrip);
             this.ForeColor = System.Drawing.Color.Black;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Main";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Admin Setup";
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            this.Text = "Admin Setup Tool";
+            this.MainMenuStrip.ResumeLayout(false);
+            this.MainMenuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -112,10 +107,10 @@
 
         #endregion
 
-        private TextBox UsernameTB;
-        private Button CreateButton;
-        private Button ResetButton;
-        private Label label1;
-        private ErrorProvider errorProvider1;
+        private MenuStrip MainMenuStrip;
+        private ToolStripMenuItem SetupMenuItem;
+        private ToolStripMenuItem AdminSetupMenuItem;
+        private ToolStripMenuItem LoggingMenuItem;
+        private Panel MainPanel;
     }
 }

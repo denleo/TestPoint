@@ -1,4 +1,4 @@
-﻿namespace Core.Models.CreateAdmin;
+﻿namespace Core.Models.Api.CreateAdmin;
 
 public class CreateAdminResponse
 {
