@@ -1,21 +1,33 @@
-import React from "react";
+import React, { FC, lazy, Suspense } from "react";
 
-import ReactDOM from "react-dom";
+import { ThemeProvider } from "@mui/material";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Max from "@components/Max";
+import { theme } from "@common/theme/createTheme";
 
-const App = () => {
+const HomePage = lazy(() => import("./containers/Home"));
+
+const MainApp: FC = () => {
   return (
-    <>
-      <Max />
-      <h1>TestPoint</h1>
-    </>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Suspense>
+          <Routes>
+            <Route index element={<HomePage />} />
+            <Route path=":login" element={<HomePage />} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+root.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById("root")
+    <MainApp />
+  </React.StrictMode>
 );
