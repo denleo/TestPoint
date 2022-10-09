@@ -1,5 +1,9 @@
 import { createTheme } from "@mui/material";
 
+export const WHITE = "#FFFFFF";
+export const BLACK = "#000000";
+export const MAIN_BACKGROUND = "#F3F4F6";
+
 export const { palette } = createTheme({
   palette: {
     primary: {
@@ -36,6 +40,10 @@ export const { palette } = createTheme({
       primary: "#111827",
       secondary: "#6B7280",
       disabled: "#d8dee9",
+    },
+    background: {
+      default: MAIN_BACKGROUND,
+      paper: "#e5e9f0",
     },
   },
 });

@@ -8,12 +8,9 @@ import {
   ChevronDownIcon,
 } from "../icons/index";
 
-import { palette } from "./colors";
+import { palette, WHITE, BLACK, MAIN_BACKGROUND } from "./colors";
 
 export const HTML_FONT_SIZE = 14;
-export const WHITE = "#FFFFFF";
-export const BLACK = "#000000";
-export const MAIN_BACKGROUND = "#F3F4F6";
 
 const { typography: typographyRaw } = createTheme({
   typography: {
@@ -138,7 +135,7 @@ const { breakpoints, spacing, transitions } = createTheme({
   },
 });
 
-const theme = createTheme({
+export const theme = createTheme({
   typography,
   breakpoints,
   spacing,
@@ -607,7 +604,7 @@ const theme = createTheme({
       root: {
         lineHeight: typographyRaw.pxToRem(24),
         letterSpacing: "0.0094em",
-        borderColor: fade(WHITE, 1),
+        borderColor: WHITE,
         "&:focus": {
           outline: "none",
         },
