@@ -24,21 +24,31 @@ module.exports = {
     "react/jsx-filename-extension": ["error", { extensions: [".tsx"] }],
     "react/require-default-props": "off",
     "react/jsx-props-no-spreading": "off",
-    "import/prefer-default-export": "off",
     "react/destructuring-assignment": 0,
     "react/function-component-definition": [
       2,
       { namedComponents: "arrow-function" },
     ],
-    "import/no-unresolved": "error",
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"],
     "prettier/prettier": [
       "error",
       {
         endOfLine: "auto",
+        overrides: [
+          {
+            files: ["*.tsx", "*.ts"],
+            options: {
+              semi: false,
+            },
+          },
+        ],
       },
     ],
+
+    // Organize import section.
+    "import/no-unresolved": "error",
+    "import/prefer-default-export": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -77,6 +87,7 @@ module.exports = {
         alphabetize: { order: "asc", caseInsensitive: true },
       },
     ],
+    // "import/newline-after-import": ["error", { count: 2 }], conflict with prettier
   },
   settings: {
     "import/parsers": {

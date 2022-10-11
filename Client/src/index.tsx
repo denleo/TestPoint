@@ -6,6 +6,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { theme } from "@common/theme/createTheme";
 
+import ErrorBoundary from "./components/ErrorBoundary";
+
 const HomePage = lazy(() => import("./containers/Home"));
 
 const MainApp: FC = () => {
@@ -28,6 +30,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <MainApp />
+    <ErrorBoundary>
+      <MainApp />
+    </ErrorBoundary>
   </React.StrictMode>
 );

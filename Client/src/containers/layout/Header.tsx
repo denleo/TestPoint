@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import React, { FC, useCallback } from "react";
+import React, { FC } from "react";
 
 import { AccountCircle } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -17,21 +17,17 @@ import {
 import MuiAppBar, { AppBarProps } from "@mui/material/AppBar";
 
 import { DRAWER_WIDTH, HEADER_HEIGHT } from "./common";
-
-interface Props {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}
+import { useSidebarStore } from "./useLayoutStore";
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})<AppBarProps & { open?: boolean }>(({ theme, open }) => ({
+  shouldForwardProp: (prop) => prop !== "isMinimized",
+})<AppBarProps & { isMinimized?: boolean }>(({ theme, isMinimized }) => ({
   height: HEADER_HEIGHT,
   transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  ...(open && {
+  ...(isMinimized && {
     width: `calc(100% - ${DRAWER_WIDTH}px)`,
     marginLeft: `${DRAWER_WIDTH}px`,
     transition: theme.transitions.create(["margin", "width"], {
@@ -44,15 +40,14 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-export const Header: FC<Props> = ({ open, setOpen }) => {
+export const Header: FC = () => {
   const theme = useTheme();
-  const handleOpenSideBar = useCallback(() => {
-    setOpen(!open);
-  }, [open, setOpen]);
+  const isMinimized = useSidebarStore((store) => store.isMinimized);
+  const toggleIsMinimized = useSidebarStore((store) => store.toggleIsMinimized);
 
   return (
     <AppBar
-      open={open}
+      isMinimized={isMinimized}
       position="static"
       sx={{
         backgroundColor: theme.palette.background.default,
@@ -66,7 +61,7 @@ export const Header: FC<Props> = ({ open, setOpen }) => {
           color="secondary"
           aria-label="menu"
           sx={{ mr: 2 }}
-          onClick={handleOpenSideBar}
+          onClick={() => toggleIsMinimized()}
         >
           <MenuIcon />
         </IconButton>

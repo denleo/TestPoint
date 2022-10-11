@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from "react";
+import React, { FC } from "react";
 
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -19,6 +19,7 @@ import { useBreakpoint } from "@/api/hooks/useBreakPoint";
 import { SVGFullLogo } from "@/common/icons";
 
 import { DRAWER_WIDTH, HEADER_HEIGHT } from "./common";
+import { useSidebarStore } from "./useLayoutStore";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -45,20 +46,13 @@ const Drawer = styled(MUIDrawer)(({ theme }) => ({
   },
 }));
 
-interface Props {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}
-
-export const SideBar: FC<Props> = ({ open, setOpen }) => {
+export const SideBar: FC = () => {
   const mdUp = useBreakpoint("md");
-
-  const handleOpenSideBar = useCallback(() => {
-    setOpen(!open);
-  }, [open, setOpen]);
+  const isMinimized = useSidebarStore((store) => store.isMinimized);
+  const toggleIsMinimized = useSidebarStore((store) => store.toggleIsMinimized);
 
   return (
-    <Drawer variant="persistent" anchor="left" open={open}>
+    <Drawer variant="persistent" anchor="left" open={isMinimized}>
       <DrawerHeader>
         <SVGFullLogo />
         {!mdUp && (
@@ -68,7 +62,7 @@ export const SideBar: FC<Props> = ({ open, setOpen }) => {
             color="secondary"
             aria-label="menu"
             sx={{ mr: 2 }}
-            onClick={handleOpenSideBar}
+            onClick={() => toggleIsMinimized()}
           >
             <MenuIcon />
           </IconButton>
