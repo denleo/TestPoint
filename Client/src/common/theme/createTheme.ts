@@ -6,7 +6,7 @@ import {
   IconSuccess,
   IconWarning,
   ChevronDownIcon,
-} from "../icons/index";
+} from "@/common/icons";
 
 import { palette, WHITE, BLACK, MAIN_BACKGROUND } from "./colors";
 

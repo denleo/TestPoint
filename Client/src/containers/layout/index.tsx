@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import React, { FC, ReactNode, useState } from "react";
+import React, { FC, ReactNode } from "react";
 
 import { Box, ContainerProps, Divider, styled } from "@mui/material";
 
@@ -8,6 +8,7 @@ import { theme } from "@/common/theme/createTheme";
 import { DRAWER_WIDTH, HEADER_HEIGHT } from "./common";
 import { Header } from "./Header";
 import { SideBar } from "./SideBar";
+import { useSidebarStore } from "./useLayoutStore";
 
 interface Props extends ContainerProps {
   children?: ReactNode;
@@ -15,10 +16,10 @@ interface Props extends ContainerProps {
 }
 
 const MainContainer = styled("main", {
-  shouldForwardProp: (prop) => prop !== "open",
+  shouldForwardProp: (prop) => prop !== "isMinimized",
 })<{
-  open?: boolean;
-}>(({ theme, open }) => ({
+  isMinimized?: boolean;
+}>(({ theme, isMinimized }) => ({
   flexGrow: 1,
   height: `calc(100vh - ${HEADER_HEIGHT + 1}px)`, // 1px Divider XD
   padding: theme.spacing(3),
@@ -26,7 +27,7 @@ const MainContainer = styled("main", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  ...(open && {
+  ...(isMinimized && {
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -39,7 +40,7 @@ const MainContainer = styled("main", {
 }));
 
 export const LayoutContainer: FC<Props> = ({ children, footer, ...props }) => {
-  const [open, setOpen] = useState(false);
+  const isMinimized = useSidebarStore((store) => store.isMinimized);
   return (
     <>
       <Box
@@ -48,11 +49,11 @@ export const LayoutContainer: FC<Props> = ({ children, footer, ...props }) => {
           minHeight: "100vh",
         }}
       >
-        <SideBar open={open} setOpen={setOpen} />
-        <Header open={open} setOpen={setOpen} />
+        <SideBar />
+        <Header />
         <Divider />
         {children && (
-          <MainContainer open={open} {...props}>
+          <MainContainer isMinimized={isMinimized} {...props}>
             {children}
           </MainContainer>
         )}
