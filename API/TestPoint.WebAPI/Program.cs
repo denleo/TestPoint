@@ -5,6 +5,7 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using TestPoint.Application;
 using TestPoint.DAL;
+using TestPoint.Log4NetLoggly;
 using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDal();
 builder.Services.AddApplication();
+builder.Services.AddLoggly();
 
 builder.Services.AddCors(setup =>
 {

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using TestPoint.Application.Common.Authentication;
-using TestPoint.Application.Interfaces;
+using TestPoint.Application.Interfaces.Services;
 
 namespace TestPoint.Application;
 

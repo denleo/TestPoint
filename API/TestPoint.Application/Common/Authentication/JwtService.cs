@@ -2,7 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using TestPoint.Application.Interfaces;
+using TestPoint.Application.Interfaces.Services;
 
 namespace TestPoint.Application.Common.Authentication;
 

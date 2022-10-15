@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 using TestPoint.Application.Common.Exceptions;
+using TestPoint.Application.Interfaces.Services;
 
 namespace TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 
@@ -44,6 +45,11 @@ public class CustomExceptionHandlerMiddleware
             case EntityNotFoundException notFoundException:
                 code = HttpStatusCode.NotFound;
                 break;
+
+            default:
+                var log = context.RequestServices.GetService<ILogService>();
+                log?.Log<CustomExceptionHandlerMiddleware>(LogLevel.Error, exception.Message, exception);
+                break;
         }
 
         context.Response.ContentType = "application/json";
@@ -54,7 +60,6 @@ public class CustomExceptionHandlerMiddleware
             result = JsonSerializer.Serialize(new { Status = (int)code, Error = exception.Message }, JsonOptions);
         }
 
-        //TODO logging
         return context.Response.WriteAsync(result);
     }
 }

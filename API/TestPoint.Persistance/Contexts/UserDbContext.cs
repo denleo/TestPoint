@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using TestPoint.Application.Interfaces;
+using TestPoint.Application.Interfaces.Persistence;
 using TestPoint.DAL.Configurations;
 using TestPoint.Domain;
 

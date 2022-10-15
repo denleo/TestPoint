@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TestPoint.Domain;
 
-namespace TestPoint.Application.Interfaces;
+namespace TestPoint.Application.Interfaces.Persistence;
 
 public interface IAdminDbContext : IDisposable
 {

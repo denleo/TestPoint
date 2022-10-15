@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TestPoint.Application.Interfaces;
+using TestPoint.Application.Interfaces.Persistence;
 using TestPoint.DAL.Contexts;
 
 namespace TestPoint.DAL;

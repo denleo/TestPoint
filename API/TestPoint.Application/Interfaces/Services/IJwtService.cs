@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace TestPoint.Application.Interfaces;
+namespace TestPoint.Application.Interfaces.Services;
 
 public interface IJwtService
 {

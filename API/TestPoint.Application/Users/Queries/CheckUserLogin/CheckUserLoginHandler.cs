@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TestPoint.Application.Common.Encryption;
-using TestPoint.Application.Interfaces;
+using TestPoint.Application.Interfaces.Persistence;
 using TestPoint.Domain;
 
 namespace TestPoint.Application.Users.Queries.CheckUserLogin;

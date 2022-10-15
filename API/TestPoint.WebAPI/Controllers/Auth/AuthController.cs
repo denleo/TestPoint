@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TestPoint.Application.Admins.Queries.CheckAdminLogin;
-using TestPoint.Application.Interfaces;
+using TestPoint.Application.Interfaces.Services;
 using TestPoint.Application.Users.Queries.CheckUserLogin;
 using TestPoint.WebAPI.Models;
 

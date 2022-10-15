@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TestPoint.Application.Common.Encryption;
 using TestPoint.Application.Common.Exceptions;
-using TestPoint.Application.Interfaces;
+using TestPoint.Application.Interfaces.Persistence;
 using TestPoint.Domain;
 
 namespace TestPoint.Application.Users.Commands.CreateUser;
