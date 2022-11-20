@@ -16,7 +16,10 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.FirstName).HasColumnName("FirstName");
         builder.Property(x => x.LastName).HasColumnName("LastName");
         builder.Property(x => x.Email).HasColumnName("Email");
+        builder.Property(x => x.EmailConfirmed).HasColumnName("EmailConfirmed");
         builder.Property(x => x.LoginId).HasColumnName("LoginId");
+        builder.Property(x => x.UpdatedAt).HasColumnName("updated_at");
+
         builder.HasOne(x => x.Login).WithOne().HasForeignKey<User>(x => x.LoginId);
     }
 }

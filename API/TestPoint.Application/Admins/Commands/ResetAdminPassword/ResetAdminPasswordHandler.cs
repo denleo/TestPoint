@@ -29,7 +29,7 @@ public class ResetAdminPasswordHandler : IRequestHandler<ResetAdminPasswordComma
 
         var tempPassword = PasswordHelper.CreateRandomPassword();
         admin.Login.PasswordHash = PasswordHelper.ComputeHash(tempPassword);
-        admin.IsPasswordReset = true;
+        admin.Login.PasswordReseted = true;
 
         await _adminDbContext.SaveChangesAsync(cancellationToken);
 

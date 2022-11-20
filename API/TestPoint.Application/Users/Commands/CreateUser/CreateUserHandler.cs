@@ -45,9 +45,11 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserRe
                 LoginType = LoginType.User,
                 Username = request.Username,
                 PasswordHash = PasswordHelper.ComputeHash(request.Password),
+                PasswordReseted = false,
                 RegistryDate = DateTime.Now
             },
             Email = request.Email,
+            EmailConfirmed = false,
             FirstName = request.FirstName,
             LastName = request.LastName
         };

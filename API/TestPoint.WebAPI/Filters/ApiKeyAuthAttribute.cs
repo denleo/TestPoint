@@ -27,8 +27,9 @@ public class ApiKeyAuthAttribute : Attribute, IAuthorizationFilter
 
         var claims = new Claim[]
         {
-            new (ClaimTypes.AuthenticationMethod, "ApiKey"),
-            new (ClaimTypes.Role, "TrustedApplication")
+            new(ClaimTypes.Sid, "0"),
+            new(ClaimTypes.Name, "TrustedApplication"),
+            new(ClaimTypes.AuthenticationMethod, "ApiKey")
         };
         context.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(claims));
     }

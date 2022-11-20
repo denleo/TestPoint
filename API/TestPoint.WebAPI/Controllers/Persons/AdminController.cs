@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TestPoint.Application.Admins.Commands.CreateAdmin;
 using TestPoint.Application.Admins.Commands.ResetAdminPassword;
+using TestPoint.Application.Admins.Queries.GetCurrentAdmin;
 using TestPoint.WebAPI.Filters;
 using TestPoint.WebAPI.Models;
 
-namespace TestPoint.WebAPI.Controllers;
+namespace TestPoint.WebAPI.Controllers.Persons;
 
 public class AdminController : BaseController
 {
-    [HttpPost("setup/admins"), ApiKeyAuth]
+    [HttpPost("_setup/admins"), ApiKeyAuth]
     public async Task<ActionResult<CreateAdminResponse>> CreateAdmin([FromBody] CreateAdminDto newAdmin)
     {
         var createAdminCommand = new CreateAdminCommand
@@ -20,7 +22,7 @@ public class AdminController : BaseController
         return response;
     }
 
-    [HttpPatch("setup/admin/password"), ApiKeyAuth]
+    [HttpPatch("_setup/admin/password"), ApiKeyAuth]
     public async Task<ActionResult<ResetAdminPasswordResponse>> ResetAdminPassword([FromBody] CreateAdminDto admin)
     {
         var resetAdminPasswordCommand = new ResetAdminPasswordCommand
@@ -29,6 +31,18 @@ public class AdminController : BaseController
         };
 
         var response = await Mediator.Send(resetAdminPasswordCommand);
+        return response;
+    }
+
+    [HttpGet("session/admin"), Authorize(Roles = "Administrator")]
+    public async Task<ActionResult<GetCurrentAdminResponse>> GetCurrentAdmin()
+    {
+        var getCurrentAdminQuery = new GetCurrentAdminQuery
+        {
+            AdminId = LoginId!.Value
+        };
+
+        var response = await Mediator.Send(getCurrentAdminQuery);
         return response;
     }
 }

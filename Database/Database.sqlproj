@@ -59,6 +59,7 @@
     <Folder Include="Tables" />
     <Folder Include="Publish" />
     <Folder Include="PostDeploy" />
+    <Folder Include="Triggers" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Login.sql" />
@@ -67,6 +68,9 @@
     <Build Include="Tables\UserGroup.sql" />
     <Build Include="Tables\UserUserGroupBridge.sql" />
     <Build Include="Tables\LoginType.sql" />
+    <Build Include="Triggers\LoginOnUpdate.sql" />
+    <Build Include="Triggers\UserOnUpdate.sql" />
+    <Build Include="Triggers\AdministratorOnUpdate.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish\Database.publish.xml" />

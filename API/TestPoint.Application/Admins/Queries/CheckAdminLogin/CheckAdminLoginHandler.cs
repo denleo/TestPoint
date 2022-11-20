@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using TestPoint.Application.Common.Encryption;
 using TestPoint.Application.Interfaces.Persistence;
-using TestPoint.Domain;
 
 namespace TestPoint.Application.Admins.Queries.CheckAdminLogin;
 
@@ -31,8 +30,8 @@ public class CheckAdminLoginHandler : IRequestHandler<CheckAdminLoginQuery, Chec
 
         return new CheckAdminLoginResponse
         {
-            Username = admin.Login.Username,
-            Role = LoginType.Administrator
+            AdminId = admin.Id,
+            Username = admin.Login.Username
         };
     }
 }

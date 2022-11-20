@@ -18,7 +18,7 @@ public partial class Main : Form
     private void RunNewTab<TView>()
     where TView : class, IViewBase
     {
-        var presenter = Program.Container.Resolve<PresenterBase<TView>>();
+        var presenter = Program.Container!.Resolve<PresenterBase<TView>>();
 
         if (presenter.View is Form form)
         {

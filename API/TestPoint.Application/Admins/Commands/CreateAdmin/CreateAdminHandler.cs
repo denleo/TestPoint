@@ -38,9 +38,9 @@ public class CreateAdminHandler : IRequestHandler<CreateAdminCommand, CreateAdmi
                 LoginType = LoginType.Administrator,
                 Username = request.Username,
                 PasswordHash = PasswordHelper.ComputeHash(tempPassword),
+                PasswordReseted = true,
                 RegistryDate = DateTime.Now
-            },
-            IsPasswordReset = true
+            }
         };
 
         await _adminDbContext.Administrators.AddAsync(newAdmin, cancellationToken);

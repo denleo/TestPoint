@@ -38,11 +38,11 @@ public class CustomExceptionHandlerMiddleware
 
         switch (exception)
         {
-            case EntityExistsException existsException:
+            case EntityExistsException:
                 code = HttpStatusCode.Conflict;
                 break;
 
-            case EntityNotFoundException notFoundException:
+            case EntityNotFoundException:
                 code = HttpStatusCode.NotFound;
                 break;
 

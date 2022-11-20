@@ -42,9 +42,8 @@ internal class CheckUserLoginHandler : IRequestHandler<CheckUserLoginQuery, Chec
 
         return new CheckUserLoginResponse
         {
-            Username = user.Login.Username,
-            Email = user.Email,
-            Role = LoginType.User
+            UserId = user.Id,
+            Username = user.Login.Username
         };
     }
 }

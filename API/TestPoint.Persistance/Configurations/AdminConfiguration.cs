@@ -12,8 +12,9 @@ internal class AdminConfiguration : IEntityTypeConfiguration<Administrator>
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).HasColumnName("AdministratorId");
-        builder.Property(x => x.IsPasswordReset).HasColumnName("IsPasswordReset");
         builder.Property(x => x.LoginId).HasColumnName("LoginId");
+        builder.Property(x => x.UpdatedAt).HasColumnName("updated_at");
+
         builder.HasOne(x => x.Login).WithOne().HasForeignKey<Administrator>(x => x.LoginId);
     }
 }
