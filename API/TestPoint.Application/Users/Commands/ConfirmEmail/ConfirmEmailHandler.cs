@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using TestPoint.Application.Common.Exceptions;
 using TestPoint.Application.Interfaces.Persistence;
 
@@ -7,18 +6,17 @@ namespace TestPoint.Application.Users.Commands.ConfirmEmail;
 
 public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand>
 {
-    private readonly IUserDbContext _userDbContext;
+    private readonly IUnitOfWork _uow;
 
-    public ConfirmEmailHandler(IUserDbContext userDbContext)
+    public ConfirmEmailHandler(IUnitOfWork unitOfWork)
     {
-        _userDbContext = userDbContext;
+        _uow = unitOfWork;
     }
 
     public async Task<Unit> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userDbContext.Users
-            .Where(x => x.Id == request.UserId)
-            .FirstOrDefaultAsync(cancellationToken);
+        var user = await _uow.UserRepository
+            .FindOneAsync(x => x.Id == request.UserId);
 
         if (user is null)
         {
@@ -36,7 +34,7 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand>
         }
 
         user.EmailConfirmed = true;
-        await _userDbContext.SaveChangesAsync(cancellationToken);
+        await _uow.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

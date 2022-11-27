@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TestPoint.Application.Users.Commands.CreateUser;
-using TestPoint.Application.Users.Commands.ResetUserPassword;
 using TestPoint.Application.Users.Queries.GetCurrentUser;
 using TestPoint.WebAPI.Models;
 
-namespace TestPoint.WebAPI.Controllers.Persons;
+namespace TestPoint.WebAPI.Controllers.Membership;
 
 public class UserController : BaseController
 {
+    /// <summary>
+    /// Create new user
+    /// </summary>
+    /// <param name="newUser">New user data</param>
+    /// <returns>New user id</returns>
     [AllowAnonymous]
     [HttpPost("users")]
     public async Task<ActionResult<CreateUserResponse>> CreateUser([FromBody] CreateUserDto newUser)
@@ -26,6 +30,10 @@ public class UserController : BaseController
         return response;
     }
 
+    /// <summary>
+    /// Get current user data
+    /// </summary>
+    /// <returns>User data</returns>
     [HttpGet("session/user"), Authorize(Roles = "User")]
     public async Task<ActionResult<GetCurrentUserResponse>> GetCurrentUser()
     {

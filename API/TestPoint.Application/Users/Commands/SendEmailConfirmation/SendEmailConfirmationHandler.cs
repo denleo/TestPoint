@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TestPoint.Application.Common.Entities;
 using TestPoint.Application.Common.Exceptions;
@@ -10,22 +9,21 @@ namespace TestPoint.Application.Users.Commands.SendEmailConfirmation
 {
     public class SendEmailConfirmationHandler : IRequestHandler<SendEmailConfirmationCommand>
     {
-        private readonly IUserDbContext _userDbContext;
+        private readonly IUnitOfWork _uow;
         private readonly IJwtService _jwtService;
         private readonly IEmailService _emailService;
 
-        public SendEmailConfirmationHandler(IUserDbContext userDbContext, IJwtService jwtService, IEmailService emailService)
+        public SendEmailConfirmationHandler(IUnitOfWork unitOfWork, IJwtService jwtService, IEmailService emailService)
         {
-            _userDbContext = userDbContext;
+            _uow = unitOfWork;
             _jwtService = jwtService;
             _emailService = emailService;
         }
 
         public async Task<Unit> Handle(SendEmailConfirmationCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userDbContext.Users
-                .Where(x => x.Id == request.UserId)
-                .FirstOrDefaultAsync(cancellationToken);
+            var user = await _uow.UserRepository
+                .FindOneAsync(x => x.Id == request.UserId);
 
             if (user is null)
             {

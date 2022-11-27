@@ -19,6 +19,9 @@ public class EmailController : BaseController
         _jwtService = jwtService;
     }
 
+    /// <summary>
+    /// Send email verification for the current user 
+    /// </summary>
     [HttpPost("session/user/email-verification"), Authorize(Roles = "User")]
     public async Task<IActionResult> SendEmailVerification()
     {
@@ -32,6 +35,9 @@ public class EmailController : BaseController
         return Accepted(value: "Verification email will be sent, please check your mailbox");
     }
 
+    /// <summary>
+    /// Confirm user email link
+    /// </summary>
     [AllowAnonymous]
     [HttpGet("user/email/verify/{token}")]
     public async Task<IActionResult> ConfirmEmail(string token)
@@ -69,6 +75,10 @@ public class EmailController : BaseController
         return Ok("Email confirmed");
     }
 
+    /// <summary>
+    /// Send forgot password email for user
+    /// </summary>
+    /// <param name="userForgotPassword">Username</param>
     [AllowAnonymous]
     [HttpPost("user/password/forgot-password")]
     public async Task<IActionResult> SendForgotPasswordEmail([FromBody] UserForgotPasswordDto userForgotPassword)
@@ -83,6 +93,9 @@ public class EmailController : BaseController
         return Accepted(value: "Email with further instructions will be sent, please check your mailbox");
     }
 
+    /// <summary>
+    /// Reset user password link
+    /// </summary>
     [AllowAnonymous]
     [HttpGet("user/password/reset/{token}")]
     public async Task<IActionResult> ResetUserPassword(string token)

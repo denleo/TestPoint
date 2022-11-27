@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using TestPoint.Application.Common.Encryption;
 using TestPoint.Application.Interfaces.Persistence;
 using TestPoint.Domain;
@@ -8,11 +7,11 @@ namespace TestPoint.Application.Users.Queries.CheckUserLogin;
 
 internal class CheckUserLoginHandler : IRequestHandler<CheckUserLoginQuery, CheckUserLoginResponse?>
 {
-    private readonly IUserDbContext _userDbContext;
+    private readonly IUnitOfWork _uow;
 
-    public CheckUserLoginHandler(IUserDbContext userDbContext)
+    public CheckUserLoginHandler(IUnitOfWork unitOfWork)
     {
-        _userDbContext = userDbContext;
+        _uow = unitOfWork;
     }
 
     public async Task<CheckUserLoginResponse?> Handle(CheckUserLoginQuery request, CancellationToken cancellationToken)
@@ -20,19 +19,13 @@ internal class CheckUserLoginHandler : IRequestHandler<CheckUserLoginQuery, Chec
         User? user;
         if (request.Login.Contains("@"))
         {
-            user = await _userDbContext.Users
-                .Include(x => x.Login)
-                .Where(u => u.Email == request.Login)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(cancellationToken);
+            user = await _uow.UserRepository
+                .FindOneAsync(x => x.Email == request.Login);
         }
         else
         {
-            user = await _userDbContext.Users
-                .Include(x => x.Login)
-                .Where(u => u.Login.Username == request.Login)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(cancellationToken);
+            user = await _uow.UserRepository
+                .FindOneAsync(x => x.Login.Username == request.Login);
         }
 
         if (user is null || !PasswordHelper.VerifyPassword(request.Password, user.Login.PasswordHash))

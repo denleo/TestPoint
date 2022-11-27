@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using TestPoint.Application.Common.Exceptions;
 using TestPoint.Application.Interfaces.Persistence;
 
@@ -7,20 +6,17 @@ namespace TestPoint.Application.Admins.Queries.GetCurrentAdmin;
 
 public class GetCurrentAdminHandler : IRequestHandler<GetCurrentAdminQuery, GetCurrentAdminResponse>
 {
-    private readonly IAdminDbContext _adminDbContext;
+    private readonly IUnitOfWork _uow;
 
-    public GetCurrentAdminHandler(IAdminDbContext adminDbContext)
+    public GetCurrentAdminHandler(IUnitOfWork unitOfWork)
     {
-        _adminDbContext = adminDbContext;
+        _uow = unitOfWork;
     }
 
     public async Task<GetCurrentAdminResponse> Handle(GetCurrentAdminQuery request, CancellationToken cancellationToken)
     {
-        var admin = await _adminDbContext.Administrators
-            .Include(x => x.Login)
-            .Where(x => x.Id == request.AdminId)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(cancellationToken);
+        var admin = await _uow.AdminRepository
+            .FindOneAsync(x => x.Id == request.AdminId);
 
         if (admin is null)
         {

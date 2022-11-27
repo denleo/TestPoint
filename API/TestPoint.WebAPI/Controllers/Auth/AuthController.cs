@@ -19,6 +19,11 @@ public class AuthController : BaseController
         _jwtService = jwtService;
     }
 
+    /// <summary>
+    /// User login action
+    /// </summary>
+    /// <param name="login">User credentials</param>
+    /// <returns>JWT Token</returns>
     [HttpPost("auth/user")]
     public async Task<ActionResult<string>> UserLogin([FromBody] UserLoginDto login)
     {
@@ -38,6 +43,11 @@ public class AuthController : BaseController
         return _jwtService.CreateToken(CreateClaims(loginResponse.UserId, loginResponse.Username, LoginType.User));
     }
 
+    /// <summary>
+    /// Admin login action
+    /// </summary>
+    /// <param name="login">Admin credentials</param>
+    /// <returns>JWT Token</returns>
     [HttpPost("auth/admin")]
     public async Task<ActionResult<string>> AdminLogin([FromBody] AdminLoginDto login)
     {

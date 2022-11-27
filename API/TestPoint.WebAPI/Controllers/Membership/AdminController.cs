@@ -6,10 +6,15 @@ using TestPoint.Application.Admins.Queries.GetCurrentAdmin;
 using TestPoint.WebAPI.Filters;
 using TestPoint.WebAPI.Models;
 
-namespace TestPoint.WebAPI.Controllers.Persons;
+namespace TestPoint.WebAPI.Controllers.Membership;
 
 public class AdminController : BaseController
 {
+    /// <summary>
+    /// Create new administrator with temporary password
+    /// </summary>
+    /// <param name="newAdmin">New admin username</param>
+    /// <returns>New admin id and password</returns>
     [HttpPost("_setup/admins"), ApiKeyAuth]
     public async Task<ActionResult<CreateAdminResponse>> CreateAdmin([FromBody] CreateAdminDto newAdmin)
     {
@@ -22,6 +27,11 @@ public class AdminController : BaseController
         return response;
     }
 
+    /// <summary>
+    /// Reset password for administrator
+    /// </summary>
+    /// <param name="admin">Admin username</param>
+    /// <returns>New generated password</returns>
     [HttpPatch("_setup/admin/password"), ApiKeyAuth]
     public async Task<ActionResult<ResetAdminPasswordResponse>> ResetAdminPassword([FromBody] CreateAdminDto admin)
     {
@@ -34,6 +44,10 @@ public class AdminController : BaseController
         return response;
     }
 
+    /// <summary>
+    /// Get current administrator data
+    /// </summary>
+    /// <returns>Administrator data</returns>
     [HttpGet("session/admin"), Authorize(Roles = "Administrator")]
     public async Task<ActionResult<GetCurrentAdminResponse>> GetCurrentAdmin()
     {

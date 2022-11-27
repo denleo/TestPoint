@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using TestPoint.Application.Common.Exceptions;
 using TestPoint.Application.Interfaces.Persistence;
 
@@ -7,20 +6,17 @@ namespace TestPoint.Application.Users.Queries.GetCurrentUser;
 
 public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserQuery, GetCurrentUserResponse>
 {
-    private readonly IUserDbContext _userDbContext;
+    private readonly IUnitOfWork _uow;
 
-    public GetCurrentUserHandler(IUserDbContext userDbContext)
+    public GetCurrentUserHandler(IUnitOfWork unitOfWork)
     {
-        _userDbContext = userDbContext;
+        _uow = unitOfWork;
     }
 
     public async Task<GetCurrentUserResponse> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userDbContext.Users
-            .Include(x => x.Login)
-            .Where(x => x.Id == request.UserId)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(cancellationToken);
+        var user = await _uow.UserRepository
+            .FindOneAsync(x => x.Id == request.UserId);
 
         if (user is null)
         {

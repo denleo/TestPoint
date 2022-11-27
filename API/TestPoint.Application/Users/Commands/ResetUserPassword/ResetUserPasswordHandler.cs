@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using TestPoint.Application.Common.Encryption;
 using TestPoint.Application.Common.Entities;
@@ -11,23 +10,21 @@ namespace TestPoint.Application.Users.Commands.ResetUserPassword;
 
 public class ResetUserPasswordHandler : IRequestHandler<ResetUserPasswordCommand, ResetUserPasswordResponse>
 {
-    private readonly IUserDbContext _userDbContext;
+    private readonly IUnitOfWork _uow;
     private readonly IEmailService _emailService;
     private readonly IConfiguration _config;
 
-    public ResetUserPasswordHandler(IUserDbContext userDbContext, IEmailService emailService, IConfiguration config)
+    public ResetUserPasswordHandler(IUnitOfWork unitOfWork, IEmailService emailService, IConfiguration config)
     {
-        _userDbContext = userDbContext;
+        _uow = unitOfWork;
         _emailService = emailService;
         _config = config;
     }
 
     public async Task<ResetUserPasswordResponse> Handle(ResetUserPasswordCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userDbContext.Users
-            .Include(x => x.Login)
-            .Where(x => x.Id == request.UserId)
-            .FirstOrDefaultAsync(cancellationToken);
+        var user = await _uow.UserRepository
+            .FindOneAsync(x => x.Id == request.UserId);
 
         if (user == null)
         {
@@ -45,7 +42,7 @@ public class ResetUserPasswordHandler : IRequestHandler<ResetUserPasswordCommand
         user.Login.PasswordHash = PasswordHelper.ComputeHash(tempPassword);
         user.Login.PasswordReseted = true;
 
-        await _userDbContext.SaveChangesAsync(cancellationToken);
+        await _uow.SaveChangesAsync(cancellationToken);
 
         var message = new EmailMessage
         {

@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TestPoint.Application.Common.Entities;
 using TestPoint.Application.Common.Exceptions;
@@ -10,22 +9,21 @@ namespace TestPoint.Application.Users.Commands.SendForgotPasswordEmail
 {
     public class SendForgotPasswordEmailHandler : IRequestHandler<SendForgotPasswordEmailCommand>
     {
-        private readonly IUserDbContext _userDbContext;
+        private readonly IUnitOfWork _uow;
         private readonly IEmailService _emailService;
         private readonly IJwtService _jwtService;
 
-        public SendForgotPasswordEmailHandler(IUserDbContext userDbContext, IEmailService emailService, IJwtService jwtService)
+        public SendForgotPasswordEmailHandler(IUnitOfWork unitOfWork, IEmailService emailService, IJwtService jwtService)
         {
-            _userDbContext = userDbContext;
+            _uow = unitOfWork;
             _emailService = emailService;
             _jwtService = jwtService;
         }
 
         public async Task<Unit> Handle(SendForgotPasswordEmailCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userDbContext.Users
-                .Where(x => x.Login.Username == request.Username)
-                .FirstOrDefaultAsync(cancellationToken);
+            var user = await _uow.UserRepository
+                .FindOneAsync(x => x.Login.Username == request.Username);
 
             if (user == null)
             {
