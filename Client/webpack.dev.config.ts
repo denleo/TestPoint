@@ -50,6 +50,7 @@ const config: Configuration = {
       "@constants": path.resolve(__dirname, "src/constants"),
       "@common": path.resolve(__dirname, "src/common"),
       "@api": path.resolve(__dirname, "src/api"),
+      "@redux": path.resolve(__dirname, "src/redux"),
     },
   },
   plugins: [
@@ -59,7 +60,7 @@ const config: Configuration = {
     new HotModuleReplacementPlugin(),
     // new TsconfigPathsPlugin(),
     new CopyWebpackPlugin({
-      patterns: ["common/favicon", "common/styles"].map((e: any) => ({
+      patterns: ["common/favicon", "common/styles", "shared"].map((e: any) => ({
         from: path.join(src, e.from || e),
         to: path.join(dist, e.to || e),
       })),

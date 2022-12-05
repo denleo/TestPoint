@@ -13,10 +13,11 @@ import {
   ListItemIcon,
   ListItemText,
   styled,
+  useTheme,
 } from "@mui/material";
 
 import { useBreakpoint } from "@/api/hooks/useBreakPoint";
-import { SVGFullLogo } from "@/common/icons";
+import { IconFullLogo } from "@/common/icons";
 
 import { DRAWER_WIDTH, HEADER_HEIGHT } from "./common";
 import { useSidebarStore } from "./useLayoutStore";
@@ -48,13 +49,14 @@ const Drawer = styled(MUIDrawer)(({ theme }) => ({
 
 export const SideBar: FC = () => {
   const mdUp = useBreakpoint("md");
+  const theme = useTheme();
   const isMinimized = useSidebarStore((store) => store.isMinimized);
   const toggleIsMinimized = useSidebarStore((store) => store.toggleIsMinimized);
 
   return (
     <Drawer variant="persistent" anchor="left" open={isMinimized}>
       <DrawerHeader>
-        <SVGFullLogo />
+        <IconFullLogo width={180} height={35} />
         {!mdUp && (
           <IconButton
             size="large"
@@ -71,8 +73,12 @@ export const SideBar: FC = () => {
       <Divider />
       <List>
         {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
+          <ListItem
+            key={text}
+            color={theme.palette.secondary.main}
+            disablePadding
+          >
+            <ListItemButton color={theme.palette.secondary.main}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>

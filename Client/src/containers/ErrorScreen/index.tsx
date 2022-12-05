@@ -16,7 +16,7 @@ export const ErrorScreen: FC<Props> = ({ error, message }) => {
       sx={{
         width: "100vw",
         minHeight: "100vh",
-        backgroundColor: theme.palette.grey[300],
+        backgroundColor: theme.palette.background.default,
       }}
     >
       <Grid container spacing={2} direction="column">

@@ -3,18 +3,10 @@ import React, { FC } from "react";
 
 import { AccountCircle } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
-import {
-  Breadcrumbs,
-  IconButton,
-  Link,
-  Menu,
-  MenuItem,
-  styled,
-  Toolbar,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Breadcrumbs, IconButton, Link, Menu, MenuItem, styled, Toolbar, Typography, useTheme } from "@mui/material";
 import MuiAppBar, { AppBarProps } from "@mui/material/AppBar";
+
+import { useCurrentPath } from "@/api/hooks/useCurrentPath";
 
 import { DRAWER_WIDTH, HEADER_HEIGHT } from "./common";
 import { useSidebarStore } from "./useLayoutStore";
@@ -42,6 +34,7 @@ const AppBar = styled(MuiAppBar, {
 
 export const Header: FC = () => {
   const theme = useTheme();
+  const currentPath = useCurrentPath();
   const isMinimized = useSidebarStore((store) => store.isMinimized);
   const toggleIsMinimized = useSidebarStore((store) => store.toggleIsMinimized);
 
@@ -71,7 +64,7 @@ export const Header: FC = () => {
               TestPoint
             </Link>
             <Typography variant="body2" color="text.primary">
-              Home
+              {currentPath ? currentPath.name : "Home"}
             </Typography>
           </Breadcrumbs>
         </Typography>

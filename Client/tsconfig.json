@@ -9,6 +9,7 @@
       "@constants/*": ["src/constants/*"],
       "@common/*": ["src/common/*"],
       "@api/*": ["src/api/*"],
+      "@redux/*": ["src/redux/*"],
     },
     "target": "es5",
     "outDir": "./build",
@@ -30,7 +31,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
+    "types": []
   },
   "include": [
     "src"
