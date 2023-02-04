@@ -32,7 +32,7 @@ public class EmailController : BaseController
         };
 
         await Mediator.Send(sendEmailConfirmationCommand);
-        return Accepted(value: "Verification email will be sent, please check your mailbox");
+        return Accepted(value: "Verification email will be sent, please check your mailbox.");
     }
 
     /// <summary>
@@ -49,12 +49,12 @@ public class EmailController : BaseController
         }
         catch
         {
-            return BadRequest("Invalid confirmation URL");
+            return BadRequest("Invalid confirmation URL.");
         }
 
         if (claims.Find(x => x.Type == "TokenType")?.Value != "EmailConfirmation")
         {
-            return BadRequest("Invalid confirmation URL");
+            return BadRequest("Invalid confirmation URL.");
         }
 
         var confirmEmailCommand = new ConfirmEmailCommand
@@ -72,7 +72,7 @@ public class EmailController : BaseController
             return BadRequest(e.Message);
         }
 
-        return Ok("Email confirmed");
+        return Ok("Email confirmed, this page can be closed.");
     }
 
     /// <summary>
@@ -90,7 +90,7 @@ public class EmailController : BaseController
         };
 
         await Mediator.Send(sendForgotPasswordEmailCommand);
-        return Accepted(value: "Email with further instructions will be sent, please check your mailbox");
+        return Accepted(value: "Email with further instructions will be sent, please check your mailbox.");
     }
 
     /// <summary>
@@ -107,12 +107,12 @@ public class EmailController : BaseController
         }
         catch
         {
-            return BadRequest("Invalid password reset URL");
+            return BadRequest("Invalid password reset URL.");
         }
 
         if (claims.Find(x => x.Type == "TokenType")?.Value != "PasswordReset")
         {
-            return BadRequest("Invalid password reset URL");
+            return BadRequest("Invalid password reset URL.");
         }
 
         var resetUserPasswordCommand = new ResetUserPasswordCommand
@@ -129,6 +129,6 @@ public class EmailController : BaseController
             return BadRequest(e.Message);
         }
 
-        return Accepted(value: "Email with new password will be sent, please check your mailbox");
+        return Accepted(value: "Email with a new password will be sent, please check your mailbox.");
     }
 }

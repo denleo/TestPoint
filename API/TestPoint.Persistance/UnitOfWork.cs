@@ -44,7 +44,7 @@ public sealed class UnitOfWork : IUnitOfWork
         {
             affected = await _context.SaveChangesAsync(cancellationToken);
         }
-        catch (Exception ex)
+        catch (Exception? ex)
         {
             _logger.Log<UnitOfWork>(LogLevel.Error, ex.Message, ex);
             throw new RepositoryException("Repository commit error");

@@ -25,13 +25,13 @@ public class CustomExceptionHandlerMiddleware
         {
             await _next.Invoke(context);
         }
-        catch (Exception exception)
+        catch (Exception? exception)
         {
             await HandleExceptions(context, exception);
         }
     }
 
-    private Task HandleExceptions(HttpContext context, Exception exception)
+    private Task HandleExceptions(HttpContext context, Exception? exception)
     {
         var code = HttpStatusCode.InternalServerError;
         var result = string.Empty;
@@ -47,8 +47,8 @@ public class CustomExceptionHandlerMiddleware
                 break;
 
             default:
-                var log = context.RequestServices.GetService<ILogService>();
-                log?.Log<CustomExceptionHandlerMiddleware>(LogLevel.Error, exception.Message, exception);
+                var log = context.RequestServices.GetRequiredService<ILogService>();
+                log.Log<CustomExceptionHandlerMiddleware>(LogLevel.Error, exception.Message, exception);
                 break;
         }
 

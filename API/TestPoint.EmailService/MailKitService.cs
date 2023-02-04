@@ -41,7 +41,7 @@ public class MailKitService : IEmailService
 
             await client.DisconnectAsync(true);
         }
-        catch (Exception ex)
+        catch (Exception? ex)
         {
             _logService.Log<MailKitService>(LogLevel.Error, "Email Service Error", ex);
         }

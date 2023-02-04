@@ -7,12 +7,17 @@ namespace TestPoint.Log4NetLoggly;
 
 public static class DependencyInjector
 {
-    public static IServiceCollection AddLoggly(this IServiceCollection services)
+    public static IServiceCollection AddLogService(this IServiceCollection services)
+    {
+        ConfigureLog4Net();
+
+        services.AddSingleton<ILogService, Log4NetAdapter>();
+        return services;
+    }
+
+    private static void ConfigureLog4Net()
     {
         var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
-        log4net.Config.XmlConfigurator.Configure(logRepository, new FileInfo("App.config"));
-
-        services.AddSingleton<ILogService, LoggerAdapter>();
-        return services;
+        log4net.Config.XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
     }
 }

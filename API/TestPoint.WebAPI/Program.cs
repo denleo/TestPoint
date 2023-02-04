@@ -14,16 +14,23 @@ using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddDbContext<AppDbContext>
-    (
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection"))
-    );
+#region Database context
 
-builder.Services.AddLoggly();
+builder.Services.AddDbContext<AppDbContext>
+(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection"))
+);
+
+#endregion
+
+#region Services
+
+builder.Services.AddLogService();
 builder.Services.AddEmailService();
 builder.Services.AddDal();
 builder.Services.AddApplication();
+
+#endregion
 
 builder.Services.AddCors(setup =>
 {
@@ -76,7 +83,8 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+#region HTTP request pipeline
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -85,7 +93,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCustomExceptionHandler();
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
@@ -96,3 +104,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+#endregion
