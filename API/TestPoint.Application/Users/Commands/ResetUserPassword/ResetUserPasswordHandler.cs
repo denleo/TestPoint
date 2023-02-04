@@ -28,13 +28,13 @@ public class ResetUserPasswordHandler : IRequestHandler<ResetUserPasswordCommand
 
         if (user == null)
         {
-            throw new EntityNotFoundException("User does not exist.");
+            throw new EntityNotFoundException($"User with {request.UserId} id does not exist.");
         }
 
         var timeout = int.Parse(_config.GetSection("DomainSettings:PasswordResetTimeout").Value);
         if (user.Login.PasswordReseted && timeout > 0 && DateTime.Now <= user.Login.UpdatedAt.AddHours(timeout))
         {
-            throw new TimeoutException($"The password was recently reset, please wait {timeout} " +
+            throw new ActionNotAllowedException($"The password was recently reset, please wait {timeout} " +
                                        (timeout == 1 ? "hour" : "hours") + " before the next attempt.");
         }
 
@@ -48,7 +48,7 @@ public class ResetUserPasswordHandler : IRequestHandler<ResetUserPasswordCommand
         {
             Reciever = user.Email,
             Title = "Password Reset",
-            Body = $"<h3><b>Hello, {user.FirstName}</b></h3>" + // TODO: REPLACE WITH HTML FILE
+            Body = $"<h3><b>Hello, {user.FirstName}</b></h3>" +
                    $"<div>Here is your new temporary password to enter the platform: <b>{tempPassword}</b></div>" +
                    "<div><b>Test Point System</b>, do not reply on this message.</div>"
         };

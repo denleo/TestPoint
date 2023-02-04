@@ -27,12 +27,12 @@ namespace TestPoint.Application.Users.Commands.SendEmailConfirmation
 
             if (user is null)
             {
-                throw new EntityNotFoundException($"User with {request.UserId} id does not exist");
+                throw new EntityNotFoundException($"User with {request.UserId} id does not exist.");
             }
 
             if (user.EmailConfirmed)
             {
-                throw new EmailConfirmationException("User email is already confirmed");
+                throw new EntityConflictException("User email is already confirmed.");
             }
 
             var claims = new List<Claim>

@@ -20,17 +20,17 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand>
 
         if (user is null)
         {
-            throw new EntityNotFoundException("User with does not exist.");
+            throw new EntityNotFoundException($"User with {request.UserId} id does not exist.");
         }
 
         if (user.Email != request.EmailForConfirmation)
         {
             throw new InvalidOperationException($"Actual user email is not equal to email under the confirmation ({request.EmailForConfirmation}).");
         }
-
+         
         if (user.EmailConfirmed)
         {
-            throw new EmailConfirmationException("User email is already confirmed.");
+            throw new EntityConflictException("User email is already confirmed.");
         }
 
         user.EmailConfirmed = true;

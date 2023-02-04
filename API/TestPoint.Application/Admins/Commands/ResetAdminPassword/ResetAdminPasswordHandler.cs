@@ -21,7 +21,7 @@ public class ResetAdminPasswordHandler : IRequestHandler<ResetAdminPasswordComma
 
         if (admin is null)
         {
-            throw new EntityNotFoundException("Admin with such username doesn't exist");
+            throw new EntityNotFoundException("Admin with such username doesn't exist.");
         }
 
         var tempPassword = PasswordHelper.CreateRandomPassword();

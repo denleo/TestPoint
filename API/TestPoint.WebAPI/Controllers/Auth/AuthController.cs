@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Security.Claims;
 using TestPoint.Application.Admins.Queries.CheckAdminLogin;
 using TestPoint.Application.Interfaces.Services;
 using TestPoint.Application.Users.Queries.CheckUserLogin;
 using TestPoint.Domain;
+using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 using TestPoint.WebAPI.Models;
 
 namespace TestPoint.WebAPI.Controllers.Auth;
@@ -37,7 +39,7 @@ public class AuthController : BaseController
 
         if (loginResponse is null)
         {
-            return Unauthorized(new { Status = StatusCodes.Status401Unauthorized, Error = "Incorrect username or password" });
+            return Unauthorized(new ErrorResult(HttpStatusCode.Unauthorized, "Incorrect username or password."));
         }
 
         return _jwtService.CreateToken(CreateClaims(loginResponse.UserId, loginResponse.Username, LoginType.User));
@@ -61,7 +63,7 @@ public class AuthController : BaseController
 
         if (loginResponse is null)
         {
-            return Unauthorized(new { Status = StatusCodes.Status401Unauthorized, Error = "Incorrect username or password" });
+            return Unauthorized(new ErrorResult(HttpStatusCode.Unauthorized, "Incorrect username or password."));
         }
 
         return _jwtService.CreateToken(CreateClaims(loginResponse.AdminId, loginResponse.Username, LoginType.Administrator));

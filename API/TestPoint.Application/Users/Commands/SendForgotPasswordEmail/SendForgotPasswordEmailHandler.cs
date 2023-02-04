@@ -27,12 +27,12 @@ namespace TestPoint.Application.Users.Commands.SendForgotPasswordEmail
 
             if (user == null)
             {
-                throw new EntityNotFoundException($"User with {request.Username} username does not exist");
+                throw new EntityNotFoundException($"User with {request.Username} username does not exist.");
             }
 
             if (!user.EmailConfirmed)
             {
-                throw new EmailConfirmationException("User email is not confirmed");
+                throw new ActionNotAllowedException("User email is not confirmed.");
             }
 
             var claims = new List<Claim>

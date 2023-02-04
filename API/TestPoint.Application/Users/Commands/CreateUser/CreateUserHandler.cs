@@ -21,7 +21,7 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserRe
 
         if (userWithSameUsername is not null)
         {
-            throw new EntityExistsException("Username is already taken");
+            throw new EntityConflictException("Username is already taken.");
         }
 
         var userWithSameEmail = await _uow.UserRepository
@@ -29,7 +29,7 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserRe
 
         if (userWithSameEmail is not null)
         {
-            throw new EntityExistsException("User with such email already exists");
+            throw new EntityConflictException("User with such email already exists.");
         }
 
         var newUser = new User

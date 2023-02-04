@@ -22,7 +22,7 @@ public class CreateAdminHandler : IRequestHandler<CreateAdminCommand, CreateAdmi
 
         if (adminWithSameLogin is not null)
         {
-            throw new EntityExistsException("Username is already taken");
+            throw new EntityConflictException("Username is already taken.");
         }
 
         var tempPassword = PasswordHelper.CreateRandomPassword();

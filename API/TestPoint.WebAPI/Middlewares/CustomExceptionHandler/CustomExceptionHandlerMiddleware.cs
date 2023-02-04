@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Text.Json;
 using TestPoint.Application.Common.Exceptions;
 using TestPoint.Application.Interfaces.Services;
 
@@ -8,11 +7,6 @@ namespace TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 public class CustomExceptionHandlerMiddleware
 {
     private readonly RequestDelegate _next;
-
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
 
     public CustomExceptionHandlerMiddleware(RequestDelegate next)
     {
@@ -33,17 +27,20 @@ public class CustomExceptionHandlerMiddleware
 
     private Task HandleExceptions(HttpContext context, Exception? exception)
     {
-        var code = HttpStatusCode.InternalServerError;
-        var result = string.Empty;
+        var status = HttpStatusCode.InternalServerError;
 
         switch (exception)
         {
-            case EntityExistsException:
-                code = HttpStatusCode.Conflict;
+            case EntityConflictException:
+                status = HttpStatusCode.Conflict;
                 break;
 
             case EntityNotFoundException:
-                code = HttpStatusCode.NotFound;
+                status = HttpStatusCode.NotFound;
+                break;
+
+            case ActionNotAllowedException:
+                status = HttpStatusCode.Forbidden;
                 break;
 
             default:
@@ -53,13 +50,7 @@ public class CustomExceptionHandlerMiddleware
         }
 
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)code;
-
-        if (string.IsNullOrEmpty(result))
-        {
-            result = JsonSerializer.Serialize(new { Status = (int)code, Error = exception.Message }, JsonOptions);
-        }
-
-        return context.Response.WriteAsync(result);
+        context.Response.StatusCode = (int)status;
+        return context.Response.WriteAsync(new ErrorResult(status, exception.Message).ToJson());
     }
 }
