@@ -15,9 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestPoint.Application", "Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestPoint.DAL", "TestPoint.Persistance\TestPoint.DAL.csproj", "{E58A0A25-906F-456E-A1E5-8B290235826E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestPoint.Log4NetLoggly", "TestPoint.Log4NetLoggly\TestPoint.Log4NetLoggly.csproj", "{98D1E8ED-DF99-4C58-A530-A5B5FAD1C53E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestPoint.Log4Net", "TestPoint.Log4NetLoggly\TestPoint.Log4Net.csproj", "{98D1E8ED-DF99-4C58-A530-A5B5FAD1C53E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPoint.EmailService", "TestPoint.EmailService\TestPoint.EmailService.csproj", "{6043BF18-8E80-47D7-A420-E7CA255824CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestPoint.EmailService", "TestPoint.EmailService\TestPoint.EmailService.csproj", "{6043BF18-8E80-47D7-A420-E7CA255824CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

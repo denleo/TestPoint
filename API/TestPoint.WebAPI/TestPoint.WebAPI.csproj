@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TestPoint.EmailService\TestPoint.EmailService.csproj" />
-    <ProjectReference Include="..\TestPoint.Log4NetLoggly\TestPoint.Log4NetLoggly.csproj" />
+    <ProjectReference Include="..\TestPoint.Log4NetLoggly\TestPoint.Log4Net.csproj" />
     <ProjectReference Include="..\TestPoint.Persistance\TestPoint.DAL.csproj" />
   </ItemGroup>
 
