@@ -31,8 +31,6 @@ public class AuthController : BaseController
     [HttpPost("auth/user")]
     public async Task<ActionResult<string>> UserLogin([FromBody] UserLoginDto login)
     {
-        _logger.LogError(new OutOfMemoryException("test"), "Some error test");
-
         var checkUserLoginQuery = new CheckUserLoginQuery
         {
             Login = login.Login,

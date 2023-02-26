@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using TestPoint.Application.Interfaces.Services;
 
-namespace TestPoint.Application.Common.Authentication;
+namespace TestPoint.JwtService;
 
 public class JwtService : IJwtService
 {
