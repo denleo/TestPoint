@@ -2,7 +2,6 @@
 using TestPoint.Application.Common.Exceptions;
 using TestPoint.Application.Interfaces.Persistence;
 using TestPoint.Application.Interfaces.Persistence.Repositories;
-using TestPoint.Application.Interfaces.Services;
 using TestPoint.DAL.Contexts;
 using TestPoint.DAL.Repositories;
 
@@ -11,7 +10,7 @@ namespace TestPoint.DAL;
 public sealed class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
-    private readonly ILogService _logger;
+    private readonly ILogger<UnitOfWork> _logger;
     private bool _disposed = false;
 
     private IAdminRepository _adminRepository = null!;
@@ -20,10 +19,10 @@ public sealed class UnitOfWork : IUnitOfWork
     public IAdminRepository AdminRepository => _adminRepository ??= new AdminRepository(_context);
     public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
 
-    public UnitOfWork(AppDbContext appDbContext, ILogService logService)
+    public UnitOfWork(AppDbContext appDbContext, ILogger<UnitOfWork> logger)
     {
         _context = appDbContext;
-        _logger = logService;
+        _logger = logger;
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
@@ -46,7 +45,7 @@ public sealed class UnitOfWork : IUnitOfWork
         }
         catch (Exception? ex)
         {
-            _logger.Log<UnitOfWork>(LogLevel.Error, ex.Message, ex);
+            _logger.LogError(ex, ex.Message);
             throw new RepositoryException("Repository commit error");
         }
 

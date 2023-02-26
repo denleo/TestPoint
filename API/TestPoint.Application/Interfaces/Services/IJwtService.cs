@@ -4,6 +4,6 @@ namespace TestPoint.Application.Interfaces.Services;
 
 public interface IJwtService
 {
-    string CreateToken(IEnumerable<Claim> claims, bool isEmailToken = false);
+    string CreateToken(IEnumerable<Claim> claims, bool isShortToken = false);
     List<Claim> ParseToken(string token);
 }

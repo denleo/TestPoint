@@ -15,10 +15,12 @@ namespace TestPoint.WebAPI.Controllers.Auth;
 public class AuthController : BaseController
 {
     private readonly IJwtService _jwtService;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(IJwtService jwtService)
+    public AuthController(IJwtService jwtService, ILogger<AuthController> logger)
     {
         _jwtService = jwtService;
+        _logger = logger;
     }
 
     /// <summary>
@@ -29,6 +31,8 @@ public class AuthController : BaseController
     [HttpPost("auth/user")]
     public async Task<ActionResult<string>> UserLogin([FromBody] UserLoginDto login)
     {
+        _logger.LogError(new OutOfMemoryException("test"), "Some error test");
+
         var checkUserLoginQuery = new CheckUserLoginQuery
         {
             Login = login.Login,

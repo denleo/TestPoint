@@ -41,6 +41,7 @@ namespace TestPoint.Application.Users.Commands.SendEmailConfirmation
                 new(ClaimTypes.Email, user.Email),
                 new("TokenType", "EmailConfirmation")
             };
+
             var token = _jwtService.CreateToken(claims, true);
 
             var message = new EmailMessage

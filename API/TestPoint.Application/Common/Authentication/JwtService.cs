@@ -16,13 +16,13 @@ public class JwtService : IJwtService
         _configuration = configuration;
     }
 
-    public string CreateToken(IEnumerable<Claim> claims, bool isEmailToken = false)
+    public string CreateToken(IEnumerable<Claim> claims, bool isShortToken = false)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
             _configuration.GetSection("Jwt:TokenSecurityKey").Value));
 
-        var tokenExpiration = int.Parse(isEmailToken ?
-            _configuration.GetSection("Jwt:EmailTokenExp").Value :
+        var tokenExpiration = int.Parse(isShortToken ?
+            _configuration.GetSection("Jwt:ShortTokenExp").Value :
             _configuration.GetSection("Jwt:TokenExp").Value);
 
         //var issuer = _configuration.GetSection("Jwt:Issuer").Value;

@@ -10,12 +10,12 @@ namespace TestPoint.EmailService;
 public class MailKitService : IEmailService
 {
     private readonly IConfiguration _config;
-    private readonly ILogService _logService;
+    private readonly ILogger<MailKitService> _logger;
 
-    public MailKitService(IConfiguration configuration, ILogService logService)
+    public MailKitService(IConfiguration configuration, ILogger<MailKitService> logger)
     {
         _config = configuration;
-        _logService = logService;
+        _logger = logger;
     }
 
     public async Task SendEmail(EmailMessage message)
@@ -43,7 +43,7 @@ public class MailKitService : IEmailService
         }
         catch (Exception? ex)
         {
-            _logService.Log<MailKitService>(LogLevel.Error, "Email Service Error", ex);
+            _logger.LogError(ex, "Email Service Error");
         }
     }
 

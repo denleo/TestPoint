@@ -44,8 +44,8 @@ public class CustomExceptionHandlerMiddleware
                 break;
 
             default:
-                var log = context.RequestServices.GetRequiredService<ILogService>();
-                log.Log<CustomExceptionHandlerMiddleware>(LogLevel.Error, exception.Message, exception);
+                var logger = context.RequestServices.GetRequiredService<ILogger<CustomExceptionHandlerMiddleware>>();
+                logger.LogError(exception, exception.Message);
                 break;
         }
 

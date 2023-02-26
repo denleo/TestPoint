@@ -9,7 +9,6 @@ using TestPoint.Application;
 using TestPoint.DAL;
 using TestPoint.DAL.Contexts;
 using TestPoint.EmailService;
-using TestPoint.Log4NetLoggly;
 using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +24,7 @@ builder.Services.AddDbContext<AppDbContext>
 
 #region Services
 
-builder.Services.AddLogService();
+builder.Services.AddLogging(b => b.AddLog4Net("log4net.config", true));
 builder.Services.AddEmailService();
 builder.Services.AddDal();
 builder.Services.AddApplication();
