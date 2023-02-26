@@ -32,7 +32,7 @@ public class ResetUserPasswordHandler : IRequestHandler<ResetUserPasswordCommand
         }
 
         var timeout = int.Parse(_config.GetSection("DomainSettings:PasswordResetTimeout").Value);
-        if (user.Login.PasswordReseted && timeout > 0 && DateTime.Now <= user.Login.UpdatedAt.AddHours(timeout))
+        if (user.Login.PasswordReseted && timeout > 0 && DateTime.Now <= user.Login.UpdatedAt!.Value.AddHours(timeout))
         {
             throw new ActionNotAllowedException($"The password was recently reset, please wait {timeout} " +
                                        (timeout == 1 ? "hour" : "hours") + " before the next attempt.");
