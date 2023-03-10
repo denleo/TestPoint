@@ -1,0 +1,33 @@
+volumes:
+ mssql-data:
+
+services:
+ db:
+   image: mcr.microsoft.com/mssql/server:2022-latest
+   restart: always
+   environment:
+     MSSQL_SA_PASSWORD: ${MSSQL_PASSWORD}
+     ACCEPT_EULA: "Y"
+     TZ: ${TIMEZONE}
+   volumes:
+     - mssql-data:/var/opt/mssql
+   ports:
+     - "1433:1433"
+ backend:
+   build:
+     context: /API
+   restart: always
+   environment:
+     TZ: ${TIMEZONE}
+     ASPNETCORE_ENVIRONMENT: Development
+   depends_on:
+     - db
+ proxy:
+   image: nginx
+   restart: always
+   volumes:
+     - ./nginx.conf:/etc/nginx/nginx.conf
+   ports:
+     - "8080:80"
+   depends_on:
+     - backend
