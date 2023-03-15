@@ -4,5 +4,5 @@ namespace TestPoint.Application.Users.Commands.ResetUserPassword;
 
 public class ResetUserPasswordCommand : IRequest<ResetUserPasswordResponse>
 {
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
 }

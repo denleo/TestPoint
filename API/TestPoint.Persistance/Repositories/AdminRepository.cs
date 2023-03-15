@@ -4,7 +4,7 @@ using TestPoint.Domain;
 
 namespace TestPoint.DAL.Repositories;
 
-public class AdminRepository : RepositoryBase<Administrator, int>, IAdminRepository
+public class AdminRepository : RepositoryBase<Administrator, Guid>, IAdminRepository
 {
     public AdminRepository(DbContext context) : base(context) { }
 

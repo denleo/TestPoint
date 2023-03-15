@@ -3,7 +3,7 @@ using TestPoint.Domain;
 
 namespace TestPoint.Application.Interfaces.Persistence.Repositories;
 
-public interface IRepository<TEntity> where TEntity : EntityBase
+public interface IRepository<TEntity> where TEntity : Entity
 {
     void Add(TEntity entity);
     void Remove(TEntity entity);

@@ -2,6 +2,6 @@
 
 public class CheckAdminLoginResponse
 {
-    public int AdminId { get; set; }
+    public Guid AdminId { get; set; }
     public string Username { get; set; }
 }

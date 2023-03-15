@@ -1,7 +1,6 @@
 ﻿namespace TestPoint.Domain;
 
-public class Administrator : AuditableEntity<int>
+public class Administrator : AuditableEntity
 {
-    public int LoginId { get; set; }
     public SystemLogin Login { get; set; }
 }

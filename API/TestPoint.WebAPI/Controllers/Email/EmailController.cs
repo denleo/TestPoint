@@ -59,7 +59,7 @@ public class EmailController : BaseController
 
         var confirmEmailCommand = new ConfirmEmailCommand
         {
-            UserId = int.Parse(claims.First(c => c.Type == ClaimTypes.Sid).Value),
+            UserId = Guid.Parse(claims.First(c => c.Type == ClaimTypes.Sid).Value),
             EmailForConfirmation = claims.First(c => c.Type == ClaimTypes.Email).Value
         };
 
@@ -117,7 +117,7 @@ public class EmailController : BaseController
 
         var resetUserPasswordCommand = new ResetUserPasswordCommand
         {
-            UserId = int.Parse(claims.Find(x => x.Type == ClaimTypes.Sid)!.Value)
+            UserId = Guid.Parse(claims.Find(x => x.Type == ClaimTypes.Sid)!.Value)
         };
 
         try

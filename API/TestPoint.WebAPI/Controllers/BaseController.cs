@@ -12,14 +12,14 @@ public abstract class BaseController : ControllerBase
     private IMediator? _mediator;
     protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<IMediator>();
 
-    protected int? LoginId
+    protected Guid? LoginId
     {
         get
         {
             var id = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid)?.Value;
             if (id != null)
             {
-                return int.Parse(id);
+                return Guid.Parse(id);
             }
 
             return null;

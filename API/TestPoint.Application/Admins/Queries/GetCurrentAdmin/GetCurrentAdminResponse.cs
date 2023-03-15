@@ -2,7 +2,7 @@
 
 public class GetCurrentAdminResponse
 {
-    public int AdminId { get; set; }
+    public Guid AdminId { get; set; }
 
     public string Username { get; set; }
     public bool PasswordReseted { get; set; }

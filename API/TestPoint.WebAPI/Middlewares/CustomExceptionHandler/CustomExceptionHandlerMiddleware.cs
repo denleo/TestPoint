@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using TestPoint.Application.Common.Exceptions;
-using TestPoint.Application.Interfaces.Services;
 
 namespace TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 
@@ -51,6 +50,7 @@ public class CustomExceptionHandlerMiddleware
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)status;
-        return context.Response.WriteAsync(new ErrorResult(status, exception.Message).ToJson());
+        var errorResult = new ErrorResult(status, status == HttpStatusCode.InternalServerError ? "Internal server error" : exception.Message);
+        return context.Response.WriteAsync(errorResult.ToJson());
     }
 }

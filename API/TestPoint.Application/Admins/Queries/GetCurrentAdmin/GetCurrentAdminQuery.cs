@@ -4,5 +4,5 @@ namespace TestPoint.Application.Admins.Queries.GetCurrentAdmin;
 
 public class GetCurrentAdminQuery : IRequest<GetCurrentAdminResponse>
 {
-    public int AdminId { get; set; }
+    public Guid AdminId { get; set; }
 }

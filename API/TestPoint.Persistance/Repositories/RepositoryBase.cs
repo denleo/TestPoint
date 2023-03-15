@@ -6,7 +6,7 @@ using TestPoint.Domain;
 namespace TestPoint.DAL.Repositories;
 
 public abstract class RepositoryBase<TEntity, TKey> : IRepository<TEntity, TKey>
-    where TEntity : Entity<TKey>
+    where TEntity : Entity
 {
     protected readonly DbSet<TEntity> DbSet;
     protected RepositoryBase(DbContext context) => DbSet = context.Set<TEntity>();

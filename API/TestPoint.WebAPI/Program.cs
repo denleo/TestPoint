@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
 using System.Text;
 using TestPoint.Application;
 using TestPoint.DAL;
@@ -73,11 +72,6 @@ builder.Services.AddSwaggerGen(options =>
     });
 
     options.OperationFilter<SecurityRequirementsOperationFilter>();
-
-    // Set the comments path for the Swagger JSON and UI.
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    options.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
 });
 
 
@@ -104,6 +98,21 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+InitializeDatabase();
+
 app.Run();
 
 #endregion
+
+
+void InitializeDatabase()
+{
+    using (var serviceScope = app.Services.CreateScope())
+    {
+        var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        //context.Database.EnsureDeleted();
+        //context.Database.EnsureCreated();
+        context.Database.Migrate();
+    }
+}

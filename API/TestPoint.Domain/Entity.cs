@@ -1,6 +1,6 @@
 ﻿namespace TestPoint.Domain;
 
-public abstract class Entity<T> : EntityBase
+public abstract class Entity
 {
-    public T Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 }

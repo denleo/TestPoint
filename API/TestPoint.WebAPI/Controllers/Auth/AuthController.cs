@@ -71,7 +71,7 @@ public class AuthController : BaseController
         return _jwtService.CreateToken(CreateClaims(loginResponse.AdminId, loginResponse.Username, LoginType.Administrator));
     }
 
-    private static IEnumerable<Claim> CreateClaims(int id, string username, LoginType loginType) => new List<Claim>
+    private static IEnumerable<Claim> CreateClaims(Guid id, string username, LoginType loginType) => new List<Claim>
     {
         new(ClaimTypes.Sid, id.ToString()),
         new(ClaimTypes.Name, username),

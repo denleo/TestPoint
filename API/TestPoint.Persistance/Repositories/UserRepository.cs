@@ -4,7 +4,7 @@ using TestPoint.Domain;
 
 namespace TestPoint.DAL.Repositories;
 
-public class UserRepository : RepositoryBase<User, int>, IUserRepository
+public class UserRepository : RepositoryBase<User, Guid>, IUserRepository
 {
     public UserRepository(DbContext context) : base(context) { }
 
