@@ -15,12 +15,10 @@ namespace TestPoint.WebAPI.Controllers.Auth;
 public class AuthController : BaseController
 {
     private readonly IJwtService _jwtService;
-    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(IJwtService jwtService, ILogger<AuthController> logger)
+    public AuthController(IJwtService jwtService)
     {
         _jwtService = jwtService;
-        _logger = logger;
     }
 
     /// <summary>

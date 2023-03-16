@@ -13,21 +13,13 @@ using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 
 var builder = WebApplication.CreateBuilder(args);
 
-#region Database context
-
-builder.Services.AddDbContext<AppDbContext>
-(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("MSSqlConnection"))
-);
-
-#endregion
 
 #region Services
 
 builder.Services.AddLogging(b => b.AddLog4Net("log4net.config", true));
+builder.Services.AddDal(builder.Configuration.GetConnectionString("MSSqlConnection"));
 builder.Services.AddJwtService();
 builder.Services.AddEmailService();
-builder.Services.AddDal();
 builder.Services.AddApplication();
 
 #endregion

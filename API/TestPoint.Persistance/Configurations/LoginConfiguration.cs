@@ -4,7 +4,7 @@ using TestPoint.Domain;
 
 namespace TestPoint.DAL.Configurations;
 
-internal class LoginConfiguration : IEntityTypeConfiguration<SystemLogin>
+internal sealed class LoginConfiguration : IEntityTypeConfiguration<SystemLogin>
 {
     public void Configure(EntityTypeBuilder<SystemLogin> builder)
     {

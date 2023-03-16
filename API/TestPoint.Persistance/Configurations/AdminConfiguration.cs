@@ -4,7 +4,7 @@ using TestPoint.Domain;
 
 namespace TestPoint.DAL.Configurations;
 
-internal class AdminConfiguration : IEntityTypeConfiguration<Administrator>
+internal sealed class AdminConfiguration : IEntityTypeConfiguration<Administrator>
 {
     public void Configure(EntityTypeBuilder<Administrator> builder)
     {
