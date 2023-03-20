@@ -13,13 +13,13 @@ namespace TestPoint.WebAPI.Controllers.Email;
 public class EmailController : BaseController
 {
     private readonly IJwtService _jwtService;
-    private readonly string proxyHost, proxyPort;
+    private readonly string proxyHost, proxySecurePort;
 
     public EmailController(IJwtService jwtService, IConfiguration config)
     {
         _jwtService = jwtService;
         proxyHost = config.GetSection("Proxy:Host").Value;
-        proxyPort = config.GetSection("Proxy:Port").Value;
+        proxySecurePort = config.GetSection("Proxy:HttpsPort").Value;
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ public class EmailController : BaseController
         var sendEmailConfirmationCommand = new SendEmailConfirmationCommand()
         {
             UserId = LoginId!.Value,
-            EmailConfirmUrl = $"{Request.Scheme}://{proxyHost}:{proxyPort}/api/user/email/verify/"
+            EmailConfirmUrl = $"https://{proxyHost}:{proxySecurePort}/api/user/email/verify/"
         };
 
         await Mediator.Send(sendEmailConfirmationCommand);
@@ -89,7 +89,7 @@ public class EmailController : BaseController
         var sendForgotPasswordEmailCommand = new SendForgotPasswordEmailCommand
         {
             Username = userForgotPassword.Username,
-            PasswordResetUrl = $"{Request.Scheme}://{proxyHost}:{proxyPort}/api/user/password/reset/"
+            PasswordResetUrl = $"https://{proxyHost}:{proxySecurePort}/api/user/password/reset/"
         };
 
         await Mediator.Send(sendForgotPasswordEmailCommand);
