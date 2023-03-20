@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using TestPoint.Application.Users.Commands.CreateUser;
 using TestPoint.Application.Users.Queries.GetCurrentUser;
 using TestPoint.WebAPI.Models;
@@ -8,6 +9,10 @@ namespace TestPoint.WebAPI.Controllers.Membership;
 
 public class UserController : BaseController
 {
+    private readonly IMemoryCache Cache;
+
+    public UserController(IMemoryCache memoryCache) => Cache = memoryCache;
+
     /// <summary>
     /// Create new user
     /// </summary>
@@ -37,12 +42,25 @@ public class UserController : BaseController
     [HttpGet("session/user"), Authorize(Roles = "User")]
     public async Task<ActionResult<GetCurrentUserResponse>> GetCurrentUser()
     {
+        GetCurrentUserResponse userData;
+
+        if (Cache.TryGetValue(LoginId!.Value, out userData))
+        {
+            return userData;
+        }
+
         var getCurrentUserQuery = new GetCurrentUserQuery
         {
             UserId = LoginId!.Value
         };
 
-        var response = await Mediator.Send(getCurrentUserQuery);
-        return response;
+        userData = await Mediator.Send(getCurrentUserQuery);
+
+        Cache.Set(LoginId!.Value, userData, new MemoryCacheEntryOptions
+        {
+            SlidingExpiration = TimeSpan.FromMinutes(30)
+        });
+
+        return userData;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using TestPoint.Application.Admins.Commands.CreateAdmin;
 using TestPoint.Application.Admins.Commands.ResetAdminPassword;
 using TestPoint.Application.Admins.Queries.GetCurrentAdmin;
@@ -10,6 +11,10 @@ namespace TestPoint.WebAPI.Controllers.Membership;
 
 public class AdminController : BaseController
 {
+    private readonly IMemoryCache Cache;
+
+    public AdminController(IMemoryCache memoryCache) => Cache = memoryCache;
+
     /// <summary>
     /// Create new administrator with temporary password
     /// </summary>
@@ -51,12 +56,25 @@ public class AdminController : BaseController
     [HttpGet("session/admin"), Authorize(Roles = "Administrator")]
     public async Task<ActionResult<GetCurrentAdminResponse>> GetCurrentAdmin()
     {
+        GetCurrentAdminResponse adminData;
+
+        if (Cache.TryGetValue(LoginId!.Value, out adminData))
+        {
+            return adminData;
+        }
+
         var getCurrentAdminQuery = new GetCurrentAdminQuery
         {
             AdminId = LoginId!.Value
         };
 
-        var response = await Mediator.Send(getCurrentAdminQuery);
-        return response;
+        adminData = await Mediator.Send(getCurrentAdminQuery);
+
+        Cache.Set(LoginId!.Value, adminData, new MemoryCacheEntryOptions
+        {
+            SlidingExpiration = TimeSpan.FromMinutes(30)
+        });
+
+        return adminData;
     }
 }
