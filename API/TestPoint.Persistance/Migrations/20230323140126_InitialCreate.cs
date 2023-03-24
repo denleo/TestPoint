@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TestPoint.DAL.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -72,6 +72,50 @@ namespace TestPoint.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserGroup",
+                columns: table => new
+                {
+                    UserGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    AdministratorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserGroup", x => x.UserGroupId);
+                    table.ForeignKey(
+                        name: "FK_UserGroup_Administrator_AdministratorId",
+                        column: x => x.AdministratorId,
+                        principalTable: "Administrator",
+                        principalColumn: "AdministratorId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserUserGroupBridge",
+                columns: table => new
+                {
+                    UserGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserUserGroupBridge", x => new { x.UserGroupId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_UserUserGroupBridge_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
+                        name: "FK_UserUserGroupBridge_UserGroup_UserGroupId",
+                        column: x => x.UserGroupId,
+                        principalTable: "UserGroup",
+                        principalColumn: "UserGroupId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Administrator_LoginId",
                 table: "Administrator",
@@ -79,7 +123,7 @@ namespace TestPoint.DAL.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "UQ_Login_UsernameLoginType",
+                name: "UQ_Login_Username_LoginType",
                 table: "Login",
                 columns: new[] { "Username", "LoginType" },
                 unique: true);
@@ -95,15 +139,37 @@ namespace TestPoint.DAL.Migrations
                 table: "User",
                 column: "Email",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserGroup_AdministratorId",
+                table: "UserGroup",
+                column: "AdministratorId");
+
+            migrationBuilder.CreateIndex(
+                name: "UQ_UserGroup_Name_AdministratorId",
+                table: "UserGroup",
+                columns: new[] { "Name", "AdministratorId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserUserGroupBridge_UserId",
+                table: "UserUserGroupBridge",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Administrator");
+                name: "UserUserGroupBridge");
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "UserGroup");
+
+            migrationBuilder.DropTable(
+                name: "Administrator");
 
             migrationBuilder.DropTable(
                 name: "Login");

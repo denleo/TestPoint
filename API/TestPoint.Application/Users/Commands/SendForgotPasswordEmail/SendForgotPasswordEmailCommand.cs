@@ -1,10 +1,9 @@
 ﻿using MediatR;
 
-namespace TestPoint.Application.Users.Commands.SendForgotPasswordEmail
+namespace TestPoint.Application.Users.Commands.SendForgotPasswordEmail;
+
+public class SendForgotPasswordEmailCommand : IRequest
 {
-    public class SendForgotPasswordEmailCommand : IRequest
-    {
-        public string Username { get; set; }
-        public string PasswordResetUrl { get; set; }
-    }
+    public string Username { get; set; }
+    public string PasswordResetUrl { get; set; }
 }

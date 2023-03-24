@@ -18,6 +18,6 @@ internal sealed class LoginConfiguration : IEntityTypeConfiguration<SystemLogin>
         builder.Property(x => x.PasswordReseted).HasColumnName("PasswordReseted").IsRequired();
         builder.Property(x => x.RegistryDate).HasColumnName("RegistryDate").IsRequired();
 
-        builder.HasIndex(x => new { x.Username, x.LoginType }).IsUnique().HasDatabaseName("UQ_Login_UsernameLoginType");
+        builder.HasIndex(x => new { x.Username, x.LoginType }).IsUnique().HasDatabaseName("UQ_Login_Username_LoginType");
     }
 }

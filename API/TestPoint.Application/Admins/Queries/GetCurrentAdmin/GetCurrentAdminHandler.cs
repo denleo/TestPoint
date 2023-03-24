@@ -4,7 +4,7 @@ using TestPoint.Application.Interfaces.Persistence;
 
 namespace TestPoint.Application.Admins.Queries.GetCurrentAdmin;
 
-public class GetCurrentAdminHandler : IRequestHandler<GetCurrentAdminQuery, GetCurrentAdminResponse>
+internal class GetCurrentAdminHandler : IRequestHandler<GetCurrentAdminQuery, GetCurrentAdminResponse>
 {
     private readonly IUnitOfWork _uow;
 

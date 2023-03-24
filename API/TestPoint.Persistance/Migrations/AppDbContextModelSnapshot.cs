@@ -87,7 +87,7 @@ namespace TestPoint.DAL.Migrations
 
                     b.HasIndex("Username", "LoginType")
                         .IsUnique()
-                        .HasDatabaseName("UQ_Login_UsernameLoginType");
+                        .HasDatabaseName("UQ_Login_Username_LoginType");
 
                     b.ToTable("Login", (string)null);
                 });
@@ -146,6 +146,54 @@ namespace TestPoint.DAL.Migrations
                     b.ToTable("User", (string)null);
                 });
 
+            modelBuilder.Entity("TestPoint.Domain.UserGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserGroupId");
+
+                    b.Property<Guid>("AdministratorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("Name");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdministratorId");
+
+                    b.HasIndex("Name", "AdministratorId")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_UserGroup_Name_AdministratorId");
+
+                    b.ToTable("UserGroup", (string)null);
+                });
+
+            modelBuilder.Entity("UserUserGroupBridge", b =>
+                {
+                    b.Property<Guid>("UserGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserGroupId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserUserGroupBridge");
+                });
+
             modelBuilder.Entity("TestPoint.Domain.Administrator", b =>
                 {
                     b.HasOne("TestPoint.Domain.SystemLogin", "Login")
@@ -166,6 +214,30 @@ namespace TestPoint.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Login");
+                });
+
+            modelBuilder.Entity("TestPoint.Domain.UserGroup", b =>
+                {
+                    b.HasOne("TestPoint.Domain.Administrator", null)
+                        .WithMany()
+                        .HasForeignKey("AdministratorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UserUserGroupBridge", b =>
+                {
+                    b.HasOne("TestPoint.Domain.UserGroup", null)
+                        .WithMany()
+                        .HasForeignKey("UserGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TestPoint.Domain.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

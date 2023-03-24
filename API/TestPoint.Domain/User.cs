@@ -9,4 +9,5 @@ public class User : AuditableEntity
     public byte[]? Avatar { get; set; }
 
     public SystemLogin Login { get; set; }
+    public ICollection<UserGroup> UserGroups { get; set; }
 }
