@@ -1,26 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import {
-  Alert,
-  Grid,
-  Paper,
-  styled,
-  Tab,
-  TabProps,
-  Tabs,
-  useTheme,
-} from "@mui/material";
+import { Alert, Grid, Paper, styled, Tab, TabProps, Tabs, useTheme } from "@mui/material";
 import { Formik } from "formik";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
 import { useBreakpoint } from "@/api/hooks/useBreakPoint";
+import { httpAction } from "@/api/httpAction";
 import { IconFullLogo } from "@/common/icons";
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { userAccountNameSelector } from "@/redux/selectors";
+import { AccountActions } from "@/redux/userAccount/actions";
 
-import { httpAction } from "../../../api/httpAction";
-import { AccountActions } from "../../../redux/userAccount/actions";
 import { LoginUserFormValues, LOGIN_TAB } from "../common";
 
 import { ActionButtons } from "./ActionButtons";
@@ -111,20 +102,11 @@ export const Login = () => {
   return (
     <div>
       {error && mdUp && (
-        <Alert
-          sx={{ marginBottom: theme.spacing(2) }}
-          variant="outlined"
-          severity="error"
-        >
+        <Alert sx={{ marginBottom: theme.spacing(2) }} variant="outlined" severity="error">
           {error.message}
         </Alert>
       )}
-      <Tabs
-        variant="fullWidth"
-        value={loginTab}
-        onChange={handleChangeTab}
-        aria-label="choose login type"
-      >
+      <Tabs variant="fullWidth" value={loginTab} onChange={handleChangeTab} aria-label="choose login type">
         <CustomTab label="User" value={LOGIN_TAB.USER} selected={isUser} />
         <CustomTab label="Admin" value={LOGIN_TAB.ADMIN} selected={!isUser} />
       </Tabs>
@@ -138,15 +120,8 @@ export const Login = () => {
             } as LoginUserFormValues
           }
           validationSchema={yup.object().shape({
-            username: yup
-              .string()
-              .min(3, "Minimum 3 symbols")
-              .max(255, "Maximum 255 symbols")
-              .required("Required"),
-            password: yup
-              .string()
-              .min(10, "At least 10 characters")
-              .required("Required"),
+            username: yup.string().min(3, "Minimum 3 symbols").max(255, "Maximum 255 symbols").required("Required"),
+            password: yup.string().min(10, "At least 10 characters").required("Required"),
             rememberMe: yup.boolean(),
           })}
           onSubmit={submitLoginForm}

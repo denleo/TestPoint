@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import React, { FC, ReactNode } from "react";
+import React, { FC, ReactNode, useEffect } from "react";
 
 import { Box, ContainerProps, Divider, styled } from "@mui/material";
 
+import { useBreakpoint } from "@/api/hooks/useBreakPoint";
 import { theme } from "@/common/theme/createTheme";
 
 import { DRAWER_WIDTH, HEADER_HEIGHT } from "./common";
@@ -40,7 +41,16 @@ const MainContainer = styled("main", {
 }));
 
 export const LayoutContainer: FC<Props> = ({ children, footer, ...props }) => {
+  const lgUp = useBreakpoint("lg");
   const isMinimized = useSidebarStore((store) => store.isMinimized);
+  const toggleIsMinimized = useSidebarStore((store) => store.toggleIsMinimized);
+
+  useEffect(() => {
+    if (lgUp) {
+      toggleIsMinimized(true);
+    }
+  }, []);
+
   return (
     <>
       <Box

@@ -1,8 +1,12 @@
 import React, { FC } from "react";
 
+import AnalyticsIcon from "@mui/icons-material/Analytics";
+import HomeIcon from "@mui/icons-material/Home";
+import LogoutIcon from "@mui/icons-material/Logout";
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
+import QuizIcon from "@mui/icons-material/Quiz";
 import {
   Divider,
   Drawer as MUIDrawer,
@@ -15,8 +19,10 @@ import {
   styled,
   useTheme,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 import { useBreakpoint } from "@/api/hooks/useBreakPoint";
+import { TESTPOINT_ROUTES } from "@/api/pageRoutes";
 import { IconFullLogo } from "@/common/icons";
 
 import { DRAWER_WIDTH, HEADER_HEIGHT } from "./common";
@@ -47,8 +53,24 @@ const Drawer = styled(MUIDrawer)(({ theme }) => ({
   },
 }));
 
+const routes = [
+  {
+    ...TESTPOINT_ROUTES.home,
+    icon: <HomeIcon />,
+  },
+  {
+    ...TESTPOINT_ROUTES.tests,
+    icon: <QuizIcon />,
+  },
+  {
+    ...TESTPOINT_ROUTES.statistics,
+    icon: <AnalyticsIcon />,
+  },
+];
+
 export const SideBar: FC = () => {
   const mdUp = useBreakpoint("md");
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMinimized = useSidebarStore((store) => store.isMinimized);
   const toggleIsMinimized = useSidebarStore((store) => store.toggleIsMinimized);
@@ -72,33 +94,25 @@ export const SideBar: FC = () => {
       </DrawerHeader>
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem
-            key={text}
-            color={theme.palette.secondary.main}
-            disablePadding
-          >
+        {routes.map(({ icon, name, path }) => (
+          <ListItem key={name} color={theme.palette.secondary.main} disablePadding onClick={() => navigate(path)}>
             <ListItemButton color={theme.palette.secondary.main}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemIcon>{icon}</ListItemIcon>
+              <ListItemText primary={name} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Exit" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Drawer>
   );

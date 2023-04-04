@@ -5,7 +5,7 @@ import { Box, Typography } from "@mui/material";
 import { useSelector } from "@/redux/hooks";
 import { userAccountNameSelector } from "@/redux/selectors";
 
-const HomePage = () => {
+const ProfilePage = () => {
   const userName = useSelector(userAccountNameSelector);
 
   return (
@@ -15,4 +15,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default ProfilePage;

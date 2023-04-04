@@ -40,11 +40,7 @@ export const IconCross: FC<IconProps> = ({ ...props }) => (
   </SvgIcon>
 );
 
-export const IconFullLogo: FC<IconProps> = ({
-  width = 120,
-  height = 23,
-  ...props
-}) => (
+export const IconFullLogo: FC<IconProps> = ({ width = 120, height = 23, ...props }) => (
   <SvgIcon
     viewBox="0 0 120 23"
     fill="none"

@@ -2,16 +2,19 @@ export enum TESTPOINT_ROUTE {
   HOME = "Home",
   TESTS = "Tests",
   TESTPAGE = "Test",
+  STATISTICS = "Statistics",
+  PROFILE = "Profile",
 }
 
 export interface TestpointRoutes {
   [key: string]: {
     name: TESTPOINT_ROUTE;
     path: string;
+    component?: JSX.Element;
   };
 }
 
-export const TESTPOINT_ROUTE_DATA: TestpointRoutes = {
+export const TESTPOINT_ROUTES: TestpointRoutes = {
   home: {
     name: TESTPOINT_ROUTE.HOME,
     path: "/home",
@@ -23,5 +26,13 @@ export const TESTPOINT_ROUTE_DATA: TestpointRoutes = {
   testPage: {
     name: TESTPOINT_ROUTE.TESTPAGE,
     path: "/test",
+  },
+  statistics: {
+    name: TESTPOINT_ROUTE.STATISTICS,
+    path: "/statistics",
+  },
+  profile: {
+    name: TESTPOINT_ROUTE.PROFILE,
+    path: "/profile",
   },
 };

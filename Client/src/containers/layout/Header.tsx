@@ -74,26 +74,10 @@ export const Header: FC = () => {
             aria-label="account of current user"
             aria-controls="menu-appbar"
             aria-haspopup="true"
-            color="inherit"
+            color="secondary"
           >
-            <AccountCircle />
+            <AccountCircle fontSize="large" />
           </IconButton>
-          <Menu
-            open={false}
-            id="menu-appbar"
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-          >
-            <MenuItem>Profile</MenuItem>
-            <MenuItem>My account</MenuItem>
-          </Menu>
         </div>
       </Toolbar>
     </AppBar>
