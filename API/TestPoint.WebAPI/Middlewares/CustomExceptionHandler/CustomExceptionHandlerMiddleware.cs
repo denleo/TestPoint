@@ -30,6 +30,10 @@ public class CustomExceptionHandlerMiddleware
 
         switch (exception)
         {
+            case BadEntityException:
+                status = HttpStatusCode.BadRequest;
+                break;
+
             case EntityConflictException:
                 status = HttpStatusCode.Conflict;
                 break;

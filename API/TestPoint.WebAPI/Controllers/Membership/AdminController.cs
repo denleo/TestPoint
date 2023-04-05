@@ -1,27 +1,21 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
+using Swashbuckle.AspNetCore.Annotations;
+using TestPoint.Application.Admins.Commands.ChangePassword;
 using TestPoint.Application.Admins.Commands.CreateAdmin;
 using TestPoint.Application.Admins.Commands.ResetAdminPassword;
 using TestPoint.Application.Admins.Queries.GetCurrentAdmin;
 using TestPoint.WebAPI.Filters;
-using TestPoint.WebAPI.Models;
+using TestPoint.WebAPI.Models.Admin;
+using TestPoint.WebAPI.Models.User;
 
 namespace TestPoint.WebAPI.Controllers.Membership;
 
 public class AdminController : BaseController
 {
-    private readonly IMemoryCache Cache;
-
-    public AdminController(IMemoryCache memoryCache) => Cache = memoryCache;
-
-    /// <summary>
-    /// Create new administrator with temporary password
-    /// </summary>
-    /// <param name="newAdmin">New admin username</param>
-    /// <returns>New admin id and password</returns>
+    [SwaggerOperation(Summary = "Create new administrator with temporary password (roles:tpa)")]
     [HttpPost("_setup/admins"), ApiKeyAuth]
-    public async Task<ActionResult<CreateAdminResponse>> CreateAdmin([FromBody] CreateAdminDto newAdmin)
+    public async Task<ActionResult<CreateAdminResponse>> CreateAdmin([FromBody] AdminDto newAdmin)
     {
         var createAdminCommand = new CreateAdminCommand
         {
@@ -32,13 +26,9 @@ public class AdminController : BaseController
         return response;
     }
 
-    /// <summary>
-    /// Reset password for administrator
-    /// </summary>
-    /// <param name="admin">Admin username</param>
-    /// <returns>New generated password</returns>
+    [SwaggerOperation(Summary = "Reset password for administrator (roles:tpa)")]
     [HttpPatch("_setup/admin/password"), ApiKeyAuth]
-    public async Task<ActionResult<ResetAdminPasswordResponse>> ResetAdminPassword([FromBody] CreateAdminDto admin)
+    public async Task<ActionResult<ResetAdminPasswordResponse>> ResetAdminPassword([FromBody] AdminDto admin)
     {
         var resetAdminPasswordCommand = new ResetAdminPasswordCommand
         {
@@ -49,32 +39,31 @@ public class AdminController : BaseController
         return response;
     }
 
-    /// <summary>
-    /// Get current administrator data
-    /// </summary>
-    /// <returns>Administrator data</returns>
+    [SwaggerOperation(Summary = "Get current administrator data (roles:admin)")]
     [HttpGet("session/admin"), Authorize(Roles = "Administrator")]
     public async Task<ActionResult<GetCurrentAdminResponse>> GetCurrentAdmin()
     {
-        GetCurrentAdminResponse adminData;
-
-        if (Cache.TryGetValue(LoginId!.Value, out adminData))
-        {
-            return adminData;
-        }
-
         var getCurrentAdminQuery = new GetCurrentAdminQuery
         {
             AdminId = LoginId!.Value
         };
 
-        adminData = await Mediator.Send(getCurrentAdminQuery);
-
-        Cache.Set(LoginId!.Value, adminData, new MemoryCacheEntryOptions
-        {
-            SlidingExpiration = TimeSpan.FromMinutes(30)
-        });
-
+        var adminData = await Mediator.Send(getCurrentAdminQuery);
         return adminData;
+    }
+
+    [SwaggerOperation(Summary = "Change password for current admin (roles:admin)")]
+    [HttpPatch("session/admin/password"), Authorize(Roles = "Administrator")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
+    {
+        var changeAdminPasswordCommand = new ChangeAdminPasswordCommand
+        {
+            AdminId = LoginId!.Value,
+            OldPassword = changePasswordDto.OldPassword,
+            NewPassword = changePasswordDto.NewPassword
+        };
+
+        await Mediator.Send(changeAdminPasswordCommand);
+        return Ok();
     }
 }

@@ -11,6 +11,7 @@ public sealed class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Administrator> Admins { get; set; }
     public DbSet<UserGroup> UserGroups { get; set; }
+    public DbSet<Test> Tests { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -27,6 +28,9 @@ public sealed class AppDbContext : DbContext
             .ApplyConfiguration(new LoginConfiguration())
             .ApplyConfiguration(new UserConfiguration())
             .ApplyConfiguration(new AdminConfiguration())
-            .ApplyConfiguration(new UserGroupConfiguration());
+            .ApplyConfiguration(new UserGroupConfiguration())
+            .ApplyConfiguration(new TestConfiguration())
+            .ApplyConfiguration(new QuestionConfiguration())
+            .ApplyConfiguration(new AnswerConfiguration());
     }
 }

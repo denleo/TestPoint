@@ -13,7 +13,7 @@ public partial class Main : Form
 
     private void AdminSetupMenuItem_Click(object sender, EventArgs e) => RunNewTab<IAdminSetupView>();
 
-    private void LoggingMenuItem_Click(object sender, EventArgs e) { }
+    private void LoggingMenuItem_Click(object sender, EventArgs e) => RunNewTab<ILogsView>();
 
     private void RunNewTab<TView>()
     where TView : class, IViewBase

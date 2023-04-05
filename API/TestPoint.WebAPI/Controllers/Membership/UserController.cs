@@ -1,26 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
+using Swashbuckle.AspNetCore.Annotations;
+using TestPoint.Application.Users.Commands.ChangePassword;
 using TestPoint.Application.Users.Commands.CreateUser;
 using TestPoint.Application.Users.Queries.GetCurrentUser;
-using TestPoint.WebAPI.Models;
+using TestPoint.WebAPI.Models.User;
 
 namespace TestPoint.WebAPI.Controllers.Membership;
 
 public class UserController : BaseController
 {
-    private readonly IMemoryCache Cache;
-
-    public UserController(IMemoryCache memoryCache) => Cache = memoryCache;
-
-    /// <summary>
-    /// Create new user
-    /// </summary>
-    /// <param name="newUser">New user data</param>
-    /// <returns>New user id</returns>
-    [AllowAnonymous]
-    [HttpPost("users")]
-    public async Task<ActionResult<CreateUserResponse>> CreateUser([FromBody] CreateUserDto newUser)
+    [SwaggerOperation(Summary = "Create a new user")]
+    [HttpPost("users"), AllowAnonymous]
+    public async Task<ActionResult<CreateUserResponse>> CreateUser([FromBody] UserDto newUser)
     {
         var createUserCommand = new CreateUserCommand
         {
@@ -35,32 +27,31 @@ public class UserController : BaseController
         return response;
     }
 
-    /// <summary>
-    /// Get current user data
-    /// </summary>
-    /// <returns>User data</returns>
+    [SwaggerOperation(Summary = "Get current user data (roles:user)")]
     [HttpGet("session/user"), Authorize(Roles = "User")]
     public async Task<ActionResult<GetCurrentUserResponse>> GetCurrentUser()
     {
-        GetCurrentUserResponse userData;
-
-        if (Cache.TryGetValue(LoginId!.Value, out userData))
-        {
-            return userData;
-        }
-
         var getCurrentUserQuery = new GetCurrentUserQuery
         {
             UserId = LoginId!.Value
         };
 
-        userData = await Mediator.Send(getCurrentUserQuery);
-
-        Cache.Set(LoginId!.Value, userData, new MemoryCacheEntryOptions
-        {
-            SlidingExpiration = TimeSpan.FromMinutes(30)
-        });
-
+        var userData = await Mediator.Send(getCurrentUserQuery);
         return userData;
+    }
+
+    [SwaggerOperation(Summary = "Change password for current user (roles:user)")]
+    [HttpPatch("session/user/password"), Authorize(Roles = "User")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
+    {
+        var changeUserPasswordCommand = new ChangeUserPasswordCommand
+        {
+            UserId = LoginId!.Value,
+            OldPassword = changePasswordDto.OldPassword,
+            NewPassword = changePasswordDto.NewPassword
+        };
+
+        await Mediator.Send(changeUserPasswordCommand);
+        return Ok();
     }
 }

@@ -1,26 +1,23 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using TestPoint.Application.UserGroups.Commands.AddUserToGroup;
 using TestPoint.Application.UserGroups.Commands.CreateUserGroup;
 using TestPoint.Application.UserGroups.Commands.DeleteUserGroup;
 using TestPoint.Application.UserGroups.Commands.RemoveUserFromGroup;
-using TestPoint.WebAPI.Models;
+using TestPoint.WebAPI.Models.UserGroup;
 
 namespace TestPoint.WebAPI.Controllers.Membership;
 
 public class UserGroupController : BaseController
 {
-    /// <summary>
-    /// Create new user group
-    /// </summary>
-    /// <param name="newUserGroup">New user group data</param>
-    /// <returns>New user group id</returns>
+    [SwaggerOperation(Summary = "Create a new user group (roles:admin)")]
     [HttpPost("usergroup"), Authorize(Roles = "Administrator")]
-    public async Task<ActionResult<CreateUserGroupResponse>> CreateUserGroup([FromBody] CreateUserGroupDto newUserGroup)
+    public async Task<ActionResult<CreateUserGroupResponse>> CreateUserGroup([FromBody] UserGroupDto newUserGroup)
     {
         var createUserGroupCommand = new CreateUserGroupCommand
         {
-            AdministratorId = LoginId.Value,
+            AdministratorId = LoginId!.Value,
             GroupName = newUserGroup.GroupName
         };
 
@@ -28,11 +25,7 @@ public class UserGroupController : BaseController
         return response;
     }
 
-    /// <summary>
-    /// Delete existing user group
-    /// </summary>
-    /// <param name="id">User group id</param>
-    /// <returns></returns>
+    [SwaggerOperation(Summary = "Delete existing user group (roles:admin)")]
     [HttpDelete("usergroup/{id:guid}"), Authorize(Roles = "Administrator")]
     public async Task<IActionResult> DeleteUserGroup(Guid id)
     {
@@ -45,12 +38,7 @@ public class UserGroupController : BaseController
         return Ok();
     }
 
-    /// <summary>
-    /// Add user to the group
-    /// </summary>
-    /// <param name="groupId">Group id</param>
-    /// <param name="userId">User id</param>
-    /// <returns></returns>
+    [SwaggerOperation(Summary = "Add user to the group (roles:admin)")]
     [HttpPost("usergroup/{groupId:guid}/users"), Authorize(Roles = "Administrator")]
     public async Task<IActionResult> AddUserToGroup([FromRoute] Guid groupId, [FromBody] Guid userId)
     {
@@ -64,12 +52,7 @@ public class UserGroupController : BaseController
         return Ok();
     }
 
-    /// <summary>
-    /// Remove user from the group
-    /// </summary>
-    /// <param name="groupId">Group id</param>
-    /// <param name="userId">User id</param>
-    /// <returns></returns>
+    [SwaggerOperation(Summary = "Remove user from the group (roles:admin)")]
     [HttpDelete("usergroup/{groupId:guid}/users/{userId:guid}"), Authorize(Roles = "Administrator")]
     public async Task<IActionResult> RemoveUserFromGroup([FromRoute] Guid groupId, [FromRoute] Guid userId)
     {

@@ -36,8 +36,6 @@ builder.Services.AddCors(setup =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddMemoryCache();
-
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -57,6 +55,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddSwaggerGen(options =>
 {
+    options.EnableAnnotations();
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme()
     {
         Description = "Standard Authorization header using the Bearer scheme",
@@ -64,7 +63,6 @@ builder.Services.AddSwaggerGen(options =>
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
-
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
@@ -92,7 +90,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-InitializeDatabase();
+InitializeDatabase(); // Code-first DB creation
 
 app.Run();
 

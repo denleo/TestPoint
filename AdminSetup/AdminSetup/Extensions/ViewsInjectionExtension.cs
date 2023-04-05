@@ -11,6 +11,10 @@ internal static class ViewsInjectionExtension
             .As<IAdminSetupView>()
             .InstancePerDependency();
 
+        builder.RegisterType<Tabs.Logs>()
+            .As<ILogsView>()
+            .InstancePerDependency();
+
         return builder;
     }
 }

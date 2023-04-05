@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 using TestPoint.Application.Interfaces.Services;
 using TestPoint.Application.Users.Commands.ConfirmEmail;
 using TestPoint.Application.Users.Commands.ResetUserPassword;
 using TestPoint.Application.Users.Commands.SendEmailConfirmation;
 using TestPoint.Application.Users.Commands.SendForgotPasswordEmail;
-using TestPoint.WebAPI.Models;
+using TestPoint.WebAPI.Models.User;
 
 namespace TestPoint.WebAPI.Controllers.Email;
 
@@ -22,9 +23,7 @@ public class EmailController : BaseController
         proxySecurePort = config.GetSection("Proxy:HttpsPort").Value;
     }
 
-    /// <summary>
-    /// Send email verification for the current user 
-    /// </summary>
+    [SwaggerOperation(Summary = "Send verification email for the current user (roles:user)")]
     [HttpPost("session/user/email-verification"), Authorize(Roles = "User")]
     public async Task<IActionResult> SendEmailVerification()
     {
@@ -38,11 +37,8 @@ public class EmailController : BaseController
         return Accepted(value: "Verification email will be sent, please check your mailbox.");
     }
 
-    /// <summary>
-    /// Confirm user email link
-    /// </summary>
-    [AllowAnonymous]
-    [HttpGet("user/email/verify/{token}")]
+    [SwaggerOperation(Summary = "Confirm user email link")]
+    [HttpGet("user/email/verify/{token}"), AllowAnonymous]
     public async Task<IActionResult> ConfirmEmail(string token)
     {
         List<Claim> claims;
@@ -78,12 +74,8 @@ public class EmailController : BaseController
         return Ok("Email confirmed, this page can be closed.");
     }
 
-    /// <summary>
-    /// Send forgot password email for user
-    /// </summary>
-    /// <param name="userForgotPassword">Username</param>
-    [AllowAnonymous]
-    [HttpPost("user/password/forgot-password")]
+    [SwaggerOperation(Summary = "Send forgot password email for the user")]
+    [HttpPost("user/password/forgot-password"), AllowAnonymous]
     public async Task<IActionResult> SendForgotPasswordEmail([FromBody] UserForgotPasswordDto userForgotPassword)
     {
         var sendForgotPasswordEmailCommand = new SendForgotPasswordEmailCommand
@@ -96,11 +88,8 @@ public class EmailController : BaseController
         return Accepted(value: "Email with further instructions will be sent, please check your mailbox.");
     }
 
-    /// <summary>
-    /// Reset user password link
-    /// </summary>
-    [AllowAnonymous]
-    [HttpGet("user/password/reset/{token}")]
+    [SwaggerOperation(Summary = "Reset user password link")]
+    [HttpGet("user/password/reset/{token}"), AllowAnonymous]
     public async Task<IActionResult> ResetUserPassword(string token)
     {
         List<Claim> claims;

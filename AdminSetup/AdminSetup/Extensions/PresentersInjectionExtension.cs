@@ -13,6 +13,10 @@ internal static class PresentersInjectionExtension
             .As<PresenterBase<IAdminSetupView>>()
             .InstancePerDependency();
 
+        builder.RegisterType<LogsPresenter>()
+            .As<PresenterBase<ILogsView>>()
+            .InstancePerDependency();
+
         return builder;
     }
 }

@@ -16,10 +16,12 @@ public sealed class UnitOfWork : IUnitOfWork
     private IAdminRepository _adminRepository = null!;
     private IUserRepository _userRepository = null!;
     private IUserGroupRepository _userGroupRepository = null!;
+    private ITestRepository _testRepository = null!;
 
     public IAdminRepository AdminRepository => _adminRepository ??= new AdminRepository(_context);
     public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
     public IUserGroupRepository UserGroupRepository => _userGroupRepository ??= new UserGroupRepository(_context);
+    public ITestRepository TestRepository => _testRepository ??= new TestRepository(_context);
 
     public UnitOfWork(AppDbContext appDbContext, ILogger<UnitOfWork> logger)
     {

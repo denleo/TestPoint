@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using System.Security.Claims;
 using TestPoint.Application.Admins.Queries.CheckAdminLogin;
@@ -7,7 +8,8 @@ using TestPoint.Application.Interfaces.Services;
 using TestPoint.Application.Users.Queries.CheckUserLogin;
 using TestPoint.Domain;
 using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
-using TestPoint.WebAPI.Models;
+using TestPoint.WebAPI.Models.Admin;
+using TestPoint.WebAPI.Models.User;
 
 namespace TestPoint.WebAPI.Controllers.Auth;
 
@@ -21,11 +23,7 @@ public class AuthController : BaseController
         _jwtService = jwtService;
     }
 
-    /// <summary>
-    /// User login action
-    /// </summary>
-    /// <param name="login">User credentials</param>
-    /// <returns>JWT Token</returns>
+    [SwaggerOperation(Summary = "User login action")]
     [HttpPost("auth/user")]
     public async Task<ActionResult<string>> UserLogin([FromBody] UserLoginDto login)
     {
@@ -45,11 +43,7 @@ public class AuthController : BaseController
         return _jwtService.CreateToken(CreateClaims(loginResponse.UserId, loginResponse.Username, LoginType.User));
     }
 
-    /// <summary>
-    /// Admin login action
-    /// </summary>
-    /// <param name="login">Admin credentials</param>
-    /// <returns>JWT Token</returns>
+    [SwaggerOperation(Summary = "Admin login action")]
     [HttpPost("auth/admin")]
     public async Task<ActionResult<string>> AdminLogin([FromBody] AdminLoginDto login)
     {

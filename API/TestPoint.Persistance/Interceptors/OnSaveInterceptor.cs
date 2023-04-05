@@ -8,7 +8,7 @@ internal sealed class OnSaveInterceptor : SaveChangesInterceptor
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
-        foreach (var entry in eventData.Context.ChangeTracker.Entries())
+        foreach (var entry in eventData!.Context!.ChangeTracker.Entries())
         {
             if (entry.Entity is AuditableEntity entity)
             {
