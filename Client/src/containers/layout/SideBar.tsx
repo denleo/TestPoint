@@ -1,12 +1,12 @@
 import React, { FC } from "react";
 
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
 import HomeIcon from "@mui/icons-material/Home";
 import LogoutIcon from "@mui/icons-material/Logout";
-import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import QuizIcon from "@mui/icons-material/Quiz";
+import SensorDoorIcon from "@mui/icons-material/SensorDoor";
 import {
   Divider,
   Drawer as MUIDrawer,
@@ -53,6 +53,18 @@ const Drawer = styled(MUIDrawer)(({ theme }) => ({
   },
 }));
 
+const ExitButton = styled(ListItemButton)(({ theme }) => ({
+  "&:hover, &:focus, &:active": {
+    backgroundColor: theme.palette.error.light,
+  },
+}));
+
+const ListButton = styled(ListItemButton)(({ theme }) => ({
+  "&:hover, &:focus, &:active": {
+    backgroundColor: theme.palette.secondary.light,
+  },
+}));
+
 const routes = [
   {
     ...TESTPOINT_ROUTES.home,
@@ -61,6 +73,10 @@ const routes = [
   {
     ...TESTPOINT_ROUTES.tests,
     icon: <QuizIcon />,
+  },
+  {
+    ...TESTPOINT_ROUTES.profile,
+    icon: <AccountBoxIcon />,
   },
   {
     ...TESTPOINT_ROUTES.statistics,
@@ -96,22 +112,22 @@ export const SideBar: FC = () => {
       <List>
         {routes.map(({ icon, name, path }) => (
           <ListItem key={name} color={theme.palette.secondary.main} disablePadding onClick={() => navigate(path)}>
-            <ListItemButton color={theme.palette.secondary.main}>
+            <ListButton color={theme.palette.secondary.main}>
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText primary={name} />
-            </ListItemButton>
+            </ListButton>
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ExitButton>
             <ListItemIcon>
-              <LogoutIcon />
+              <SensorDoorIcon />
             </ListItemIcon>
             <ListItemText primary="Exit" />
-          </ListItemButton>
+          </ExitButton>
         </ListItem>
       </List>
     </Drawer>

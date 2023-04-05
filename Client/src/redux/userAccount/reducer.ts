@@ -14,6 +14,7 @@ const initialState: AccountUserState = {
     lastName: "",
     email: "",
     avatar: "",
+    creationDate: new Date(),
   },
   status: null,
 };

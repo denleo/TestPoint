@@ -1,13 +1,6 @@
 import React, { FC } from "react";
 
-import {
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  Link,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Checkbox, FormControlLabel, Grid, Link, Typography, useTheme } from "@mui/material";
 import { Form, useFormikContext } from "formik";
 
 import { TextFieldFormik } from "@/components/TextFieldFormik";
@@ -65,13 +58,7 @@ export const LoginForm: FC<Props> = ({ isUser }) => {
           <FormControlLabel
             label={<Typography variant="body2">Remember me</Typography>}
             control={
-              <Checkbox
-                name="rememberMe"
-                color="secondary"
-                size="small"
-                checked={rememberMe}
-                onChange={handleChange}
-              />
+              <Checkbox name="rememberMe" color="secondary" size="small" checked={rememberMe} onChange={handleChange} />
             }
           />
         </Grid>

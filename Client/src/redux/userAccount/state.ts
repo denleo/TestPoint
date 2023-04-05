@@ -11,6 +11,7 @@ export interface UserData {
   lastName: string;
   email: string;
   avatar: string;
+  creationDate: Date;
 }
 
 export interface AccountUserState {

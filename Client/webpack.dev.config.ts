@@ -3,10 +3,7 @@ import path from "path";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
-import {
-  Configuration as WebpackConfiguration,
-  HotModuleReplacementPlugin,
-} from "webpack";
+import { Configuration as WebpackConfiguration, HotModuleReplacementPlugin } from "webpack";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
 
 interface Configuration extends WebpackConfiguration {
@@ -30,13 +27,22 @@ const config: Configuration = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: [
-              "@babel/preset-env",
-              "@babel/preset-react",
-              "@babel/preset-typescript",
-            ],
+            presets: ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"],
           },
         },
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/, // определяем типы файлов, которые будем обрабатывать
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 8192, // если размер файла меньше 8 КБ, то он будет встроен в CSS-файл в формате base64
+              fallback: "file-loader", // если размер файла больше 8 КБ, то используется file-loader для сохранения файла на диск
+              outputPath: "images", // указываем путь для сохранения файлов изображений
+            },
+          },
+        ],
       },
     ],
   },
