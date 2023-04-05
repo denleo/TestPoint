@@ -1,21 +1,15 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+import { MOCK_USER } from "@/mock/user";
+
 import { setUserTokenToStorage } from "@api/userToken";
 
 import { AccountActions } from "./actions";
-import { AccountUserState, ResponseStatuses, UserData } from "./state";
+import { AccountUserState, ResponseStatuses } from "./state";
 
 const initialState: AccountUserState = {
-  data: {
-    username: "max",
-    emailConfirmed: false,
-    firstName: "",
-    lastName: "",
-    email: "",
-    avatar: "",
-    creationDate: new Date(),
-  },
+  data: MOCK_USER,
   status: null,
 };
 

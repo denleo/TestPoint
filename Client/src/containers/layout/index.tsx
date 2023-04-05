@@ -23,6 +23,7 @@ const MainContainer = styled("main", {
 }>(({ theme, isMinimized }) => ({
   flexGrow: 1,
   height: `calc(100vh - ${HEADER_HEIGHT + 1}px)`, // 1px Divider XD
+  overflow: "auto",
   padding: theme.spacing(3),
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,

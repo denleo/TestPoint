@@ -3,11 +3,7 @@ import React, { useCallback, useState } from "react";
 import { Paper, styled } from "@mui/material";
 import { Form, Formik } from "formik";
 
-import {
-  SignUpUserFormValues,
-  SIGN_UP_STEPS,
-  START_PAGE_STEPS,
-} from "../common";
+import { SignUpUserFormValues, SIGN_UP_STEPS, START_PAGE_STEPS } from "../common";
 import { useStartPageStore } from "../useStartPageStore";
 
 import { CredentialsStep } from "./CredentialsStep";
@@ -81,15 +77,9 @@ export const SignUp = () => {
         onReset={handleResetForm}
       >
         <Form style={{ height: "100%" }} id="sign-up">
-          {signUpStep === SIGN_UP_STEPS.USERNAME && (
-            <UserNameStep onBack={backToLogin} onNext={openNames} />
-          )}
-          {signUpStep === SIGN_UP_STEPS.NAMES && (
-            <NamesStep onBack={goToUserName} onNext={openCredentials} />
-          )}
-          {signUpStep === SIGN_UP_STEPS.CREDENTIALS && (
-            <CredentialsStep onBack={goToNames} />
-          )}
+          {signUpStep === SIGN_UP_STEPS.USERNAME && <UserNameStep onBack={backToLogin} onNext={openNames} />}
+          {signUpStep === SIGN_UP_STEPS.NAMES && <NamesStep onBack={goToUserName} onNext={openCredentials} />}
+          {signUpStep === SIGN_UP_STEPS.CREDENTIALS && <CredentialsStep onBack={goToNames} />}
         </Form>
       </Formik>
     </ModalPaper>

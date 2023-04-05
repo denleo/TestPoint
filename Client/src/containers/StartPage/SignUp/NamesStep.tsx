@@ -1,15 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { FC, useCallback } from "react";
+import React, { FC } from "react";
 
-import {
-  Box,
-  Container,
-  DialogContentText,
-  FormControl,
-  Grid,
-  styled,
-  Typography,
-} from "@mui/material";
+import { Box, FormControl, styled, Typography } from "@mui/material";
 
 import { useFieldStable } from "@/api/hooks/useFieldStable";
 import { TextFieldFormik } from "@/components/TextFieldFormik";
@@ -66,11 +58,7 @@ export const NamesStep: FC<Props> = ({ onBack, onNext }) => {
           />
         </FormControl>
       </Box>
-      <FormActions
-        disabled={!!metaFirstName.error || !!metaLastName.error}
-        onBack={onBack}
-        onNext={onNext}
-      />
+      <FormActions disabled={!!metaFirstName.error || !!metaLastName.error} onBack={onBack} onNext={onNext} />
     </ModalLayout>
   );
 };

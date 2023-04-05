@@ -21,36 +21,28 @@ export const validationSchema = yup.object({
     .oneOf([yup.ref("password"), ""], "Passwords must match"),
 });
 
-export const validateForm = ({
-  username,
-  firstName,
-  lastName,
-}: SignUpUserFormValues) => {
+export const validateForm = ({ username, firstName, lastName }: SignUpUserFormValues) => {
   const errors: FormikErrors<SignUpUserFormValues> = {};
 
   // validate username
   const usernameCharacters = username.length >= 3 && username.length <= 10;
   const usernameLettersNumbers = lettersNumbers(username);
 
-  if (!usernameCharacters)
-    errors.username = "Between 3 and 10 characters long.";
-  if (!usernameLettersNumbers)
-    errors.username = "Only letters and numbers, no special characters.";
+  if (!usernameCharacters) errors.username = "Between 3 and 10 characters long.";
+  if (!usernameLettersNumbers) errors.username = "Only letters and numbers, no special characters.";
 
   // validate names
   const firstNameCharacters = firstName.length > 0;
   const firstNameLettersNumbers = onlyLetters(firstName);
 
   if (!firstNameCharacters) errors.firstName = "Can't be empty.";
-  if (!firstNameLettersNumbers)
-    errors.firstName = "Only letters, no numbers and special characters.";
+  if (!firstNameLettersNumbers) errors.firstName = "Only letters, no numbers and special characters.";
 
   const lastNameCharacters = lastName.length > 0;
   const lastNameLettersNumbers = onlyLetters(lastName);
 
   if (!lastNameCharacters) errors.lastName = "Can't be empty.";
-  if (!lastNameLettersNumbers)
-    errors.lastName = "Only letters, no numbers and special characters.";
+  if (!lastNameLettersNumbers) errors.lastName = "Only letters, no numbers and special characters.";
 
   return errors;
 };

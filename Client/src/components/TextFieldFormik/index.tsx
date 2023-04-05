@@ -1,11 +1,6 @@
 import React, { FC, useCallback } from "react";
 
-import {
-  FormHelperText,
-  TextField,
-  TextFieldProps,
-  useTheme,
-} from "@mui/material";
+import { FormHelperText, TextField, TextFieldProps, useTheme } from "@mui/material";
 import { Field, FieldConfig } from "formik";
 import { identity } from "lodash";
 
@@ -14,10 +9,7 @@ import { useFieldStable } from "@api/hooks/useFieldStable";
 import { FieldEndAdornmentClear } from "../FieldEndAdornmentClear";
 
 interface Props
-  extends Omit<
-      FieldConfig,
-      "component" | "as" | "children" | "value" | "innerRef" | "type"
-    >,
+  extends Omit<FieldConfig, "component" | "as" | "children" | "value" | "innerRef" | "type">,
     Omit<TextFieldProps, "name" | "onChange" | "error"> {
   onChange?: (value: string) => void;
   onChangeTransform?: (raw: string) => string;
@@ -67,10 +59,7 @@ export const TextFieldFormik: FC<Props> = ({
         InputProps={{
           ...textFieldFormikProps?.InputProps,
           endAdornment: clearable
-            ? (!select ||
-                !!(Array.isArray(field.value)
-                  ? field.value.length
-                  : field.value)) && (
+            ? (!select || !!(Array.isArray(field.value) ? field.value.length : field.value)) && (
                 <FieldEndAdornmentClear
                   sx={{ marginRight: select ? theme.spacing(3) : undefined }}
                   name={name}
