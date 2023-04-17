@@ -5,7 +5,7 @@ using TestPoint.Domain;
 
 namespace TestPoint.Application.Users.Queries.CheckUserLogin;
 
-internal class CheckUserLoginHandler : IRequestHandler<CheckUserLoginQuery, CheckUserLoginResponse?>
+public class CheckUserLoginHandler : IRequestHandler<CheckUserLoginQuery, CheckUserLoginResponse?>
 {
     private readonly IUnitOfWork _uow;
 

@@ -5,7 +5,7 @@ using TestPoint.Domain;
 
 namespace TestPoint.Application.UserGroups.Commands.CreateUserGroup;
 
-internal class CreateUserGroupHandler : IRequestHandler<CreateUserGroupCommand, CreateUserGroupResponse>
+public class CreateUserGroupHandler : IRequestHandler<CreateUserGroupCommand, CreateUserGroupResponse>
 {
     private readonly IUnitOfWork _uow;
 

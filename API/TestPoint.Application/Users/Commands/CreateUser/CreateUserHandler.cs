@@ -6,7 +6,7 @@ using TestPoint.Domain;
 
 namespace TestPoint.Application.Users.Commands.CreateUser;
 
-internal class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserResponse>
+public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserResponse>
 {
     private readonly IUnitOfWork _uow;
     public CreateUserHandler(IUnitOfWork unitOfWork)

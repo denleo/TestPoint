@@ -6,7 +6,7 @@ using TestPoint.Domain;
 
 namespace TestPoint.Application.Tests.Commands.CreateTest;
 
-internal class CreateTestHandler : IRequestHandler<CreateTestCommand, Test>
+public class CreateTestHandler : IRequestHandler<CreateTestCommand, Test>
 {
     private readonly IUnitOfWork _uow;
 

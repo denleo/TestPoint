@@ -7,7 +7,7 @@ using TestPoint.Application.Interfaces.Services;
 
 namespace TestPoint.Application.Users.Commands.SendEmailConfirmation;
 
-internal class SendEmailConfirmationHandler : IRequestHandler<SendEmailConfirmationCommand>
+public class SendEmailConfirmationHandler : IRequestHandler<SendEmailConfirmationCommand>
 {
     private readonly IUnitOfWork _uow;
     private readonly IJwtService _jwtService;

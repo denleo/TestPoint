@@ -5,7 +5,7 @@ using TestPoint.Application.Interfaces.Persistence;
 
 namespace TestPoint.Application.Admins.Commands.ChangePassword;
 
-internal class ChangeAdminPasswordHandler : IRequestHandler<ChangeAdminPasswordCommand>
+public class ChangeAdminPasswordHandler : IRequestHandler<ChangeAdminPasswordCommand>
 {
     private readonly IUnitOfWork _uow;
 

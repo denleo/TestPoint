@@ -6,7 +6,7 @@ using TestPoint.Domain;
 
 namespace TestPoint.Application.Admins.Commands.CreateAdmin;
 
-internal class CreateAdminHandler : IRequestHandler<CreateAdminCommand, CreateAdminResponse>
+public class CreateAdminHandler : IRequestHandler<CreateAdminCommand, CreateAdminResponse>
 {
     private readonly IUnitOfWork _uow;
 

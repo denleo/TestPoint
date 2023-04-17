@@ -7,7 +7,7 @@ using TestPoint.Application.Interfaces.Services;
 
 namespace TestPoint.Application.Users.Commands.SendForgotPasswordEmail;
 
-internal class SendForgotPasswordEmailHandler : IRequestHandler<SendForgotPasswordEmailCommand>
+public class SendForgotPasswordEmailHandler : IRequestHandler<SendForgotPasswordEmailCommand>
 {
     private readonly IUnitOfWork _uow;
     private readonly IEmailService _emailService;

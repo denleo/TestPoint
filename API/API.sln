@@ -17,7 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestPoint.DAL", "TestPoint.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestPoint.EmailService", "TestPoint.EmailService\TestPoint.EmailService.csproj", "{6043BF18-8E80-47D7-A420-E7CA255824CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPoint.JwtService", "TestPoint.JwtService\TestPoint.JwtService.csproj", "{39958E7E-3B2E-400B-867D-FD2D38D5F6C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestPoint.JwtService", "TestPoint.JwtService\TestPoint.JwtService.csproj", "{39958E7E-3B2E-400B-867D-FD2D38D5F6C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D7E46F25-9C09-4C29-90E2-A59497B37009}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPoint.Application.Tests", "TestPoint.Application.Tests\TestPoint.Application.Tests.csproj", "{C84586AC-B03E-473D-AD85-6869DBD694B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +53,10 @@ Global
 		{39958E7E-3B2E-400B-867D-FD2D38D5F6C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39958E7E-3B2E-400B-867D-FD2D38D5F6C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39958E7E-3B2E-400B-867D-FD2D38D5F6C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C84586AC-B03E-473D-AD85-6869DBD694B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C84586AC-B03E-473D-AD85-6869DBD694B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C84586AC-B03E-473D-AD85-6869DBD694B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C84586AC-B03E-473D-AD85-6869DBD694B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +67,7 @@ Global
 		{E58A0A25-906F-456E-A1E5-8B290235826E} = {1652E114-D48B-4F03-9D32-C0C17B3DF815}
 		{6043BF18-8E80-47D7-A420-E7CA255824CE} = {1652E114-D48B-4F03-9D32-C0C17B3DF815}
 		{39958E7E-3B2E-400B-867D-FD2D38D5F6C5} = {1652E114-D48B-4F03-9D32-C0C17B3DF815}
+		{C84586AC-B03E-473D-AD85-6869DBD694B3} = {D7E46F25-9C09-4C29-90E2-A59497B37009}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {41FE4CF8-D4C2-406D-BE28-DE3F5E7CA583}

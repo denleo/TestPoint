@@ -8,7 +8,7 @@ using TestPoint.Application.Interfaces.Services;
 
 namespace TestPoint.Application.Users.Commands.ResetUserPassword;
 
-internal class ResetUserPasswordHandler : IRequestHandler<ResetUserPasswordCommand, ResetUserPasswordResponse>
+public class ResetUserPasswordHandler : IRequestHandler<ResetUserPasswordCommand, ResetUserPasswordResponse>
 {
     private readonly IUnitOfWork _uow;
     private readonly IEmailService _emailService;

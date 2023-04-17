@@ -4,7 +4,7 @@ using TestPoint.Application.Interfaces.Persistence;
 
 namespace TestPoint.Application.Admins.Queries.CheckAdminLogin;
 
-internal class CheckAdminLoginHandler : IRequestHandler<CheckAdminLoginQuery, CheckAdminLoginResponse?>
+public class CheckAdminLoginHandler : IRequestHandler<CheckAdminLoginQuery, CheckAdminLoginResponse?>
 {
     private readonly IUnitOfWork _uow;
 
