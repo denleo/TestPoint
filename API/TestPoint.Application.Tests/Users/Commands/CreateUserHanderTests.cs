@@ -1,20 +1,17 @@
 ﻿using TestPoint.Application.Common.Exceptions;
 using TestPoint.Application.Interfaces.Persistence;
-using TestPoint.Application.Interfaces.Persistence.Repositories;
 using TestPoint.Application.Users.Commands.CreateUser;
 
 namespace TestPoint.Application.Tests.Users.Commands;
 
 public class CreateUserHanderTests
 {
-    private readonly Mock<IUnitOfWork> _uow;
-    private readonly IUserRepository _userRepository;
+    private readonly CreateUserHandler _sut;
+    private readonly Mock<IUnitOfWork> _uow = new Mock<IUnitOfWork>();
 
     public CreateUserHanderTests()
     {
-        _uow = new Mock<IUnitOfWork>();
-
-        _userRepository = new FakeUserRepository()
+        var fakeUserRepo = new FakeUserRepository()
         {
             Users = new List<User>
             {
@@ -43,15 +40,14 @@ public class CreateUserHanderTests
             }
         };
 
-        _uow.Setup(x => x.UserRepository).Returns(_userRepository);
+        _uow.Setup(x => x.UserRepository).Returns(fakeUserRepo);
+        _sut = new CreateUserHandler(_uow.Object);
     }
 
     [Fact]
     public async void CreateUser_UserWithSuchUsernameExists_ThrowConflictException()
     {
         // Arrange
-        var ct = new CancellationToken(false);
-        var handler = new CreateUserHandler(_uow.Object);
         var command = new CreateUserCommand
         {
             Username = "jdoe2002",
@@ -62,7 +58,7 @@ public class CreateUserHanderTests
         };
 
         // Act 
-        Task act() => handler.Handle(command, ct);
+        Task act() => _sut.Handle(command, new CancellationToken());
 
         // Assert
         await Assert.ThrowsAsync<EntityConflictException>(act);
@@ -72,8 +68,6 @@ public class CreateUserHanderTests
     public async void CreateUser_UserWithSuchEmailExists_ThrowConflictException()
     {
         // Arrange
-        var ct = new CancellationToken(false);
-        var handler = new CreateUserHandler(_uow.Object);
         var command = new CreateUserCommand
         {
             Username = "teste2003",
@@ -84,7 +78,7 @@ public class CreateUserHanderTests
         };
 
         // Act 
-        Task act() => handler.Handle(command, ct);
+        Task act() => _sut.Handle(command, new CancellationToken());
 
         // Assert
         await Assert.ThrowsAsync<EntityConflictException>(act);
@@ -94,8 +88,6 @@ public class CreateUserHanderTests
     public async void CreateUser_ValidUser_SaveChanges()
     {
         // Arrange
-        var ct = new CancellationToken(false);
-        var handler = new CreateUserHandler(_uow.Object);
         var command = new CreateUserCommand
         {
             Username = "newuser",
@@ -106,7 +98,7 @@ public class CreateUserHanderTests
         };
 
         // Act 
-        await handler.Handle(command, ct);
+        await _sut.Handle(command, new CancellationToken());
 
         // Assert
         _uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());

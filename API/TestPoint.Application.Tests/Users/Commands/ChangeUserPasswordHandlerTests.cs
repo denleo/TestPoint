@@ -6,14 +6,12 @@ namespace TestPoint.Application.Tests.Users.Commands;
 
 public class ChangeUserPasswordHandlerTests
 {
-    private readonly Mock<IUnitOfWork> _uow;
-    private readonly FakeUserRepository _userRepository;
+    private readonly ChangeUserPasswordHandler _sut;
+    private readonly Mock<IUnitOfWork> _uow = new Mock<IUnitOfWork>();
 
     public ChangeUserPasswordHandlerTests()
     {
-        _uow = new Mock<IUnitOfWork>();
-
-        _userRepository = new FakeUserRepository()
+        var fakeUserRepo = new FakeUserRepository()
         {
             Users = new List<User>
             {
@@ -42,15 +40,14 @@ public class ChangeUserPasswordHandlerTests
             }
         };
 
-        _uow.Setup(x => x.UserRepository).Returns(_userRepository);
+        _uow.Setup(x => x.UserRepository).Returns(fakeUserRepo);
+        _sut = new ChangeUserPasswordHandler(_uow.Object);
     }
 
     [Fact]
     public async void ChangeUserPassword_UserDoesNotExist_ThrowEntityNotFoundException()
     {
         // Arrange
-        var ct = new CancellationToken(false);
-        var handler = new ChangeUserPasswordHandler(_uow.Object);
         var command = new ChangeUserPasswordCommand
         {
             UserId = Guid.Empty,
@@ -59,7 +56,7 @@ public class ChangeUserPasswordHandlerTests
         };
 
         // Act 
-        Task act() => handler.Handle(command, ct);
+        Task act() => _sut.Handle(command, new CancellationToken());
 
         // Assert
         await Assert.ThrowsAsync<EntityNotFoundException>(act);
@@ -69,8 +66,6 @@ public class ChangeUserPasswordHandlerTests
     public async void ChangeUserPassword_WrongOldPassword_ThrowActionNotAllowedException()
     {
         // Arrange
-        var ct = new CancellationToken(false);
-        var handler = new ChangeUserPasswordHandler(_uow.Object);
         var command = new ChangeUserPasswordCommand
         {
             UserId = Guid.Parse("1e1c6580-66f5-4c8b-bd3f-fc82394827be"),
@@ -79,7 +74,7 @@ public class ChangeUserPasswordHandlerTests
         };
 
         // Act 
-        Task act() => handler.Handle(command, ct);
+        Task act() => _sut.Handle(command, new CancellationToken());
 
         // Assert
         await Assert.ThrowsAsync<ActionNotAllowedException>(act);
@@ -89,8 +84,6 @@ public class ChangeUserPasswordHandlerTests
     public async void ChangeUserPassword_ValidCommand_SaveChanges()
     {
         // Arrange
-        var ct = new CancellationToken(false);
-        var handler = new ChangeUserPasswordHandler(_uow.Object);
         var command = new ChangeUserPasswordCommand
         {
             UserId = Guid.Parse("1e1c6580-66f5-4c8b-bd3f-fc82394827be"),
@@ -99,7 +92,7 @@ public class ChangeUserPasswordHandlerTests
         };
 
         // Act 
-        await handler.Handle(command, ct);
+        await _sut.Handle(command, new CancellationToken());
 
         // Assert
         _uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
