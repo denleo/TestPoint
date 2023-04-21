@@ -9,19 +9,9 @@ interface Props {
   onNext?: () => void;
 }
 
-export const FormActions: FC<Props> = ({
-  onBack,
-  onNext,
-  disabled,
-  isSubmit = false,
-}) => {
+export const FormActions: FC<Props> = ({ onBack, onNext, disabled, isSubmit = false }) => {
   return (
-    <Box
-      display="flex"
-      width="100%"
-      alignItems="center"
-      justifyContent="flex-end"
-    >
+    <Box display="flex" width="100%" alignItems="center" justifyContent="flex-end">
       <Button variant="text" type="reset" form="sign-up">
         Reset
       </Button>
@@ -30,12 +20,7 @@ export const FormActions: FC<Props> = ({
           Create
         </Button>
       ) : (
-        <Button
-          disabled={disabled}
-          onClick={onNext}
-          form="sign-up"
-          color="secondary"
-        >
+        <Button disabled={disabled} onClick={onNext} form="sign-up" color="secondary">
           Next
         </Button>
       )}

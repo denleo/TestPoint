@@ -1,8 +1,6 @@
 import { FormikErrors } from "formik";
 import * as yup from "yup";
 
-import { SignUpUserFormValues } from "../common";
-
 const lettersNumbers = (str: string) => /^[a-z0-9]*$/i.test(str);
 const onlyLetters = (str: string) => /^[a-z]*$/i.test(str);
 
@@ -21,8 +19,14 @@ export const validationSchema = yup.object({
     .oneOf([yup.ref("password"), ""], "Passwords must match"),
 });
 
-export const validateForm = ({ username, firstName, lastName }: SignUpUserFormValues) => {
-  const errors: FormikErrors<SignUpUserFormValues> = {};
+export interface DefaultValidationValues {
+  username: string;
+  firstName: string;
+  lastName: string;
+}
+
+export const validateForm = ({ username, firstName, lastName }: DefaultValidationValues) => {
+  const errors: FormikErrors<DefaultValidationValues> = {};
 
   // validate username
   const usernameCharacters = username.length >= 3 && username.length <= 10;
