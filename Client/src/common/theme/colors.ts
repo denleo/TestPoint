@@ -7,7 +7,7 @@ export const MAIN_BACKGROUND = "#F3F4F6";
 export const { palette } = createTheme({
   palette: {
     primary: {
-      main: "#D8DEE9",
+      main: "#343a40",
       light: "#e5e9f0",
       dark: "#81a1c1",
     },
@@ -17,8 +17,8 @@ export const { palette } = createTheme({
       dark: "#364FC7",
     },
     success: {
-      main: "#8ce99a",
-      light: "#d3ffce",
+      main: "#a9e34b",
+      light: "#8ce99a",
       dark: "#66a80f",
     },
     info: {
@@ -38,12 +38,13 @@ export const { palette } = createTheme({
     },
     text: {
       primary: "#111827",
-      secondary: "#6B7280",
-      disabled: "#d8dee9",
+      secondary: "#343a40",
+      disabled: "#6B7280",
     },
     background: {
       default: MAIN_BACKGROUND,
       paper: "#e5e9f0",
     },
+    divider: "rgba(0, 0, 0, 0.12)",
   },
 });

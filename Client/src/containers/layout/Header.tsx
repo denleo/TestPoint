@@ -3,18 +3,13 @@ import React, { FC } from "react";
 
 import { AccountCircle } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
-import {
-  Breadcrumbs,
-  IconButton,
-  Link,
-  Menu,
-  MenuItem,
-  styled,
-  Toolbar,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Breadcrumbs, IconButton, Link, styled, Toolbar, Typography, useTheme } from "@mui/material";
 import MuiAppBar, { AppBarProps } from "@mui/material/AppBar";
+import { useNavigate } from "react-router-dom";
+
+import { useCurrentPath } from "@/api/hooks/useCurrentPath";
+
+import { TESTPOINT_ROUTES } from "@api/pageRoutes";
 
 import { DRAWER_WIDTH, HEADER_HEIGHT } from "./common";
 import { useSidebarStore } from "./useLayoutStore";
@@ -42,6 +37,8 @@ const AppBar = styled(MuiAppBar, {
 
 export const Header: FC = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+  const currentPath = useCurrentPath();
   const isMinimized = useSidebarStore((store) => store.isMinimized);
   const toggleIsMinimized = useSidebarStore((store) => store.toggleIsMinimized);
 
@@ -71,7 +68,7 @@ export const Header: FC = () => {
               TestPoint
             </Link>
             <Typography variant="body2" color="text.primary">
-              Home
+              {currentPath ? currentPath.name : "Home"}
             </Typography>
           </Breadcrumbs>
         </Typography>
@@ -81,26 +78,11 @@ export const Header: FC = () => {
             aria-label="account of current user"
             aria-controls="menu-appbar"
             aria-haspopup="true"
-            color="inherit"
+            color="secondary"
+            onClick={() => navigate(TESTPOINT_ROUTES.profile.path)}
           >
-            <AccountCircle />
+            <AccountCircle fontSize="large" />
           </IconButton>
-          <Menu
-            open={false}
-            id="menu-appbar"
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-          >
-            <MenuItem>Profile</MenuItem>
-            <MenuItem>My account</MenuItem>
-          </Menu>
         </div>
       </Toolbar>
     </AppBar>

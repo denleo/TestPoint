@@ -8,8 +8,7 @@ export const useSidebarStore = create(
         isMinimized: false,
       },
       (set, get) => ({
-        toggleIsMinimized: (isMinimized?: boolean) =>
-          set({ isMinimized: isMinimized ?? !get().isMinimized }),
+        toggleIsMinimized: (isMinimized?: boolean) => set({ isMinimized: isMinimized ?? !get().isMinimized }),
       })
     ),
     {

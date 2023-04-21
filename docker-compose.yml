@@ -24,6 +24,13 @@ services:
      ASPNETCORE_ENVIRONMENT: Development
    depends_on:
      - db
+ client:
+   container_name: testpoint-client
+   build:
+     context: /Client
+   restart: always
+   depends_on:
+     - backend
  proxy:
    container_name: testpoint-proxy
    build:
@@ -33,4 +40,4 @@ services:
      - "8080:443"
      - "8081:80"
    depends_on:
-     - backend
+     - client

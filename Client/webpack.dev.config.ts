@@ -3,10 +3,7 @@ import path from "path";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
-import {
-  Configuration as WebpackConfiguration,
-  HotModuleReplacementPlugin,
-} from "webpack";
+import { Configuration as WebpackConfiguration, HotModuleReplacementPlugin } from "webpack";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
 
 interface Configuration extends WebpackConfiguration {
@@ -30,13 +27,22 @@ const config: Configuration = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: [
-              "@babel/preset-env",
-              "@babel/preset-react",
-              "@babel/preset-typescript",
-            ],
+            presets: ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"],
           },
         },
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/, // определяем типы файлов, которые будем обрабатывать
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 8192, // если размер файла меньше 8 КБ, то он будет встроен в CSS-файл в формате base64
+              fallback: "file-loader", // если размер файла больше 8 КБ, то используется file-loader для сохранения файла на диск
+              outputPath: "images", // указываем путь для сохранения файлов изображений
+            },
+          },
+        ],
       },
     ],
   },
@@ -50,6 +56,7 @@ const config: Configuration = {
       "@constants": path.resolve(__dirname, "src/constants"),
       "@common": path.resolve(__dirname, "src/common"),
       "@api": path.resolve(__dirname, "src/api"),
+      "@redux": path.resolve(__dirname, "src/redux"),
     },
   },
   plugins: [
@@ -59,7 +66,7 @@ const config: Configuration = {
     new HotModuleReplacementPlugin(),
     // new TsconfigPathsPlugin(),
     new CopyWebpackPlugin({
-      patterns: ["common/favicon", "common/styles"].map((e: any) => ({
+      patterns: ["common/favicon", "common/styles", "shared"].map((e: any) => ({
         from: path.join(src, e.from || e),
         to: path.join(dist, e.to || e),
       })),
@@ -69,7 +76,7 @@ const config: Configuration = {
   devServer: {
     static: path.join(__dirname, "dist"),
     historyApiFallback: true,
-    port: 4000,
+    port: 3000,
     open: true,
     hot: true,
   },
