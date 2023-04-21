@@ -1,15 +1,16 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using TestPoint.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using TestPoint.Application.Interfaces.Persistence;
 using TestPoint.DAL.Contexts;
 
 namespace TestPoint.DAL;
 
 public static class DependencyInjector
 {
-    public static IServiceCollection AddDal(this IServiceCollection services)
+    public static IServiceCollection AddDal(this IServiceCollection services, string connectionString)
     {
-        services.AddScoped<IUserDbContext, UserDbContext>();
-        services.AddScoped<IAdminDbContext, AdminDbContext>();
+        services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

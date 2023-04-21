@@ -1,8 +1,10 @@
 {
   "AppSettings": {
     "Endpoints": {
-      "Admins": "https://localhost:7045/api/setup/admins",
-      "AdminPassword": "https://localhost:7045/api/setup/admin/password"
+      "Admins": "https://localhost:8080/api/_setup/admins",
+      "AdminPassword": "https://localhost:8080/api/_setup/admin/password",
+      "GetLogFileNames": "https://localhost:8080/api/_setup/logs/names",
+      "GetLogFile": "https://localhost:8080/api/_setup/logs"
     },
     "Key": "b/Kyy9hw;eFid7FS{6aWGu{SB[!C/zV(}_vE}CmnX$/NEi{hba"
   }

@@ -1,10 +1,7 @@
-﻿using TestPoint.Domain;
-
-namespace TestPoint.Application.Users.Queries.CheckUserLogin;
+﻿namespace TestPoint.Application.Users.Queries.CheckUserLogin;
 
 public class CheckUserLoginResponse
 {
+    public Guid UserId { get; set; }
     public string Username { get; set; }
-    public string Email { get; set; }
-    public LoginType Role { get; set; }
 }

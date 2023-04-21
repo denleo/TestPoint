@@ -1,5 +1,9 @@
-﻿namespace TestPoint.Domain;
-public class Entity<T>
+﻿using System.Text.Json.Serialization;
+
+namespace TestPoint.Domain;
+
+public abstract class Entity
 {
-    public T Id { get; set; }
+    [JsonPropertyOrder(-99)]
+    public Guid Id { get; set; } = Guid.NewGuid();
 }

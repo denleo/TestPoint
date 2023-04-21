@@ -28,89 +28,85 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AdminUsernameTB = new System.Windows.Forms.TextBox();
-            this.CreateBtn = new System.Windows.Forms.Button();
-            this.ResetPasswordBtn = new System.Windows.Forms.Button();
-            this.UsernameErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.AdminSetupLabel = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.UsernameErrorProvider)).BeginInit();
-            this.panel1.SuspendLayout();
-            this.SuspendLayout();
+            components = new System.ComponentModel.Container();
+            AdminUsernameTB = new TextBox();
+            CreateBtn = new Button();
+            ResetPasswordBtn = new Button();
+            UsernameErrorProvider = new ErrorProvider(components);
+            panel1 = new Panel();
+            AdminSetupLabel = new Label();
+            ((System.ComponentModel.ISupportInitialize)UsernameErrorProvider).BeginInit();
+            panel1.SuspendLayout();
+            SuspendLayout();
             // 
             // AdminUsernameTB
             // 
-            this.AdminUsernameTB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.AdminUsernameTB.Location = new System.Drawing.Point(21, 12);
-            this.AdminUsernameTB.MaxLength = 16;
-            this.AdminUsernameTB.Name = "AdminUsernameTB";
-            this.AdminUsernameTB.Size = new System.Drawing.Size(208, 27);
-            this.AdminUsernameTB.TabIndex = 0;
-            this.AdminUsernameTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            AdminUsernameTB.BorderStyle = BorderStyle.FixedSingle;
+            AdminUsernameTB.Location = new Point(21, 12);
+            AdminUsernameTB.MaxLength = 16;
+            AdminUsernameTB.Name = "AdminUsernameTB";
+            AdminUsernameTB.Size = new Size(208, 27);
+            AdminUsernameTB.TabIndex = 0;
+            AdminUsernameTB.TextAlign = HorizontalAlignment.Center;
             // 
             // CreateBtn
             // 
-            this.CreateBtn.Location = new System.Drawing.Point(21, 59);
-            this.CreateBtn.Name = "CreateBtn";
-            this.CreateBtn.Size = new System.Drawing.Size(94, 29);
-            this.CreateBtn.TabIndex = 1;
-            this.CreateBtn.Text = "Create";
-            this.CreateBtn.UseVisualStyleBackColor = true;
+            CreateBtn.Location = new Point(21, 59);
+            CreateBtn.Name = "CreateBtn";
+            CreateBtn.Size = new Size(94, 29);
+            CreateBtn.TabIndex = 1;
+            CreateBtn.Text = "Create";
+            CreateBtn.UseVisualStyleBackColor = true;
             // 
             // ResetPasswordBtn
             // 
-            this.ResetPasswordBtn.Location = new System.Drawing.Point(135, 59);
-            this.ResetPasswordBtn.Name = "ResetPasswordBtn";
-            this.ResetPasswordBtn.Size = new System.Drawing.Size(94, 29);
-            this.ResetPasswordBtn.TabIndex = 2;
-            this.ResetPasswordBtn.Text = "Reset";
-            this.ResetPasswordBtn.UseVisualStyleBackColor = true;
+            ResetPasswordBtn.Location = new Point(135, 59);
+            ResetPasswordBtn.Name = "ResetPasswordBtn";
+            ResetPasswordBtn.Size = new Size(94, 29);
+            ResetPasswordBtn.TabIndex = 2;
+            ResetPasswordBtn.Text = "Reset";
+            ResetPasswordBtn.UseVisualStyleBackColor = true;
             // 
             // UsernameErrorProvider
             // 
-            this.UsernameErrorProvider.ContainerControl = this;
+            UsernameErrorProvider.ContainerControl = this;
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.BackColor = System.Drawing.Color.Transparent;
-            this.panel1.Controls.Add(this.AdminUsernameTB);
-            this.panel1.Controls.Add(this.ResetPasswordBtn);
-            this.panel1.Controls.Add(this.CreateBtn);
-            this.panel1.Location = new System.Drawing.Point(242, 157);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(250, 101);
-            this.panel1.TabIndex = 3;
+            panel1.BackColor = Color.Transparent;
+            panel1.Controls.Add(AdminUsernameTB);
+            panel1.Controls.Add(ResetPasswordBtn);
+            panel1.Controls.Add(CreateBtn);
+            panel1.Location = new Point(104, 82);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(248, 102);
+            panel1.TabIndex = 3;
             // 
             // AdminSetupLabel
             // 
-            this.AdminSetupLabel.AutoSize = true;
-            this.AdminSetupLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.AdminSetupLabel.Location = new System.Drawing.Point(303, 126);
-            this.AdminSetupLabel.Name = "AdminSetupLabel";
-            this.AdminSetupLabel.Size = new System.Drawing.Size(126, 28);
-            this.AdminSetupLabel.TabIndex = 4;
-            this.AdminSetupLabel.Text = "Admin Setup";
+            AdminSetupLabel.AutoSize = true;
+            AdminSetupLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            AdminSetupLabel.Location = new Point(166, 51);
+            AdminSetupLabel.Name = "AdminSetupLabel";
+            AdminSetupLabel.Size = new Size(126, 28);
+            AdminSetupLabel.TabIndex = 4;
+            AdminSetupLabel.Text = "Admin Setup";
             // 
             // AdminSetup
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(732, 422);
-            this.Controls.Add(this.AdminSetupLabel);
-            this.Controls.Add(this.panel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "AdminSetup";
-            ((System.ComponentModel.ISupportInitialize)(this.UsernameErrorProvider)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
+            ClientSize = new Size(460, 230);
+            Controls.Add(AdminSetupLabel);
+            Controls.Add(panel1);
+            FormBorderStyle = FormBorderStyle.None;
+            Name = "AdminSetup";
+            ((System.ComponentModel.ISupportInitialize)UsernameErrorProvider).EndInit();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

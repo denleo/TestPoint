@@ -1,9 +1,6 @@
 ﻿namespace TestPoint.Domain;
 
-public class Administrator : Entity<int>
+public class Administrator : AuditableEntity
 {
-    public bool IsPasswordReset { get; set; }
-
-    public int LoginId { get; set; }
     public SystemLogin Login { get; set; }
 }

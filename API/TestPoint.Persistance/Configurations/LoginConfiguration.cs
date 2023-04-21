@@ -4,17 +4,20 @@ using TestPoint.Domain;
 
 namespace TestPoint.DAL.Configurations;
 
-internal class LoginConfiguration : IEntityTypeConfiguration<SystemLogin>
+internal sealed class LoginConfiguration : IEntityTypeConfiguration<SystemLogin>
 {
     public void Configure(EntityTypeBuilder<SystemLogin> builder)
     {
         builder.ToTable("Login");
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).HasColumnName("LoginId");
-        builder.Property(x => x.LoginType).HasColumnName("LoginType");
-        builder.Property(x => x.Username).HasColumnName("Username");
-        builder.Property(x => x.PasswordHash).HasColumnName("PasswordHash");
-        builder.Property(x => x.RegistryDate).HasColumnName("RegistryDate");
+        builder.Property(x => x.Id).HasColumnName("LoginId").IsRequired();
+        builder.Property(x => x.LoginType).HasColumnName("LoginType").IsRequired();
+        builder.Property(x => x.Username).HasColumnName("Username").HasMaxLength(16).IsRequired();
+        builder.Property(x => x.PasswordHash).HasColumnName("PasswordHash").HasMaxLength(256).IsRequired();
+        builder.Property(x => x.PasswordReseted).HasColumnName("PasswordReseted").IsRequired();
+        builder.Property(x => x.RegistryDate).HasColumnName("RegistryDate").IsRequired();
+
+        builder.HasIndex(x => new { x.Username, x.LoginType }).IsUnique().HasDatabaseName("UQ_Login_Username_LoginType");
     }
 }

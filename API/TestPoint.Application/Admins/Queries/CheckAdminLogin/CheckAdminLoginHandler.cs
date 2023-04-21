@@ -1,28 +1,22 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using TestPoint.Application.Common.Encryption;
-using TestPoint.Application.Interfaces;
-using TestPoint.Domain;
+using TestPoint.Application.Interfaces.Persistence;
 
 namespace TestPoint.Application.Admins.Queries.CheckAdminLogin;
 
-public class CheckAdminLoginHandler : IRequestHandler<CheckAdminLoginQuery, CheckAdminLoginResponse?>
+internal class CheckAdminLoginHandler : IRequestHandler<CheckAdminLoginQuery, CheckAdminLoginResponse?>
 {
-    private readonly IAdminDbContext _adminDbContext;
+    private readonly IUnitOfWork _uow;
 
-    public CheckAdminLoginHandler(IAdminDbContext adminDbContext)
+    public CheckAdminLoginHandler(IUnitOfWork unitOfWork)
     {
-        _adminDbContext = adminDbContext;
+        _uow = unitOfWork;
     }
 
     public async Task<CheckAdminLoginResponse?> Handle(CheckAdminLoginQuery request, CancellationToken cancellationToken)
     {
-        var admin = await _adminDbContext.Administrators
-            .Include(x => x.Login)
-            .Where(a => a.Login.Username == request.Username)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(cancellationToken);
-
+        var admin = await _uow.AdminRepository
+            .FindOneAsync(x => x.Login.Username == request.Username);
 
         if (admin is null || !PasswordHelper.VerifyPassword(request.Password, admin.Login.PasswordHash))
         {
@@ -31,8 +25,8 @@ public class CheckAdminLoginHandler : IRequestHandler<CheckAdminLoginQuery, Chec
 
         return new CheckAdminLoginResponse
         {
-            Username = admin.Login.Username,
-            Role = LoginType.Administrator
+            AdminId = admin.Id,
+            Username = admin.Login.Username
         };
     }
 }

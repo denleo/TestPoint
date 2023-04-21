@@ -1,0 +1,36 @@
+volumes:
+ mssql-data:
+
+services:
+ db:
+   container_name: testpoint-database
+   image: mcr.microsoft.com/mssql/server:2022-latest
+   restart: always
+   environment:
+     MSSQL_SA_PASSWORD: ${MSSQL_PASSWORD}
+     ACCEPT_EULA: "Y"
+     TZ: ${TIMEZONE}
+   volumes:
+     - mssql-data:/var/opt/mssql
+   ports:
+     - "1433:1433"
+ backend:
+   container_name: testpoint-backend
+   build:
+     context: /API
+   restart: always
+   environment:
+     TZ: ${TIMEZONE}
+     ASPNETCORE_ENVIRONMENT: Development
+   depends_on:
+     - db
+ proxy:
+   container_name: testpoint-proxy
+   build:
+     context: /Nginx
+   restart: always
+   ports:
+     - "8080:443"
+     - "8081:80"
+   depends_on:
+     - backend

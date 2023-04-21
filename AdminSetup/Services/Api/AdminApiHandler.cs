@@ -2,35 +2,74 @@
 using Core.Models.Api.CreateAdmin;
 using Core.Models.Api.ResetAdminPassword;
 using Core.Services.Api;
+using Core.Services.Http;
 using Microsoft.Extensions.Configuration;
+using System.Net;
+using System.Text;
+using System.Text.Json;
 
 namespace Services.Api;
 
 public class AdminApiHandler : IAdminApiHandler
 {
-    private readonly IConfiguration _configuration;
+    private readonly string AdminsEdnpoint, AdminPasswordEndpoint;
+    private readonly IHttpService HttpService;
 
-    public AdminApiHandler(IConfiguration configuration)
+    private static readonly JsonSerializerOptions JsonOptions = new()
     {
-        _configuration = configuration;
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
+    public AdminApiHandler(IConfiguration configuration, IHttpService httpService)
+    {
+        AdminsEdnpoint = configuration.GetSection("AppSettings:Endpoints:Admins").Value;
+        AdminPasswordEndpoint = configuration.GetSection("AppSettings:Endpoints:AdminPassword").Value;
+        HttpService = httpService;
     }
 
-    public Task<ResponseBag<CreateAdminResponse>> CreateNewAdmin(CreateAdminRequest request)
+    public async Task<ResponseBag<CreateAdminResponse>> CreateNewAdmin(CreateAdminRequest request)
     {
-        var apiKey = _configuration.GetSection("AppSettings:Key").Value;
-        var adminsEndpoint = _configuration.GetSection("AppSettings:Endpoints:Admins").Value;
+        var httpClient = HttpService.GetHttpClient();
 
-        return new RequestHandler(apiKey)
-            .SendRequest<CreateAdminRequest, CreateAdminResponse>(adminsEndpoint, RequestMethod.POST, request);
+        var serialized = JsonSerializer.Serialize(request, JsonOptions);
+        var requestContent = new StringContent(serialized, Encoding.UTF8, "application/json");
 
+        var response = await httpClient.PostAsync(AdminsEdnpoint, requestContent);
+
+        CreateAdminResponse? body = null;
+        if (response!.StatusCode == HttpStatusCode.OK)
+        {
+            var stringBody = await response.Content.ReadAsStringAsync();
+            body = JsonSerializer.Deserialize<CreateAdminResponse>(stringBody, JsonOptions);
+        }
+
+        return new ResponseBag<CreateAdminResponse>
+        {
+            Body = body,
+            Code = response.StatusCode
+        };
     }
 
-    public Task<ResponseBag<ResetAdminPasswordResponse>> ResetAdminPassword(ResetAdminPasswordRequest request)
+    public async Task<ResponseBag<ResetAdminPasswordResponse>> ResetAdminPassword(ResetAdminPasswordRequest request)
     {
-        var apiKey = _configuration.GetSection("AppSettings:Key").Value;
-        var adminPasswordEndpoint = _configuration.GetSection("AppSettings:Endpoints:AdminPassword").Value;
+        var httpClient = HttpService.GetHttpClient();
 
-        return new RequestHandler(apiKey)
-            .SendRequest<ResetAdminPasswordRequest, ResetAdminPasswordResponse>(adminPasswordEndpoint, RequestMethod.PATCH, request);
+        var serialized = JsonSerializer.Serialize(request, JsonOptions);
+        var requestContent = new StringContent(serialized, Encoding.UTF8, "application/json");
+
+        var response = await httpClient.PatchAsync(AdminPasswordEndpoint, requestContent);
+
+        ResetAdminPasswordResponse? body = null;
+        if (response!.StatusCode == HttpStatusCode.OK)
+        {
+            var stringBody = await response.Content.ReadAsStringAsync();
+            body = JsonSerializer.Deserialize<ResetAdminPasswordResponse>(stringBody, JsonOptions);
+        }
+
+        return new ResponseBag<ResetAdminPasswordResponse>
+        {
+            Body = body,
+            Code = response.StatusCode
+        };
     }
 }
