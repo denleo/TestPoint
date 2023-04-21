@@ -1,29 +1,12 @@
-import React, { FC, lazy, Suspense } from "react";
+import React from "react";
 
-import { ThemeProvider } from "@mui/material";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Provider as ReduxStoreProvider } from "react-redux";
 
-import { theme } from "@common/theme/createTheme";
+import ErrorBoundary from "@components/ErrorBoundary";
+import { store } from "@redux/store";
 
-import ErrorBoundary from "./components/ErrorBoundary";
-
-const HomePage = lazy(() => import("./containers/Home"));
-
-const MainApp: FC = () => {
-  return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Suspense>
-          <Routes>
-            <Route index element={<HomePage />} />
-            <Route path=":login" element={<HomePage />} />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
-    </ThemeProvider>
-  );
-};
+import { MainApp } from "./MainApp";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -31,7 +14,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ErrorBoundary>
-      <MainApp />
+      <ReduxStoreProvider store={store}>
+        <MainApp />
+      </ReduxStoreProvider>
     </ErrorBoundary>
   </React.StrictMode>
 );

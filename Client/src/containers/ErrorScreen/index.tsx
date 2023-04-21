@@ -16,7 +16,7 @@ export const ErrorScreen: FC<Props> = ({ error, message }) => {
       sx={{
         width: "100vw",
         minHeight: "100vh",
-        backgroundColor: theme.palette.grey[300],
+        backgroundColor: theme.palette.background.default,
       }}
     >
       <Grid container spacing={2} direction="column">
@@ -36,11 +36,7 @@ export const ErrorScreen: FC<Props> = ({ error, message }) => {
         <Divider />
         {error && (
           <Grid item xs={12} sx={{ margin: theme.spacing(2) }}>
-            <Typography
-              variant="body2"
-              component="p"
-              sx={{ overflowWrap: "anywhere" }}
-            >
+            <Typography variant="body2" component="p" sx={{ overflowWrap: "anywhere" }}>
               {error.stack}
             </Typography>
           </Grid>

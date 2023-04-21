@@ -1,8 +1,12 @@
 import React, { FC } from "react";
 
-import MailIcon from "@mui/icons-material/Mail";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import AnalyticsIcon from "@mui/icons-material/Analytics";
+import HomeIcon from "@mui/icons-material/Home";
+import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
+import QuizIcon from "@mui/icons-material/Quiz";
+import SensorDoorIcon from "@mui/icons-material/SensorDoor";
 import {
   Divider,
   Drawer as MUIDrawer,
@@ -13,10 +17,13 @@ import {
   ListItemIcon,
   ListItemText,
   styled,
+  useTheme,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 import { useBreakpoint } from "@/api/hooks/useBreakPoint";
-import { SVGFullLogo } from "@/common/icons";
+import { TESTPOINT_ROUTES } from "@/api/pageRoutes";
+import { IconFullLogo } from "@/common/icons";
 
 import { DRAWER_WIDTH, HEADER_HEIGHT } from "./common";
 import { useSidebarStore } from "./useLayoutStore";
@@ -46,15 +53,48 @@ const Drawer = styled(MUIDrawer)(({ theme }) => ({
   },
 }));
 
+const ExitButton = styled(ListItemButton)(({ theme }) => ({
+  "&:hover, &:focus, &:active": {
+    backgroundColor: theme.palette.error.light,
+  },
+}));
+
+const ListButton = styled(ListItemButton)(({ theme }) => ({
+  "&:hover, &:focus, &:active": {
+    backgroundColor: theme.palette.secondary.light,
+  },
+}));
+
+const routes = [
+  {
+    ...TESTPOINT_ROUTES.home,
+    icon: <HomeIcon />,
+  },
+  {
+    ...TESTPOINT_ROUTES.tests,
+    icon: <QuizIcon />,
+  },
+  {
+    ...TESTPOINT_ROUTES.profile,
+    icon: <AccountBoxIcon />,
+  },
+  {
+    ...TESTPOINT_ROUTES.statistics,
+    icon: <AnalyticsIcon />,
+  },
+];
+
 export const SideBar: FC = () => {
   const mdUp = useBreakpoint("md");
+  const navigate = useNavigate();
+  const theme = useTheme();
   const isMinimized = useSidebarStore((store) => store.isMinimized);
   const toggleIsMinimized = useSidebarStore((store) => store.toggleIsMinimized);
 
   return (
     <Drawer variant="persistent" anchor="left" open={isMinimized}>
       <DrawerHeader>
-        <SVGFullLogo />
+        <IconFullLogo width={180} height={35} />
         {!mdUp && (
           <IconButton
             size="large"
@@ -70,29 +110,25 @@ export const SideBar: FC = () => {
       </DrawerHeader>
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
+        {routes.map(({ icon, name, path }) => (
+          <ListItem key={name} color={theme.palette.secondary.main} disablePadding onClick={() => navigate(path)}>
+            <ListButton color={theme.palette.secondary.main}>
+              <ListItemIcon>{icon}</ListItemIcon>
+              <ListItemText primary={name} />
+            </ListButton>
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem disablePadding>
+          <ExitButton>
+            <ListItemIcon>
+              <SensorDoorIcon />
+            </ListItemIcon>
+            <ListItemText primary="Exit" />
+          </ExitButton>
+        </ListItem>
       </List>
     </Drawer>
   );

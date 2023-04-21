@@ -1,22 +1,17 @@
-import React, { FC, useEffect } from "react";
+import React from "react";
 
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
-import { theme } from "@/common/theme/createTheme";
+import { useSelector } from "@/redux/hooks";
+import { userAccountNameSelector } from "@/redux/selectors";
 
-import { LayoutContainer } from "../layout/index";
-
-const HomePage: FC = () => {
-  useEffect(() => {
-    throw new Error("Test error");
-  }, []);
+const HomePage = () => {
+  const userName = useSelector(userAccountNameSelector);
 
   return (
-    <LayoutContainer>
-      <Box flex={1} color={theme.palette.error.main}>
-        MAXIM
-      </Box>
-    </LayoutContainer>
+    <Box width="100%" height="100%">
+      <Typography variant="h1">{`Welcome back, ${userName}!`}</Typography>
+    </Box>
   );
 };
 

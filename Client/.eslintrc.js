@@ -25,16 +25,14 @@ module.exports = {
     "react/require-default-props": "off",
     "react/jsx-props-no-spreading": "off",
     "react/destructuring-assignment": 0,
-    "react/function-component-definition": [
-      2,
-      { namedComponents: "arrow-function" },
-    ],
+    "react/function-component-definition": [2, { namedComponents: "arrow-function" }],
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"],
     "prettier/prettier": [
       "error",
       {
         endOfLine: "auto",
+        printWidth: 120,
         overrides: [
           {
             files: ["*.tsx", "*.ts"],
@@ -71,14 +69,7 @@ module.exports = {
       "error",
       {
         "newlines-between": "always",
-        groups: [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "unknown",
-          "sibling",
-        ],
+        groups: ["builtin", "external", "internal", "parent", "unknown", "sibling"],
         pathGroups: [
           { pattern: "react", group: "external", position: "before" },
           { pattern: "@/**", group: "internal", position: "before" },
