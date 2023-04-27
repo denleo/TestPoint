@@ -1,8 +1,10 @@
 import React, { FC, useCallback } from "react";
 
 import { QuestionMarkRounded, PlayArrowRounded } from "@mui/icons-material";
-import { Button, Grid, Paper, styled, Typography } from "@mui/material";
+import { Button, Chip, Grid, Paper, styled, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
+import { TestDifficultyChip } from "@/components/TestDifficultyChip";
 
 import { TestData } from "./data";
 
@@ -71,20 +73,26 @@ export const TestPreviewCard: FC<Props> = ({ testData }) => {
             <div>
               <Dot />
               <Typography component="span" variant="body2">
-                Number of questions: <strong>{questions.length}</strong>
+                Number of questions: <strong>{questions?.length ?? 0}</strong>
               </Typography>
             </div>
             {/* TODO: use real author */}
             <div>
               <Dot />
               <Typography component="span" variant="body2">
-                Author: <strong>Maxim Rojkov</strong>
+                Author: <strong>{testData.author}</strong>
               </Typography>
             </div>
             <div>
               <Dot />
               <Typography component="span" variant="body2">
                 Completion time: <strong>{completionTime}</strong>
+              </Typography>
+            </div>
+            <div>
+              <Dot />
+              <Typography component="span" variant="body2">
+                Difficulty: <TestDifficultyChip difficulty={testData.difficulty} />
               </Typography>
             </div>
           </Grid>

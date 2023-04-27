@@ -8,6 +8,7 @@ import { ProtectedRoute } from "@components/ProtectedRoute";
 import LoadingPage from "@containers/LoadingPage";
 
 import { TestpointRoutes, TESTPOINT_ROUTES } from "./api/pageRoutes";
+import { TEST_DATA_1 } from "./containers/TestsPage/data";
 
 const StartPage = lazy(() => import("./containers/StartPage"));
 const HomePage = lazy(() => import("./containers/Home"));
@@ -15,6 +16,7 @@ const TestComponentPage = lazy(() => import("./containers/TestComponentPage"));
 const TestsPage = lazy(() => import("./containers/TestsPage"));
 const StatisticsPage = lazy(() => import("./containers/StatisticsPage"));
 const ProfilePage = lazy(() => import("./containers/ProfilePage"));
+const TestBuilderPage = lazy(() => import("./containers/TestBuilderPage"));
 
 export const routes: TestpointRoutes = {
   home: {
@@ -36,6 +38,10 @@ export const routes: TestpointRoutes = {
   profile: {
     ...TESTPOINT_ROUTES.profile,
     component: <ProfilePage />,
+  },
+  testBuilder: {
+    ...TESTPOINT_ROUTES.testBuilder,
+    component: <TestBuilderPage test={TEST_DATA_1} />,
   },
 };
 

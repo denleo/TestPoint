@@ -17,4 +17,5 @@ export interface UserData {
 export interface AccountUserState {
   data: UserData;
   status: ResponseStatuses | null;
+  isAdmin: boolean;
 }

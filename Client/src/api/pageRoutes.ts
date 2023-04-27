@@ -4,6 +4,7 @@ export enum TESTPOINT_ROUTE {
   TESTPAGE = "Test",
   STATISTICS = "Statistics",
   PROFILE = "Profile",
+  TEST_BUILDER = "Constructor",
 }
 
 export interface TestpointRoutes {
@@ -34,5 +35,9 @@ export const TESTPOINT_ROUTES: TestpointRoutes = {
   profile: {
     name: TESTPOINT_ROUTE.PROFILE,
     path: "/profile",
+  },
+  testBuilder: {
+    name: TESTPOINT_ROUTE.TEST_BUILDER,
+    path: "/constructor",
   },
 };

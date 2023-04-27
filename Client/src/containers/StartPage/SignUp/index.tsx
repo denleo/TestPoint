@@ -3,7 +3,8 @@ import React, { useCallback, useState } from "react";
 import { Paper, styled } from "@mui/material";
 import { Form, Formik } from "formik";
 
-import { validateForm, validationSchema } from "../../../api/validation";
+import { validateForm, validationSchema } from "@api/validation";
+
 import { SignUpUserFormValues, SIGN_UP_STEPS, START_PAGE_STEPS } from "../common";
 import { useStartPageStore } from "../useStartPageStore";
 

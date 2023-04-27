@@ -254,6 +254,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: lighten("#000", 0.8),
+          opacity: "0!important",
         },
       },
     },
@@ -815,6 +816,9 @@ export const theme = createTheme({
     },
     MuiSelect: {
       styleOverrides: {
+        root: {
+          "& .MuiBackdrop-root": { opacity: "0!important" },
+        },
         filled: {
           lineHeight: typographyRaw.pxToRem(19), // for correct inactive label position
 
