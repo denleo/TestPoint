@@ -1,11 +1,10 @@
 ﻿using MediatR;
 using TestPoint.Application.Common.Exceptions;
 using TestPoint.Application.Interfaces.Persistence;
-using TestPoint.Domain;
 
 namespace TestPoint.Application.Tests.Queries.GetTestsByAdmin;
 
-public class GetTestsByAdminHandler : IRequestHandler<GetTestsByAdminQuery, List<Test>>
+public class GetTestsByAdminHandler : IRequestHandler<GetTestsByAdminQuery, List<TestInformation>>
 {
     private readonly IUnitOfWork _uow;
 
@@ -14,7 +13,7 @@ public class GetTestsByAdminHandler : IRequestHandler<GetTestsByAdminQuery, List
         _uow = unitOfWork;
     }
 
-    public async Task<List<Test>> Handle(GetTestsByAdminQuery request, CancellationToken cancellationToken)
+    public async Task<List<TestInformation>> Handle(GetTestsByAdminQuery request, CancellationToken cancellationToken)
     {
         var admin = await _uow.AdminRepository.GetByIdAsync(request.AdminId);
 
@@ -24,6 +23,9 @@ public class GetTestsByAdminHandler : IRequestHandler<GetTestsByAdminQuery, List
         }
 
         var tests = await _uow.TestRepository.FilterByAsync(x => x.AuthorId == admin.Id);
-        return tests.ToList();
+
+        return tests
+            .Select(t => new TestInformation(t.Id, admin.Login.Username, t.Name, t.Difficulty, t.Questions.Count(), t.EstimatedTime))
+            .ToList();
     }
 }

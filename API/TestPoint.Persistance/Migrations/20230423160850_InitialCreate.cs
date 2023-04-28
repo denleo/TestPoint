@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TestPoint.DAL.Migrations
 {
-    public partial class InitialCreation : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -79,7 +79,7 @@ namespace TestPoint.DAL.Migrations
                     TestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Difficulty = table.Column<byte>(type: "tinyint", nullable: false),
-                    CompletionTime = table.Column<int>(type: "int", nullable: false),
+                    EstimatedTime = table.Column<int>(type: "int", nullable: false),
                     AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -139,6 +139,32 @@ namespace TestPoint.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TestAssignment",
+                columns: table => new
+                {
+                    TestAssignmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TestAssignment", x => x.TestAssignmentId);
+                    table.ForeignKey(
+                        name: "FK_TestAssignment_Test_TestId",
+                        column: x => x.TestId,
+                        principalTable: "Test",
+                        principalColumn: "TestId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TestAssignment_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserUserGroupBridge",
                 columns: table => new
                 {
@@ -183,6 +209,55 @@ namespace TestPoint.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TestCompletion",
+                columns: table => new
+                {
+                    TestCompletionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Score = table.Column<double>(type: "float", nullable: false),
+                    CompletionTime = table.Column<double>(type: "float", nullable: false),
+                    TestAssignmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TestCompletion", x => x.TestCompletionId);
+                    table.ForeignKey(
+                        name: "FK_TestCompletion_TestAssignment_TestAssignmentId",
+                        column: x => x.TestAssignmentId,
+                        principalTable: "TestAssignment",
+                        principalColumn: "TestAssignmentId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnswerHistory",
+                columns: table => new
+                {
+                    AnswerHistoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AnswerText = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    TestCompletionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnswerHistory", x => x.AnswerHistoryId);
+                    table.ForeignKey(
+                        name: "FK_AnswerHistory_Question_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Question",
+                        principalColumn: "QuestionId");
+                    table.ForeignKey(
+                        name: "FK_AnswerHistory_TestCompletion_TestCompletionId",
+                        column: x => x.TestCompletionId,
+                        principalTable: "TestCompletion",
+                        principalColumn: "TestCompletionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Administrator_LoginId",
                 table: "Administrator",
@@ -193,6 +268,16 @@ namespace TestPoint.DAL.Migrations
                 name: "IX_Answer_QuestionId",
                 table: "Answer",
                 column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AnswerHistory_QuestionId",
+                table: "AnswerHistory",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AnswerHistory_TestCompletionId",
+                table: "AnswerHistory",
+                column: "TestCompletionId");
 
             migrationBuilder.CreateIndex(
                 name: "UQ_Login_Username_LoginType",
@@ -209,6 +294,23 @@ namespace TestPoint.DAL.Migrations
                 name: "UQ_Test_AuthorId_Name",
                 table: "Test",
                 columns: new[] { "AuthorId", "Name" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestAssignment_UserId",
+                table: "TestAssignment",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "UQ_TestAssignment_TestId_UserId",
+                table: "TestAssignment",
+                columns: new[] { "TestId", "UserId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestCompletion_TestAssignmentId",
+                table: "TestCompletion",
+                column: "TestAssignmentId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -246,19 +348,28 @@ namespace TestPoint.DAL.Migrations
                 name: "Answer");
 
             migrationBuilder.DropTable(
+                name: "AnswerHistory");
+
+            migrationBuilder.DropTable(
                 name: "UserUserGroupBridge");
 
             migrationBuilder.DropTable(
                 name: "Question");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "TestCompletion");
 
             migrationBuilder.DropTable(
                 name: "UserGroup");
 
             migrationBuilder.DropTable(
+                name: "TestAssignment");
+
+            migrationBuilder.DropTable(
                 name: "Test");
+
+            migrationBuilder.DropTable(
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Administrator");

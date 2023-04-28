@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using TestPoint.Application.TestAssignments.Commands.CreateTestAssignment;
+using TestPoint.Application.TestAssignments.Commands.CreateTestAssignmentByGroup;
+using TestPoint.Application.TestAssignments.Commands.DeleteTestAssignment;
+using TestPoint.Application.Tests;
 using TestPoint.Application.Tests.Commands.CreateTest;
 using TestPoint.Application.Tests.Commands.DeleteTest;
 using TestPoint.Application.Tests.Queries.GetTestById;
@@ -23,7 +27,7 @@ public class TestController : BaseController
             AuthorId = LoginId!.Value,
             Name = newTest.Name,
             Difficulty = newTest.Difficulty,
-            CompletionTime = newTest.CompletionTime,
+            EstimatedTime = newTest.EstimatedTime,
             Questions = newTest.Questions.Select(x => new Question
             {
                 QuestionText = x.QuestionText,
@@ -41,7 +45,7 @@ public class TestController : BaseController
 
     [SwaggerOperation(Summary = "Get all tests (role:admin)")]
     [HttpGet("tests"), Authorize(Roles = "Administrator")]
-    public async Task<ActionResult<List<Domain.Test>>> GetTestsByAdmin()
+    public async Task<ActionResult<List<TestInformation>>> GetTestsByAdmin()
     {
         var getTestsByAdminQuery = new GetTestsByAdminQuery()
         {
@@ -59,35 +63,79 @@ public class TestController : BaseController
     }
 
     [SwaggerOperation(Summary = "Get test by id (role:admin)")]
-    [HttpGet("tests/{id:guid}"), Authorize(Roles = "Administrator")]
-    public async Task<ActionResult<Domain.Test?>> GetTestById([FromRoute] Guid id)
+    [HttpGet("tests/{testId:guid}"), Authorize(Roles = "Administrator")]
+    public async Task<ActionResult<Domain.Test?>> GetTestById([FromRoute] Guid testId)
     {
         var getTestByIdQuery = new GetTestByIdQuery()
         {
-            TestId = id
+            TestId = testId
         };
 
         var test = await Mediator.Send(getTestByIdQuery);
 
         if (test is null)
         {
-            return NotFound(new ErrorResult(HttpStatusCode.NotFound, $"Test with {id} doesn't exist"));
+            return NotFound(new ErrorResult(HttpStatusCode.NotFound, $"Test with {testId} doesn't exist"));
         }
 
         return test;
     }
 
     [SwaggerOperation(Summary = "Delete test (role:admin)")]
-    [HttpDelete("tests/{id:guid}"), Authorize(Roles = "Administrator")]
-    public async Task<IActionResult> DeleteTest([FromRoute] Guid id)
+    [HttpDelete("tests/{testId:guid}"), Authorize(Roles = "Administrator")]
+    public async Task<IActionResult> DeleteTest([FromRoute] Guid testId)
     {
         var deleteTestCommand = new DeleteTestCommand()
         {
             AuthorId = LoginId!.Value,
-            TestId = id
+            TestId = testId
         };
 
         await Mediator.Send(deleteTestCommand);
+
+        return Ok();
+    }
+
+    [SwaggerOperation(Summary = "Assign user to existing test (role:admin)")]
+    [HttpPost("tests/{testId:guid}/users/{userId:guid}"), Authorize(Roles = "Administrator")]
+    public async Task<ActionResult<TestAssignment>> AssignUserToTest([FromRoute] Guid testId, [FromRoute] Guid userId)
+    {
+        var createTestAssignmentCommand = new CreateTestAssignmentCommand()
+        {
+            TestId = testId,
+            UserId = userId
+        };
+
+        var testAssignment = await Mediator.Send(createTestAssignmentCommand);
+        return testAssignment;
+    }
+
+    [SwaggerOperation(Summary = "Assign users from group to existing test (role:admin)")]
+    [HttpPost("tests/{testId:guid}/groups/{groupId:guid}"), Authorize(Roles = "Administrator")]
+    public async Task<IActionResult> AssignUserGroupToTest([FromRoute] Guid testId, [FromRoute] Guid groupId)
+    {
+        var createTestAssignmentByGroupCommand = new CreateTestAssignmentByGroupCommand()
+        {
+            TestId = testId,
+            UserGroupId = groupId
+        };
+
+        await Mediator.Send(createTestAssignmentByGroupCommand);
+
+        return Ok();
+    }
+
+    [SwaggerOperation(Summary = "Delete test assignment (role:admin)")]
+    [HttpDelete("tests/{testId:guid}/users/{userId:guid}"), Authorize(Roles = "Administrator")]
+    public async Task<IActionResult> DeleteTestAssignment([FromRoute] Guid testId, [FromRoute] Guid userId)
+    {
+        var deleteTestAssignmentCommand = new DeleteTestAssignmentCommand()
+        {
+            TestId = testId,
+            UserId = userId
+        };
+
+        await Mediator.Send(deleteTestAssignmentCommand);
 
         return Ok();
     }
