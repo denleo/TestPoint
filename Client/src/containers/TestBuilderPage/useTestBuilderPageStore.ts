@@ -1,19 +1,15 @@
 import create from "zustand";
-import { combine, persist } from "zustand/middleware";
+import { combine } from "zustand/middleware";
 
-// export const useStartPageStore = create(
-//   persist(
-//     combine(
-//       {
-//         pageStep: START_PAGE_STEPS.LOGIN,
-//       },
-//       (set) => ({
-//         setPageStep: (pageStep: START_PAGE_STEPS) => set({ pageStep }),
-//       })
-//     ),
-//     {
-//       name: "start-page",
-//       version: 1,
-//     }
-//   )
-// );
+import { TestData } from "../TestsPage/data";
+
+export const useTestBuilderStore = create(
+  combine(
+    {
+      test: null,
+    } as { test: TestData | null },
+    (set) => ({
+      setTest: (test: TestData | null) => set({ test }),
+    })
+  )
+);

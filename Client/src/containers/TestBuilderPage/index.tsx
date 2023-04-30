@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import React, { useState, useCallback, FC } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import AddIcon from "@mui/icons-material/Add";
@@ -29,10 +29,7 @@ import { QuestionTypeDialog } from "./Dialogs/QuestionTypeDialog";
 import { EmptyBlock } from "./EmptyBlock";
 import { Question } from "./Question";
 import { StartScreen } from "./StartScreen";
-
-interface Props {
-  test: TestData;
-}
+import { useTestBuilderStore } from "./useTestBuilderPageStore";
 
 const LayoutPage = styled("div")(({ theme }) => ({
   display: "flex",
@@ -55,13 +52,15 @@ const reorder = (questions: TestQuestion[], startIndex: number, endIndex: number
   return result;
 };
 
-const TestBuilderPage: FC<Props> = ({ test }) => {
+const TestBuilderPage = () => {
+  const test = useTestBuilderStore((store) => store.test);
+  const setTest = useTestBuilderStore((store) => store.setTest);
   const [expanded, setExpanded] = useState<string | false>(false);
-  const [testName, setTestName] = useState<string>(test.name);
-  const [testDifficulty, setTestDifficulty] = useState<TestDifficulty>(test.difficulty);
-  const [start, setStart] = useState(false);
+  const [testName, setTestName] = useState<string>(test?.name ?? "Test Name");
+  const [testDifficulty, setTestDifficulty] = useState<TestDifficulty>(test?.difficulty ?? TestDifficulty.Easy);
+  const [start, setStart] = useState(!test);
   const [openQuestionDialog, setOpenQuestionDialog] = useState(false);
-  const [questions, setQuestions] = useState<TestQuestion[]>();
+  const [questions, setQuestions] = useState<TestQuestion[]>(test?.questions ?? []);
   const [editQuestion, setEditQuestion] = useState<TestQuestion | false>(false);
 
   const theme = useTheme();
@@ -94,6 +93,11 @@ const TestBuilderPage: FC<Props> = ({ test }) => {
     [questions]
   );
 
+  const createTest = useCallback(() => {
+    setTest(null);
+    setStart(false);
+  }, [setTest]);
+
   const saveQuestion = useCallback(
     (values: QuestionEditFormValues) => {
       if (!editQuestion) return;
@@ -115,8 +119,13 @@ const TestBuilderPage: FC<Props> = ({ test }) => {
     setTestDifficulty(event.target.value as TestDifficulty);
   }, []);
 
+  const handleClickCancel = useCallback(() => {
+    setTest(null);
+    setStart(true);
+  }, [setTest]);
+
   return start ? (
-    <StartScreen onCreate={() => setStart(false)} />
+    <StartScreen onCreate={createTest} />
   ) : (
     <>
       <LayoutPage>
@@ -160,10 +169,14 @@ const TestBuilderPage: FC<Props> = ({ test }) => {
             <Button
               variant="contained"
               color="secondary"
+              sx={{ mr: 1 }}
               disableElevation
               startIcon={<SaveIcon sx={{ height: 24, width: 24 }} />}
             >
               Save to system
+            </Button>
+            <Button variant="contained" color="error" disableElevation onClick={handleClickCancel}>
+              Cancel
             </Button>
           </div>
         </Paper>

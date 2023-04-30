@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, FC, useCallback } from "react";
+import React, { FC, useCallback } from "react";
 
 import { Box, Divider, List, Checkbox, ListItem, styled, Typography } from "@mui/material";
 

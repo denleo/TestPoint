@@ -48,7 +48,7 @@ export const TEST_DATA_1: TestData = {
   completionTime: "15 min",
   questions: [
     {
-      id: "q1",
+      id: generateUniqueId(),
       question: "Функциональное тестирование проводят в рамках ... ",
       type: QuestionType.SingleOption,
       variants: [
@@ -59,7 +59,7 @@ export const TEST_DATA_1: TestData = {
       ],
     },
     {
-      id: "q2",
+      id: generateUniqueId(),
       question: "Функциональное тестирование проводят в рамках 2 ... ",
       type: QuestionType.SingleOption,
       variants: [
@@ -70,7 +70,7 @@ export const TEST_DATA_1: TestData = {
       ],
     },
     {
-      id: "q3",
+      id: generateUniqueId(),
       question: "Функциональное тестирование проводят в рамках 3 ... ",
       type: QuestionType.SingleOption,
       variants: [
@@ -81,7 +81,7 @@ export const TEST_DATA_1: TestData = {
       ],
     },
     {
-      id: "q4",
+      id: generateUniqueId(),
       question: "Функциональное тестирование проводят в рамках 4 ... ",
       type: QuestionType.SingleOption,
       variants: [
@@ -92,7 +92,7 @@ export const TEST_DATA_1: TestData = {
       ],
     },
     {
-      id: "q5",
+      id: generateUniqueId(),
       question: "Функциональное тестирование проводят в рамках 5 ... ",
       type: QuestionType.SingleOption,
       variants: [

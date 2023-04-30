@@ -1,11 +1,11 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import DoneOutlineRoundedIcon from "@mui/icons-material/DoneOutlineRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
-import { Button, Container, IconButton, styled, Typography } from "@mui/material";
+import { Button, IconButton, styled, Typography } from "@mui/material";
 
-import { TestData, TestQuestion, TEST_DATA_1, UserTestData } from "../TestsPage/data";
+import { TestData, TEST_DATA_1 } from "../TestsPage/data";
 
 import { QuestionComponent } from "./QuestionComponent";
 import { TestPagination } from "./TestPagination";
@@ -107,8 +107,10 @@ const TestComponentPage = () => {
     setSelectedQuestionId(selectedQuestionId - 1);
   }, [selectedQuestionId]);
 
-  const numberQuestions = testData.questions.length;
+  const numberQuestions = testData?.questions?.length ?? 0;
   const notFinished = selectedAnswers.size === numberQuestions;
+
+  if (!testData.questions) return null;
 
   return (
     <LayoutPage>

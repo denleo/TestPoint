@@ -9,6 +9,8 @@ import LoadingPage from "@containers/LoadingPage";
 
 import { TestpointRoutes, TESTPOINT_ROUTES } from "./api/pageRoutes";
 import { TEST_DATA_1 } from "./containers/TestsPage/data";
+import { useSelector } from "./redux/hooks";
+import { isAdminSelector } from "./redux/selectors";
 
 const StartPage = lazy(() => import("./containers/StartPage"));
 const HomePage = lazy(() => import("./containers/Home"));
@@ -17,6 +19,7 @@ const TestsPage = lazy(() => import("./containers/TestsPage"));
 const StatisticsPage = lazy(() => import("./containers/StatisticsPage"));
 const ProfilePage = lazy(() => import("./containers/ProfilePage"));
 const TestBuilderPage = lazy(() => import("./containers/TestBuilderPage"));
+const UsersPage = lazy(() => import("./containers/UsersPage"));
 
 export const routes: TestpointRoutes = {
   home: {
@@ -41,27 +44,35 @@ export const routes: TestpointRoutes = {
   },
   testBuilder: {
     ...TESTPOINT_ROUTES.testBuilder,
-    component: <TestBuilderPage test={TEST_DATA_1} />,
+    component: <TestBuilderPage />,
+  },
+  users: {
+    ...TESTPOINT_ROUTES.users,
+    component: <UsersPage />,
   },
 };
 
 export const MainApp: FC = () => {
+  const isAdmin = useSelector(isAdminSelector);
+
   return (
     <MUIThemeProvider theme={theme}>
       <BrowserRouter>
         <Suspense fallback={<LoadingPage />}>
           <Routes>
             <Route path="/">
-              <Route index element={<Navigate to="/home" />} />
-              {Object.keys(routes).map((key) => (
-                <Route
-                  key={key}
-                  path={routes[key].path}
-                  element={<ProtectedRoute>{routes[key].component ?? <>no elements</>}</ProtectedRoute>}
-                />
-              ))}
+              <Route index element={<Navigate to={!isAdmin ? "/home" : "/tests"} />} />
+              {Object.keys(routes)
+                .filter((key) => routes[key].showAdmin !== !isAdmin)
+                .map((key) => (
+                  <Route
+                    key={key}
+                    path={routes[key].path}
+                    element={<ProtectedRoute>{routes[key].component ?? <>no elements</>}</ProtectedRoute>}
+                  />
+                ))}
               <Route path="/login" element={<StartPage />} />
-              <Route path="*" element={<Navigate to="/home" />} />
+              <Route path="*" element={<Navigate to={!isAdmin ? "/home" : "/tests"} />} />
             </Route>
           </Routes>
         </Suspense>

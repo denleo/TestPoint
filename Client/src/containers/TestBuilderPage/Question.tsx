@@ -74,7 +74,7 @@ export const Question: FC<Props> = ({ question, expanded, setExpanded, onEdit })
             </>
           ) : (
             question.variants.map((variant) => (
-              <div key={question.id}>
+              <div key={variant.id}>
                 {question.type === QuestionType.SingleOption && (
                   <Radio checked={variant.isCorrect} key={variant.id} disabled />
                 )}
