@@ -65,7 +65,7 @@ public class GetCurrentUserHandlerTests
         Assert.Equal(DateTime.MaxValue, result.RegistryDate);
         Assert.Equal("test@test.com", result.Email);
         Assert.True(result.EmailConfirmed);
-        Assert.Null(result.Avatar);
+        Assert.Null(result.Base64Avatar);
     }
 
     [Theory]

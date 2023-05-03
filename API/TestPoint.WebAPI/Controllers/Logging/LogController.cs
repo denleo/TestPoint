@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Text.RegularExpressions;
-using TestPoint.WebAPI.Filters;
+using TestPoint.WebAPI.Attributes;
 using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 
 namespace TestPoint.WebAPI.Controllers.Logs;

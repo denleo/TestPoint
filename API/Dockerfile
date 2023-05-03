@@ -11,6 +11,7 @@ COPY ["TestPoint.Application/TestPoint.Application.csproj", "TestPoint.Applicati
 COPY ["TestPoint.Persistance/TestPoint.DAL.csproj", "TestPoint.Persistance/"]
 COPY ["TestPoint.EmailService/TestPoint.EmailService.csproj", "TestPoint.EmailService/"]
 COPY ["TestPoint.JwtService/TestPoint.JwtService.csproj", "TestPoint.JwtService/"]
+COPY ["TestPoint.Cache/TestPoint.Cache.csproj", "TestPoint.Cache/"]
 RUN dotnet restore "TestPoint.WebAPI/TestPoint.WebAPI.csproj"
 COPY . .
 WORKDIR "/src/TestPoint.WebAPI"

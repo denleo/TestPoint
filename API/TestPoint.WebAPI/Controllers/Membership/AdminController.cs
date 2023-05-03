@@ -5,7 +5,7 @@ using TestPoint.Application.Admins.Commands.ChangePassword;
 using TestPoint.Application.Admins.Commands.CreateAdmin;
 using TestPoint.Application.Admins.Commands.ResetAdminPassword;
 using TestPoint.Application.Admins.Queries.GetCurrentAdmin;
-using TestPoint.WebAPI.Filters;
+using TestPoint.WebAPI.Attributes;
 using TestPoint.WebAPI.Models.Admin;
 using TestPoint.WebAPI.Models.User;
 

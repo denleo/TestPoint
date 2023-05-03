@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using TestPoint.Application;
+using TestPoint.Cache;
 using TestPoint.DAL;
 using TestPoint.DAL.Contexts;
 using TestPoint.EmailService;
@@ -17,7 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
 #region Services
 
 builder.Services.AddLogging(b => b.AddLog4Net("log4net.config", true));
-builder.Services.AddDal(builder.Configuration.GetConnectionString("MSSqlConnection"));
+builder.Services.AddRedisCache(builder.Configuration);
+builder.Services.AddDal(builder.Configuration);
 builder.Services.AddJwtService();
 builder.Services.AddEmailService();
 builder.Services.AddApplication();
