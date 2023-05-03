@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using TestPoint.Application.Users;
 using TestPoint.Application.Users.Commands.ChangePassword;
 using TestPoint.Application.Users.Commands.CreateUser;
+using TestPoint.Application.Users.Queries.FilterUsers;
 using TestPoint.Application.Users.Queries.GetCurrentUser;
+using TestPoint.WebAPI.Attributes;
 using TestPoint.WebAPI.Models.User;
 
 namespace TestPoint.WebAPI.Controllers.Membership;
@@ -53,5 +56,19 @@ public class UserController : BaseController
 
         await Mediator.Send(changeUserPasswordCommand);
         return Ok();
+    }
+
+    [RedisCache(300)]
+    [SwaggerOperation(Summary = "Get users by filter (roles:admin)")]
+    [HttpGet("users"), Authorize(Roles = "Administrator")]
+    public async Task<ActionResult<List<UserInformationShort>>> FilterUsers([FromQuery] string filter)
+    {
+        var filterUsersQuery = new FilterUsersQuery
+        {
+            FilterParameter = filter,
+        };
+
+        var users = await Mediator.Send(filterUsersQuery);
+        return users;
     }
 }
