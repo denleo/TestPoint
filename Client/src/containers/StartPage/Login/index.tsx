@@ -8,9 +8,12 @@ import * as yup from "yup";
 import { useBreakpoint } from "@/api/hooks/useBreakPoint";
 import { httpAction } from "@/api/httpAction";
 import { IconFullLogo } from "@/common/icons";
+import { MOCK_USER } from "@/mock/user";
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { userAccountNameSelector } from "@/redux/selectors";
 import { AccountActions } from "@/redux/userAccount/actions";
+import { setUserData } from "@/redux/userAccount/reducer";
+import { ResponseStatuses } from "@/redux/userAccount/state";
 
 import { LoginUserFormValues, LOGIN_TAB } from "../common";
 
@@ -82,13 +85,20 @@ export const Login = () => {
   );
 
   const submitLoginForm = useCallback(async (values: LoginUserFormValues) => {
-    await dispatch(
-      AccountActions.requestLogin({
-        login: values.username,
-        password: values.password,
+    // await dispatch(
+    //   AccountActions.requestLogin({
+    //     login: values.username,
+    //     password: values.password,
+    //   })
+    // );
+    // await dispatch(AccountActions.getUserData());
+    dispatch(
+      setUserData({
+        data: MOCK_USER,
+        isAdmin: loginTab === LOGIN_TAB.ADMIN,
+        status: ResponseStatuses.Success,
       })
     );
-    await dispatch(AccountActions.getUserData());
     navigate(from, { replace: true });
     console.log(userName);
   }, []);

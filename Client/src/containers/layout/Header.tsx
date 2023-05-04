@@ -8,6 +8,8 @@ import MuiAppBar, { AppBarProps } from "@mui/material/AppBar";
 import { useNavigate } from "react-router-dom";
 
 import { useCurrentPath } from "@/api/hooks/useCurrentPath";
+import { useSelector } from "@/redux/hooks";
+import { isAdminSelector } from "@/redux/selectors";
 
 import { TESTPOINT_ROUTES } from "@api/pageRoutes";
 
@@ -37,6 +39,7 @@ const AppBar = styled(MuiAppBar, {
 
 export const Header: FC = () => {
   const theme = useTheme();
+  const isAdmin = useSelector(isAdminSelector);
   const navigate = useNavigate();
   const currentPath = useCurrentPath();
   const isMinimized = useSidebarStore((store) => store.isMinimized);
@@ -72,18 +75,20 @@ export const Header: FC = () => {
             </Typography>
           </Breadcrumbs>
         </Typography>
-        <div>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            color="secondary"
-            onClick={() => navigate(TESTPOINT_ROUTES.profile.path)}
-          >
-            <AccountCircle fontSize="large" />
-          </IconButton>
-        </div>
+        {!isAdmin && (
+          <div>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              color="secondary"
+              onClick={() => navigate(TESTPOINT_ROUTES.profile.path)}
+            >
+              <AccountCircle fontSize="large" />
+            </IconButton>
+          </div>
+        )}
       </Toolbar>
     </AppBar>
   );

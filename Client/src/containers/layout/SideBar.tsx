@@ -1,10 +1,12 @@
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
+import HandymanIcon from "@mui/icons-material/Handyman";
 import HomeIcon from "@mui/icons-material/Home";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
+import PeopleIcon from "@mui/icons-material/People";
 import QuizIcon from "@mui/icons-material/Quiz";
 import SensorDoorIcon from "@mui/icons-material/SensorDoor";
 import {
@@ -24,6 +26,9 @@ import { useNavigate } from "react-router-dom";
 import { useBreakpoint } from "@/api/hooks/useBreakPoint";
 import { TESTPOINT_ROUTES } from "@/api/pageRoutes";
 import { IconFullLogo } from "@/common/icons";
+import { useDispatch, useSelector } from "@/redux/hooks";
+import { isAdminSelector } from "@/redux/selectors";
+import { setUserData } from "@/redux/userAccount/reducer";
 
 import { DRAWER_WIDTH, HEADER_HEIGHT } from "./common";
 import { useSidebarStore } from "./useLayoutStore";
@@ -82,14 +87,30 @@ const routes = [
     ...TESTPOINT_ROUTES.statistics,
     icon: <AnalyticsIcon />,
   },
+  {
+    ...TESTPOINT_ROUTES.users,
+    icon: <PeopleIcon />,
+    name: "User Groups",
+  },
+  {
+    ...TESTPOINT_ROUTES.testBuilder,
+    icon: <HandymanIcon />,
+  },
 ];
 
 export const SideBar: FC = () => {
   const mdUp = useBreakpoint("md");
+  const isAdmin = useSelector(isAdminSelector);
   const navigate = useNavigate();
   const theme = useTheme();
   const isMinimized = useSidebarStore((store) => store.isMinimized);
   const toggleIsMinimized = useSidebarStore((store) => store.toggleIsMinimized);
+  const dispatch = useDispatch();
+
+  const handleExit = useCallback(() => {
+    dispatch(setUserData({ isAdmin: false, status: null }));
+    navigate("/login");
+  }, [dispatch, navigate]);
 
   return (
     <Drawer variant="persistent" anchor="left" open={isMinimized}>
@@ -110,19 +131,21 @@ export const SideBar: FC = () => {
       </DrawerHeader>
       <Divider />
       <List>
-        {routes.map(({ icon, name, path }) => (
-          <ListItem key={name} color={theme.palette.secondary.main} disablePadding onClick={() => navigate(path)}>
-            <ListButton color={theme.palette.secondary.main}>
-              <ListItemIcon>{icon}</ListItemIcon>
-              <ListItemText primary={name} />
-            </ListButton>
-          </ListItem>
-        ))}
+        {routes
+          .filter((route) => route.showAdmin !== !isAdmin)
+          .map(({ icon, name, path }) => (
+            <ListItem key={name} color={theme.palette.secondary.main} disablePadding onClick={() => navigate(path)}>
+              <ListButton color={theme.palette.secondary.main}>
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={name} />
+              </ListButton>
+            </ListItem>
+          ))}
       </List>
       <Divider />
       <List>
         <ListItem disablePadding>
-          <ExitButton>
+          <ExitButton onClick={handleExit}>
             <ListItemIcon>
               <SensorDoorIcon />
             </ListItemIcon>

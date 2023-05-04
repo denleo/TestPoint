@@ -1,8 +1,20 @@
-import React, { FC, useCallback } from "react";
+import React, { FC, useCallback, useState } from "react";
 
 import { QuestionMarkRounded, PlayArrowRounded } from "@mui/icons-material";
-import { Button, Grid, Paper, styled, Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EqualizerIcon from "@mui/icons-material/Equalizer";
+import HandymanIcon from "@mui/icons-material/Handyman";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import { Button, Chip, Grid, Paper, styled, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
+import { AssignDialog } from "@/components/AssignDialog";
+import { TestDifficultyChip } from "@/components/TestDifficultyChip";
+import { useSelector } from "@/redux/hooks";
+import { isAdminSelector } from "@/redux/selectors";
+
+import { useTestBuilderStore } from "../TestBuilderPage/useTestBuilderPageStore";
+import { useTestComponentStore } from "../TestComponentPage/useTestComponentStore";
 
 import { TestData } from "./data";
 
@@ -42,65 +54,126 @@ interface Props {
 
 export const TestPreviewCard: FC<Props> = ({ testData }) => {
   const { id, name, questions, completionTime } = { ...testData };
+  const isAdmin = useSelector(isAdminSelector);
+  const [openAssign, setOpenAssign] = useState(false);
   const navigate = useNavigate();
+  const setEditTest = useTestBuilderStore((store) => store.setTest);
+  const setTest = useTestComponentStore((store) => store.setTest);
 
   const handleStartTest = useCallback(() => {
     navigate("/test");
-  }, []);
+    setTest(testData);
+  }, [testData]);
+
+  const toggleAssignDialog = useCallback(() => {
+    setOpenAssign(!openAssign);
+  }, [openAssign]);
+
+  const editTest = useCallback(() => {
+    navigate("/constructor");
+    setEditTest(testData);
+  }, [testData]);
 
   return (
-    <PaperSection>
-      <Grid container alignItems="center" spacing={1}>
-        <Grid item>
-          <QuestionMarkWrapper>
-            <QuestionMarkRounded fontSize="medium" />
-          </QuestionMarkWrapper>
+    <>
+      <PaperSection>
+        <Grid container alignItems="center" spacing={1}>
+          <Grid item>
+            <QuestionMarkWrapper>
+              <QuestionMarkRounded fontSize="medium" />
+            </QuestionMarkWrapper>
+          </Grid>
+          <Grid item xs>
+            <Typography mr={0.5} display="inline-block" variant="h4">
+              TEST: {name}
+            </Typography>
+            <TestDifficultyChip difficulty={testData.difficulty} />
+          </Grid>
         </Grid>
-        <Grid item xs>
-          <Typography mr={0.5} display="inline-block" variant="h4">
-            TEST: {name}
-          </Typography>
-          <Typography variant="caption">#{id}</Typography>
-        </Grid>
-      </Grid>
 
-      <TestInformationWrapper>
-        <Grid container>
-          <Grid item flexDirection="column" xs>
-            <Typography variant="subtitle2">Test Information:</Typography>
-            <div>
-              <Dot />
-              <Typography component="span" variant="body2">
-                Number of questions: <strong>{questions.length}</strong>
-              </Typography>
-            </div>
-            {/* TODO: use real author */}
-            <div>
-              <Dot />
-              <Typography component="span" variant="body2">
-                Author: <strong>Maxim Rojkov</strong>
-              </Typography>
-            </div>
-            <div>
-              <Dot />
-              <Typography component="span" variant="body2">
-                Completion time: <strong>{completionTime}</strong>
-              </Typography>
-            </div>
+        <TestInformationWrapper>
+          <Grid container>
+            <Grid item flexDirection="column" xs>
+              <Typography variant="subtitle2">Test Information:</Typography>
+              <div>
+                <Dot />
+                <Typography component="span" variant="body2">
+                  Number of questions: <strong>{questions?.length ?? 0}</strong>
+                </Typography>
+              </div>
+              {/* TODO: use real author */}
+              <div>
+                <Dot />
+                <Typography component="span" variant="body2">
+                  Author: <strong>{testData.author}</strong>
+                </Typography>
+              </div>
+              <div>
+                <Dot />
+                <Typography component="span" variant="body2">
+                  Completion time: <strong>{completionTime}</strong>
+                </Typography>
+              </div>
+            </Grid>
+            <Grid item display="flex" alignItems="flex-end">
+              {isAdmin ? (
+                <>
+                  <Button
+                    size="large"
+                    variant="contained"
+                    color="success"
+                    endIcon={<PersonAddAlt1Icon />}
+                    onClick={toggleAssignDialog}
+                  >
+                    Assign
+                  </Button>
+                  <Button
+                    size="large"
+                    variant="contained"
+                    color="info"
+                    endIcon={<HandymanIcon />}
+                    sx={{ ml: 2 }}
+                    onClick={editTest}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    size="large"
+                    variant="contained"
+                    color="secondary"
+                    endIcon={<EqualizerIcon />}
+                    sx={{ ml: 2 }}
+                    onClick={toggleAssignDialog}
+                  >
+                    Statistics
+                  </Button>
+                  <Button
+                    size="large"
+                    variant="contained"
+                    color="primary"
+                    endIcon={<DeleteIcon />}
+                    sx={{ ml: 2 }}
+                    onClick={toggleAssignDialog}
+                  >
+                    Delete
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  size="large"
+                  variant="contained"
+                  color="secondary"
+                  endIcon={<PlayArrowRounded />}
+                  onClick={handleStartTest}
+                >
+                  Start
+                </Button>
+              )}
+            </Grid>
           </Grid>
-          <Grid item display="flex" alignItems="flex-end">
-            <Button
-              size="large"
-              variant="contained"
-              color="secondary"
-              endIcon={<PlayArrowRounded />}
-              onClick={handleStartTest}
-            >
-              Start
-            </Button>
-          </Grid>
-        </Grid>
-      </TestInformationWrapper>
-    </PaperSection>
+        </TestInformationWrapper>
+      </PaperSection>
+      {isAdmin && openAssign && <AssignDialog onClose={toggleAssignDialog} />}
+    </>
   );
 };

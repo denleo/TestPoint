@@ -11,6 +11,7 @@ import { AccountUserState, ResponseStatuses } from "./state";
 const initialState: AccountUserState = {
   data: MOCK_USER,
   status: null,
+  isAdmin: true,
 };
 
 export const userAccountSlice = createSlice({
@@ -45,6 +46,7 @@ export const userAccountSlice = createSlice({
           ...action.payload,
           username: action.payload.username,
         },
+        isAdmin: false,
       };
     });
   },
