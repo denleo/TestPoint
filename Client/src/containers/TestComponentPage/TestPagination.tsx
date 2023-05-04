@@ -23,7 +23,7 @@ const QuestionTab = styled(Tab, {
 }));
 
 interface Props {
-  selectedAnswers: Map<number, number>;
+  selectedAnswers: Map<number, string | string[]>;
   numberQuestions: number;
   selectedQuestionId: number;
   onChangeQuestionTab(value: number): void;
@@ -40,7 +40,12 @@ export const TestPagination: FC<Props> = ({
       {Array(numberQuestions)
         .fill(5)
         .map((e, index) => (
-          <QuestionTab answered={selectedAnswers.has(index)} key={`key=${e + index}`} value={index} label={index + 1} />
+          <QuestionTab
+            answered={!!selectedAnswers.get(index) && !!selectedAnswers.get(index)?.length}
+            key={`key=${e + index}`}
+            value={index}
+            label={index + 1}
+          />
         ))}
     </PaginationTabs>
   );

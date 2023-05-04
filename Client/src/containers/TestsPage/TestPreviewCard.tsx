@@ -14,6 +14,7 @@ import { useSelector } from "@/redux/hooks";
 import { isAdminSelector } from "@/redux/selectors";
 
 import { useTestBuilderStore } from "../TestBuilderPage/useTestBuilderPageStore";
+import { useTestComponentStore } from "../TestComponentPage/useTestComponentStore";
 
 import { TestData } from "./data";
 
@@ -57,10 +58,12 @@ export const TestPreviewCard: FC<Props> = ({ testData }) => {
   const [openAssign, setOpenAssign] = useState(false);
   const navigate = useNavigate();
   const setEditTest = useTestBuilderStore((store) => store.setTest);
+  const setTest = useTestComponentStore((store) => store.setTest);
 
   const handleStartTest = useCallback(() => {
     navigate("/test");
-  }, []);
+    setTest(testData);
+  }, [testData]);
 
   const toggleAssignDialog = useCallback(() => {
     setOpenAssign(!openAssign);

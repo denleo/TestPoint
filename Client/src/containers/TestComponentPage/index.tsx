@@ -1,14 +1,15 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import DoneOutlineRoundedIcon from "@mui/icons-material/DoneOutlineRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import { Button, IconButton, styled, Typography } from "@mui/material";
 
-import { TestData, TEST_DATA_1 } from "../TestsPage/data";
+import { QuestionType } from "../TestsPage/data";
 
 import { QuestionComponent } from "./QuestionComponent";
 import { TestPagination } from "./TestPagination";
+import { useTestComponentStore } from "./useTestComponentStore";
 
 const LayoutPage = styled("div")(({ theme }) => ({
   display: "flex",
@@ -77,46 +78,59 @@ const ButtonFinish = styled(Button)(({ theme }) => ({
 }));
 
 const TestComponentPage = () => {
-  const [testData, setTestData] = useState<TestData>(TEST_DATA_1);
-  const [selectedQuestionId, setSelectedQuestionId] = useState<number>(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Map<number, number>>(new Map());
+  const testData = useTestComponentStore((store) => store.test);
+  const questionIndex = useTestComponentStore((store) => store.questionIndex);
+  const selectedAnswers = useTestComponentStore((store) => store.selectedAnswers);
+  const setQuestionIndex = useTestComponentStore((store) => store.setQuestionIndex);
+  const setSelectedAnswers = useTestComponentStore((store) => store.setSelectedAnswers);
+
+  if (!testData || !testData?.questions) return null;
 
   const handleSelectAnswer = useCallback(
-    (answerId: number) => {
+    (answer: string | string[], questionType: QuestionType) => {
       const map = new Map(selectedAnswers);
-      const answer = map.get(selectedQuestionId);
-      if (!answer) {
-        map.set(selectedQuestionId, answerId);
-      } else if (answer === answerId) {
-        map.delete(selectedQuestionId);
-      } else {
-        map.delete(selectedQuestionId);
-        map.set(selectedQuestionId, answerId);
+
+      if (questionType === QuestionType.TextSubstitution) {
+        map.set(questionIndex, answer);
+      }
+
+      if (questionType === QuestionType.SingleOption) {
+        const currentAnswer = map.get(questionIndex);
+        if (!currentAnswer) {
+          map.set(questionIndex, answer);
+        } else if (currentAnswer === answer) {
+          map.delete(questionIndex);
+        } else {
+          map.delete(questionIndex);
+          map.set(questionIndex, answer);
+        }
+      }
+
+      if (questionType === QuestionType.MultipleOptions) {
+        map.set(questionIndex, answer);
       }
 
       setSelectedAnswers(map);
     },
-    [selectedQuestionId, selectedAnswers]
+    [questionIndex, selectedAnswers]
   );
 
   const handleGoNextQuestion = useCallback(() => {
-    setSelectedQuestionId(selectedQuestionId + 1);
-  }, [selectedQuestionId]);
+    setQuestionIndex(questionIndex + 1);
+  }, [questionIndex]);
 
   const handleGoPrevQuestion = useCallback(() => {
-    setSelectedQuestionId(selectedQuestionId - 1);
-  }, [selectedQuestionId]);
+    setQuestionIndex(questionIndex - 1);
+  }, [questionIndex]);
 
   const numberQuestions = testData?.questions?.length ?? 0;
   const notFinished = selectedAnswers.size === numberQuestions;
-
-  if (!testData.questions) return null;
 
   return (
     <LayoutPage>
       <TestContainer>
         <ButtonNext
-          disabled={selectedQuestionId === 0}
+          disabled={questionIndex === 0}
           color="secondary"
           sx={{ transform: "rotate(180deg)" }}
           onClick={handleGoPrevQuestion}
@@ -131,8 +145,8 @@ const TestComponentPage = () => {
             <Typography variant="caption">#{testData.id}</Typography>
           </TestHeader>
           <QuestionComponent
-            testQuestion={testData.questions[selectedQuestionId]}
-            selectedAnswer={selectedAnswers.get(selectedQuestionId)}
+            testQuestion={testData.questions[questionIndex]}
+            selectedAnswer={selectedAnswers.get(questionIndex)}
             onSelectAnswer={handleSelectAnswer}
           />
           <TestFooter>
@@ -142,8 +156,8 @@ const TestComponentPage = () => {
             <TestPagination
               numberQuestions={numberQuestions}
               selectedAnswers={selectedAnswers}
-              selectedQuestionId={selectedQuestionId}
-              onChangeQuestionTab={setSelectedQuestionId}
+              selectedQuestionId={questionIndex}
+              onChangeQuestionTab={setQuestionIndex}
             />
             <ButtonFinish
               disabled={!notFinished}
@@ -155,11 +169,7 @@ const TestComponentPage = () => {
             </ButtonFinish>
           </TestFooter>
         </TestInner>
-        <ButtonNext
-          disabled={selectedQuestionId === numberQuestions - 1}
-          color="secondary"
-          onClick={handleGoNextQuestion}
-        >
+        <ButtonNext disabled={questionIndex === numberQuestions - 1} color="secondary" onClick={handleGoNextQuestion}>
           <ArrowForwardIosRoundedIcon fontSize="large" />
         </ButtonNext>
       </TestContainer>

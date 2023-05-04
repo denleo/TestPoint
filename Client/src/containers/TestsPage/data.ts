@@ -50,13 +50,8 @@ export const TEST_DATA_1: TestData = {
     {
       id: generateUniqueId(),
       question: "Функциональное тестирование проводят в рамках ... ",
-      type: QuestionType.SingleOption,
-      variants: [
-        { id: "1", text: "модульного тестирования", isCorrect: false },
-        { id: "2", text: "динамического тестирования", isCorrect: false },
-        { id: "3", text: "статического тестирования", isCorrect: false },
-        { id: "4", text: "автоматизированного тестирования", isCorrect: true },
-      ],
+      type: QuestionType.TextSubstitution,
+      variants: [{ id: "1", text: "модульного тестирования", isCorrect: false }],
     },
     {
       id: generateUniqueId(),
@@ -67,12 +62,16 @@ export const TEST_DATA_1: TestData = {
         { id: "2", text: "динамического тестирования", isCorrect: false },
         { id: "3", text: "статического тестирования", isCorrect: false },
         { id: "4", text: "автоматизированного тестирования", isCorrect: false },
+        { id: "5", text: "модульного тестирования", isCorrect: true },
+        { id: "6", text: "динамического тестирования", isCorrect: false },
+        { id: "7", text: "статического тестирования", isCorrect: false },
+        { id: "8", text: "автоматизированного тестирования", isCorrect: false },
       ],
     },
     {
       id: generateUniqueId(),
       question: "Функциональное тестирование проводят в рамках 3 ... ",
-      type: QuestionType.SingleOption,
+      type: QuestionType.MultipleOptions,
       variants: [
         { id: "1", text: "модульного тестирования", isCorrect: false },
         { id: "2", text: "динамического тестирования", isCorrect: true },
@@ -94,7 +93,7 @@ export const TEST_DATA_1: TestData = {
     {
       id: generateUniqueId(),
       question: "Функциональное тестирование проводят в рамках 5 ... ",
-      type: QuestionType.SingleOption,
+      type: QuestionType.MultipleOptions,
       variants: [
         { id: "1", text: "модульного тестирования", isCorrect: true },
         { id: "2", text: "динамического тестирования", isCorrect: false },
