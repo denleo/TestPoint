@@ -4,7 +4,7 @@ using TestPoint.Application.Interfaces.Persistence;
 
 namespace TestPoint.Application.Users.Queries.GetCurrentUser;
 
-internal class GetCurrentUserHandler : IRequestHandler<GetCurrentUserQuery, GetCurrentUserResponse>
+public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserQuery, GetCurrentUserResponse>
 {
     private readonly IUnitOfWork _uow;
 
@@ -33,7 +33,7 @@ internal class GetCurrentUserHandler : IRequestHandler<GetCurrentUserQuery, GetC
             LastName = user.LastName,
             Email = user.Email,
             EmailConfirmed = user.EmailConfirmed,
-            Avatar = user.Avatar
+            Base64Avatar = user.Avatar != null ? Convert.ToBase64String(user.Avatar) : null
         };
     }
 }

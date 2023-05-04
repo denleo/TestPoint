@@ -4,7 +4,7 @@ using TestPoint.Application.Interfaces.Persistence;
 
 namespace TestPoint.Application.UserGroups.Commands.RemoveUserFromGroup;
 
-internal class RemoveUserFromGroupHandler : IRequestHandler<RemoveUserFromGroupCommand>
+public class RemoveUserFromGroupHandler : IRequestHandler<RemoveUserFromGroupCommand>
 {
     private readonly IUnitOfWork _uow;
 

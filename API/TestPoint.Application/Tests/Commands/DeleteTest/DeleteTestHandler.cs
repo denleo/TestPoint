@@ -4,7 +4,7 @@ using TestPoint.Application.Interfaces.Persistence;
 
 namespace TestPoint.Application.Tests.Commands.DeleteTest;
 
-internal class DeleteTestHandler : IRequestHandler<DeleteTestCommand>
+public class DeleteTestHandler : IRequestHandler<DeleteTestCommand>
 {
     private readonly IUnitOfWork _uow;
 

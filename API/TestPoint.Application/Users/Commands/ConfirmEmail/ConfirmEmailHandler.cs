@@ -4,7 +4,7 @@ using TestPoint.Application.Interfaces.Persistence;
 
 namespace TestPoint.Application.Users.Commands.ConfirmEmail;
 
-internal class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand>
+public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand>
 {
     private readonly IUnitOfWork _uow;
 

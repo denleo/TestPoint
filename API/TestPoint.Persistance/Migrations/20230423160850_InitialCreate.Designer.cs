@@ -12,8 +12,8 @@ using TestPoint.DAL.Contexts;
 namespace TestPoint.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230403144100_InitialCreation")]
-    partial class InitialCreation
+    [Migration("20230423160850_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -79,6 +79,40 @@ namespace TestPoint.DAL.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("Answer", (string)null);
+                });
+
+            modelBuilder.Entity("TestPoint.Domain.AnswerHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("AnswerHistoryId");
+
+                    b.Property<string>("AnswerText")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("AnswerText");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TestCompletionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("TestCompletionId");
+
+                    b.ToTable("AnswerHistory", (string)null);
                 });
 
             modelBuilder.Entity("TestPoint.Domain.Question", b =>
@@ -170,16 +204,16 @@ namespace TestPoint.DAL.Migrations
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CompletionTime")
-                        .HasColumnType("int")
-                        .HasColumnName("CompletionTime");
-
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<byte>("Difficulty")
                         .HasColumnType("tinyint")
                         .HasColumnName("Difficulty");
+
+                    b.Property<int>("EstimatedTime")
+                        .HasColumnType("int")
+                        .HasColumnName("EstimatedTime");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -197,6 +231,70 @@ namespace TestPoint.DAL.Migrations
                         .HasDatabaseName("UQ_Test_AuthorId_Name");
 
                     b.ToTable("Test", (string)null);
+                });
+
+            modelBuilder.Entity("TestPoint.Domain.TestAssignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TestAssignmentId");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("TestId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TestId");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("TestId", "UserId")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_TestAssignment_TestId_UserId");
+
+                    b.ToTable("TestAssignment", (string)null);
+                });
+
+            modelBuilder.Entity("TestPoint.Domain.TestCompletion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TestCompletionId");
+
+                    b.Property<double>("CompletionTime")
+                        .HasColumnType("float")
+                        .HasColumnName("CompletionTime");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Score")
+                        .HasColumnType("float")
+                        .HasColumnName("Score");
+
+                    b.Property<Guid>("TestAssignmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestAssignmentId")
+                        .IsUnique();
+
+                    b.ToTable("TestCompletion", (string)null);
                 });
 
             modelBuilder.Entity("TestPoint.Domain.User", b =>
@@ -321,6 +419,21 @@ namespace TestPoint.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TestPoint.Domain.AnswerHistory", b =>
+                {
+                    b.HasOne("TestPoint.Domain.Question", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("TestPoint.Domain.TestCompletion", null)
+                        .WithMany("Answers")
+                        .HasForeignKey("TestCompletionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TestPoint.Domain.Question", b =>
                 {
                     b.HasOne("TestPoint.Domain.Test", null)
@@ -335,6 +448,30 @@ namespace TestPoint.DAL.Migrations
                     b.HasOne("TestPoint.Domain.Administrator", null)
                         .WithMany()
                         .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TestPoint.Domain.TestAssignment", b =>
+                {
+                    b.HasOne("TestPoint.Domain.Test", null)
+                        .WithMany()
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TestPoint.Domain.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TestPoint.Domain.TestCompletion", b =>
+                {
+                    b.HasOne("TestPoint.Domain.TestAssignment", null)
+                        .WithOne("TestCompletion")
+                        .HasForeignKey("TestPoint.Domain.TestCompletion", "TestAssignmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -382,6 +519,16 @@ namespace TestPoint.DAL.Migrations
             modelBuilder.Entity("TestPoint.Domain.Test", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("TestPoint.Domain.TestAssignment", b =>
+                {
+                    b.Navigation("TestCompletion");
+                });
+
+            modelBuilder.Entity("TestPoint.Domain.TestCompletion", b =>
+                {
+                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

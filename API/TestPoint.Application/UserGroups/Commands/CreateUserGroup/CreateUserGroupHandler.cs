@@ -5,7 +5,7 @@ using TestPoint.Domain;
 
 namespace TestPoint.Application.UserGroups.Commands.CreateUserGroup;
 
-internal class CreateUserGroupHandler : IRequestHandler<CreateUserGroupCommand, CreateUserGroupResponse>
+public class CreateUserGroupHandler : IRequestHandler<CreateUserGroupCommand, UserGroupInformation>
 {
     private readonly IUnitOfWork _uow;
 
@@ -14,7 +14,7 @@ internal class CreateUserGroupHandler : IRequestHandler<CreateUserGroupCommand, 
         _uow = unitOfWork;
     }
 
-    public async Task<CreateUserGroupResponse> Handle(CreateUserGroupCommand request, CancellationToken cancellationToken)
+    public async Task<UserGroupInformation> Handle(CreateUserGroupCommand request, CancellationToken cancellationToken)
     {
         var groupWithTheSameName = await _uow.UserGroupRepository
             .FindOneAsync(x => x.AdministratorId == request.AdministratorId && x.Name == request.GroupName);
@@ -33,9 +33,6 @@ internal class CreateUserGroupHandler : IRequestHandler<CreateUserGroupCommand, 
         _uow.UserGroupRepository.Add(userGroup);
         await _uow.SaveChangesAsync(cancellationToken);
 
-        return new CreateUserGroupResponse
-        {
-            GroupId = userGroup.Id
-        };
+        return new UserGroupInformation(userGroup.Id, userGroup.Name, userGroup.Users.Count);
     }
 }

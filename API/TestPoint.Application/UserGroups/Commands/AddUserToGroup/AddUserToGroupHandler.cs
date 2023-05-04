@@ -4,7 +4,7 @@ using TestPoint.Application.Interfaces.Persistence;
 
 namespace TestPoint.Application.UserGroups.Commands.AddUserToGroup;
 
-internal class AddUserToGroupHandler : IRequestHandler<AddUserToGroupCommand>
+public class AddUserToGroupHandler : IRequestHandler<AddUserToGroupCommand>
 {
     private readonly IUnitOfWork _uow;
 

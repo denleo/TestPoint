@@ -36,15 +36,7 @@ internal static class TestValidations
 
                 if (question.Answers.Where(x => x.IsCorrect).Count() > 1)
                 {
-                    throw new BadEntityException("Single option question has more than one answer.");
-                }
-                break;
-
-            case QuestionType.MultipleOptions:
-
-                if (question.Answers.Where(x => x.IsCorrect).Count() < 2)
-                {
-                    throw new BadEntityException("Multiple option question has less than two answers.");
+                    throw new BadEntityException("Single option question can have only one correct answer.");
                 }
                 break;
 
@@ -52,7 +44,7 @@ internal static class TestValidations
 
                 if (question.Answers.Count() != 1)
                 {
-                    throw new BadEntityException("Text substitution question can have only one answer.");
+                    throw new BadEntityException("Text substitution question can have only one choice in total.");
                 }
                 break;
 

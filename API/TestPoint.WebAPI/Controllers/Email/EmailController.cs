@@ -14,13 +14,18 @@ namespace TestPoint.WebAPI.Controllers.Email;
 public class EmailController : BaseController
 {
     private readonly IJwtService _jwtService;
-    private readonly string proxyHost, proxySecurePort;
+    private readonly string? proxyHost, proxyPort;
 
-    public EmailController(IJwtService jwtService, IConfiguration config)
+    public EmailController(IJwtService jwtService)
     {
         _jwtService = jwtService;
-        proxyHost = config.GetSection("Proxy:Host").Value;
-        proxySecurePort = config.GetSection("Proxy:HttpsPort").Value;
+        proxyHost = Environment.GetEnvironmentVariable("PROXY_HOST");
+        proxyPort = Environment.GetEnvironmentVariable("PROXY_HTTPS_PORT");
+
+        if (proxyPort is null || proxyHost is null)
+        {
+            throw new ArgumentNullException("Proxy enviroment variables was null");
+        }
     }
 
     [SwaggerOperation(Summary = "Send verification email for the current user (roles:user)")]
@@ -30,7 +35,7 @@ public class EmailController : BaseController
         var sendEmailConfirmationCommand = new SendEmailConfirmationCommand()
         {
             UserId = LoginId!.Value,
-            EmailConfirmUrl = $"https://{proxyHost}:{proxySecurePort}/api/user/email/verify/"
+            EmailConfirmUrl = $"https://{proxyHost}:{proxyPort}/api/user/email/verify/"
         };
 
         await Mediator.Send(sendEmailConfirmationCommand);
@@ -81,7 +86,7 @@ public class EmailController : BaseController
         var sendForgotPasswordEmailCommand = new SendForgotPasswordEmailCommand
         {
             Username = userForgotPassword.Username,
-            PasswordResetUrl = $"https://{proxyHost}:{proxySecurePort}/api/user/password/reset/"
+            PasswordResetUrl = $"https://{proxyHost}:{proxyPort}/api/user/password/reset/"
         };
 
         await Mediator.Send(sendForgotPasswordEmailCommand);

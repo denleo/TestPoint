@@ -5,7 +5,7 @@ using TestPoint.Application.Interfaces.Persistence;
 
 namespace TestPoint.Application.Admins.Commands.ResetAdminPassword;
 
-internal class ResetAdminPasswordHandler : IRequestHandler<ResetAdminPasswordCommand, ResetAdminPasswordResponse>
+public class ResetAdminPasswordHandler : IRequestHandler<ResetAdminPasswordCommand, ResetAdminPasswordResponse>
 {
     private readonly IUnitOfWork _uow;
 

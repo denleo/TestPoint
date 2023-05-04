@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
 
-namespace TestPoint.WebAPI.Filters;
+namespace TestPoint.WebAPI.Attributes;
 
 public class ApiKeyAuthAttribute : Attribute, IAuthorizationFilter
 {

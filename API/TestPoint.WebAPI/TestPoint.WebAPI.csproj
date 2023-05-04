@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TestPoint.Cache\TestPoint.Cache.csproj" />
     <ProjectReference Include="..\TestPoint.EmailService\TestPoint.EmailService.csproj" />
     <ProjectReference Include="..\TestPoint.JwtService\TestPoint.JwtService.csproj" />
     <ProjectReference Include="..\TestPoint.Persistance\TestPoint.DAL.csproj" />

@@ -4,7 +4,7 @@ using TestPoint.Application.Interfaces.Persistence;
 
 namespace TestPoint.Application.UserGroups.Commands.DeleteUserGroup;
 
-internal class DeleteUserGroupHandler : IRequestHandler<DeleteUserGroupCommand>
+public class DeleteUserGroupHandler : IRequestHandler<DeleteUserGroupCommand>
 {
     private readonly IUnitOfWork _uow;
 
