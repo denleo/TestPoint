@@ -2,6 +2,10 @@ import React, { useCallback, useState } from "react";
 
 import { Paper, styled } from "@mui/material";
 import { Form, Formik } from "formik";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { useDispatch } from "@/redux/hooks";
+import { AccountActions } from "@/redux/userAccount/actions";
 
 import { validateForm, validationSchema } from "@api/validation";
 
@@ -39,8 +43,13 @@ const initialFormValues: SignUpUserFormValues = {
 
 export const SignUp = () => {
   const [signUpStep, setSignUpStep] = useState(SIGN_UP_STEPS.USERNAME);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const setPageStep = useStartPageStore((state) => state.setPageStep);
+
+  const from = location.state?.from?.pathname || "/";
 
   const backToLogin = useCallback(() => {
     setPageStep(START_PAGE_STEPS.LOGIN);
@@ -66,6 +75,15 @@ export const SignUp = () => {
     setSignUpStep(SIGN_UP_STEPS.USERNAME);
   }, []);
 
+  const submitForm = useCallback(async (values: SignUpUserFormValues) => {
+    try {
+      await dispatch(AccountActions.registerUser(values));
+      setPageStep(START_PAGE_STEPS.LOGIN);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return (
     <ModalPaper>
       <Formik
@@ -74,7 +92,7 @@ export const SignUp = () => {
         initialValues={initialFormValues}
         validate={validateForm}
         validationSchema={validationSchema}
-        onSubmit={() => {}}
+        onSubmit={submitForm}
         onReset={handleResetForm}
       >
         <Form style={{ height: "100%" }} id="sign-up">

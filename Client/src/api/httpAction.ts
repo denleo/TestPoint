@@ -6,7 +6,7 @@ import { getUserTokenFromStorage } from "./userToken";
 
 // TODO configure api url
 const instance = axios.create({
-  baseURL: "https://30cd-46-28-102-154.eu.ngrok.io/api/",
+  baseURL: "api/",
 });
 
 const axiosConfig = (token: string | null) => ({

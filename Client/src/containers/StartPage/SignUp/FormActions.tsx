@@ -16,7 +16,7 @@ export const FormActions: FC<Props> = ({ onBack, onNext, disabled, isSubmit = fa
         Reset
       </Button>
       {isSubmit ? (
-        <Button onClick={onBack} type="submit" form="sign-up" color="secondary">
+        <Button onClick={isSubmit ? undefined : onBack} type="submit" form="sign-up" color="secondary">
           Create
         </Button>
       ) : (

@@ -9,9 +9,8 @@ import { AccountActions } from "./actions";
 import { AccountUserState, ResponseStatuses } from "./state";
 
 const initialState: AccountUserState = {
-  data: MOCK_USER,
   status: null,
-  isAdmin: true,
+  isAdmin: false,
 };
 
 export const userAccountSlice = createSlice({
@@ -44,6 +43,7 @@ export const userAccountSlice = createSlice({
         status: ResponseStatuses.Success,
         data: {
           ...action.payload,
+          creationDate: new Date(action.payload.registryDate),
           username: action.payload.username,
         },
         isAdmin: false,
