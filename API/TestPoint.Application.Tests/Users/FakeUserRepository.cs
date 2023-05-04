@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using TestPoint.Application.Interfaces.Persistence.Repositories;
+using TestPoint.Application.Users;
 
 namespace TestPoint.Application.Tests.Users;
 
@@ -31,5 +32,10 @@ public class FakeUserRepository : IUserRepository
     {
         var user = Users.Where(x => x.Id == id).FirstOrDefault();
         return Task.FromResult(user);
+    }
+
+    public Task<List<UserInformationShort>> FilterUsersByFIO(string filter)
+    {
+        throw new NotImplementedException();
     }
 }
