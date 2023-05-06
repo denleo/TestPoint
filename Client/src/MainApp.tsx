@@ -1,4 +1,4 @@
-import React, { FC, lazy, Suspense } from "react";
+import React, { FC, lazy, Suspense, useEffect } from "react";
 
 import { ThemeProvider as MUIThemeProvider } from "@mui/material";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
@@ -7,10 +7,12 @@ import { theme } from "@common/theme/createTheme";
 import { ProtectedRoute } from "@components/ProtectedRoute";
 import LoadingPage from "@containers/LoadingPage";
 
+import { useStoreStates } from "./api/hooks/useStoreStates";
 import { TestpointRoutes, TESTPOINT_ROUTES } from "./api/pageRoutes";
 import { TEST_DATA_1 } from "./containers/TestsPage/data";
-import { useSelector } from "./redux/hooks";
+import { useDispatch, useSelector } from "./redux/hooks";
 import { isAdminSelector } from "./redux/selectors";
+import { AccountActions } from "./redux/userAccount/actions";
 
 const StartPage = lazy(() => import("./containers/StartPage"));
 const HomePage = lazy(() => import("./containers/Home"));
@@ -54,6 +56,20 @@ export const routes: TestpointRoutes = {
 
 export const MainApp: FC = () => {
   const isAdmin = useSelector(isAdminSelector);
+  const dispatch = useDispatch();
+  useStoreStates();
+
+  useEffect(() => {
+    async function fetchData() {
+      if (isAdmin) {
+        await dispatch(AccountActions.getAdminData());
+      } else {
+        await dispatch(AccountActions.getUserData());
+      }
+    }
+
+    fetchData();
+  }, [isAdmin, dispatch]);
 
   return (
     <MUIThemeProvider theme={theme}>

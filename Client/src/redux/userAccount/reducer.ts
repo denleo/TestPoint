@@ -21,10 +21,7 @@ export const userAccountSlice = createSlice({
       ...state,
       ...action.payload,
     }),
-    clearUserData: (state) => ({
-      ...state,
-      ...initialState,
-    }),
+    clearUserData: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(AccountActions.requestLogin.pending, (state) => {
@@ -44,7 +41,6 @@ export const userAccountSlice = createSlice({
         data: {
           ...action.payload,
           creationDate: new Date(action.payload.registryDate),
-          username: action.payload.username,
         },
         isAdmin: false,
       };

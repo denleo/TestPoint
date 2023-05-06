@@ -98,7 +98,6 @@ export const Login = () => {
         }
       } else {
         const resultAction = await dispatch(AccountActions.requestLoginAdmin(values));
-        console.log(resultAction);
         if ("error" in resultAction) {
           setError(new Error(resultAction.error.message));
         } else {
