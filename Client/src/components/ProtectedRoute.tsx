@@ -4,7 +4,7 @@ import { Navigate, useLocation } from "react-router-dom";
 
 import { LayoutContainer } from "@/containers/layout";
 import { useSelector } from "@/redux/hooks";
-import { userAccountNameSelector } from "@/redux/selectors";
+import { userAccountNameSelector, adminNameSelector } from "@/redux/selectors";
 
 interface Props {
   children: JSX.Element;
@@ -12,7 +12,8 @@ interface Props {
 
 export const ProtectedRoute: FC<Props> = ({ children }) => {
   const userName = useSelector(userAccountNameSelector);
-  const isAuth = !!userName;
+  const adminUserName = useSelector(adminNameSelector);
+  const isAuth = !!userName || !!adminUserName;
   const location = useLocation();
 
   if (!isAuth) {

@@ -49,6 +49,28 @@ export const userAccountSlice = createSlice({
         isAdmin: false,
       };
     });
+
+    builder.addCase(AccountActions.requestLoginAdmin.pending, (state) => {
+      state.status = ResponseStatuses.Pending;
+    });
+    builder.addCase(AccountActions.requestLoginAdmin.fulfilled, (state, action) => {
+      setUserTokenToStorage(String(action.payload));
+      state.status = ResponseStatuses.Success;
+    });
+
+    builder.addCase(AccountActions.getAdminData.pending, (state) => {
+      state.status = ResponseStatuses.Pending;
+    });
+    builder.addCase(AccountActions.getAdminData.fulfilled, (state, action) => {
+      return {
+        status: ResponseStatuses.Success,
+        adminData: {
+          ...action.payload,
+          registryDate: new Date(action.payload.registryDate),
+        },
+        isAdmin: true,
+      };
+    });
   },
 });
 

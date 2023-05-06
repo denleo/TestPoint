@@ -14,8 +14,16 @@ export interface UserData {
   creationDate: Date;
 }
 
+export interface AdminData {
+  adminId: string;
+  username: string;
+  passwordReseted: boolean;
+  registryDate: Date;
+}
+
 export interface AccountUserState {
   data?: UserData;
+  adminData?: AdminData;
   status: ResponseStatuses | null;
   isAdmin: boolean;
 }

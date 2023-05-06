@@ -3,6 +3,11 @@ export interface AuthUserPayload {
   password: string;
 }
 
+export interface AuthAdminPayload {
+  username: string;
+  password: string;
+}
+
 export interface RegisterUserPayload {
   username: string;
   email: string;
@@ -21,4 +26,11 @@ export interface UserDataResponse {
   passwordReseted: true;
   registryDate: string;
   base64Avatar: string;
+}
+
+export interface AdminDataResponse {
+  adminId: string;
+  username: string;
+  passwordReseted: boolean;
+  registryDate: string;
 }

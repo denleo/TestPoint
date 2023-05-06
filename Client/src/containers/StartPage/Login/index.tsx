@@ -7,6 +7,7 @@ import * as yup from "yup";
 
 import { useBreakpoint } from "@/api/hooks/useBreakPoint";
 import { IconFullLogo } from "@/common/icons";
+import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { userAccountNameSelector } from "@/redux/selectors";
 import { AccountActions } from "@/redux/userAccount/actions";
@@ -62,9 +63,9 @@ const CustomTab = styled(Tab, {
 export const Login = () => {
   const theme = useTheme();
   const mdUp = useBreakpoint("md");
+  const notify = useNotificationStore((store) => store.notify);
 
   const navigate = useNavigate();
-  const userName = useSelector(userAccountNameSelector);
   const location = useLocation();
   const dispatch = useDispatch();
 
@@ -80,31 +81,34 @@ export const Login = () => {
     [setLoginTab]
   );
 
-  const submitLoginForm = useCallback(async (values: LoginUserFormValues) => {
-    try {
-      await dispatch(
-        AccountActions.requestLogin({
-          login: values.username,
-          password: values.password,
-        })
-      );
-      const response = await dispatch(AccountActions.getUserData());
-      // dispatch(
-      //   setUserData({
-      //     data: MOCK_USER,
-      //     isAdmin: loginTab === LOGIN_TAB.ADMIN,
-      //     status: ResponseStatuses.Success,
-      //   })
-      // );
-      navigate(from, { replace: true });
-    } catch (err) {
-      setError(error);
-    }
-  }, []);
-
-  useEffect(() => {
-    console.log(userName);
-  }, [userName]);
+  const submitLoginForm = useCallback(
+    async (values: LoginUserFormValues) => {
+      if (loginTab === LOGIN_TAB.USER) {
+        const resultAction = await dispatch(
+          AccountActions.requestLogin({
+            login: values.username,
+            password: values.password,
+          })
+        );
+        if ("error" in resultAction) {
+          setError(new Error(resultAction.error.message));
+        } else {
+          await dispatch(AccountActions.getUserData());
+          navigate(from, { replace: true });
+        }
+      } else {
+        const resultAction = await dispatch(AccountActions.requestLoginAdmin(values));
+        console.log(resultAction);
+        if ("error" in resultAction) {
+          setError(new Error(resultAction.error.message));
+        } else {
+          await dispatch(AccountActions.getAdminData());
+          navigate(from, { replace: true });
+        }
+      }
+    },
+    [notify, error, loginTab, from]
+  );
 
   const isUser = loginTab === LOGIN_TAB.USER;
 
