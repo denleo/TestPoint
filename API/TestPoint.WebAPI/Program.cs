@@ -8,6 +8,7 @@ using TestPoint.Application;
 using TestPoint.Cache;
 using TestPoint.DAL;
 using TestPoint.DAL.Contexts;
+using TestPoint.Domain;
 using TestPoint.EmailService;
 using TestPoint.JwtService;
 using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
@@ -108,5 +109,24 @@ void InitializeDatabase()
         //context.Database.EnsureDeleted();
         //context.Database.EnsureCreated();
         context.Database.Migrate();
+
+        var defaultAdmin = new Administrator // [makima, makima12345]
+        {
+            Login = new SystemLogin
+            {
+                LoginType = LoginType.Administrator,
+                Username = "makima",
+                PasswordHash = "i7phShT1JsaP7dLz05tc1FzmSiixX5pIuexRMQlrerdq2qtiVIMEQNnHfJ8U+CUlRHouGETIuUL+BYMD4hGOsw==OxoaYEtzmx3EyLg3Oex6qzZzMeKgPcUJLNQViqKphZs=",
+                PasswordReseted = false,
+                RegistryDate = DateTime.MinValue
+            }
+        };
+
+        var adminsSet = context.Set<Administrator>();
+        if (adminsSet.Include(x => x.Login).FirstOrDefault(x => x.Login.Username == defaultAdmin.Login.Username && x.Login.LoginType == LoginType.Administrator) is null)
+        {
+            context.Set<Administrator>().Add(defaultAdmin);
+            context.SaveChanges();
+        }
     }
 }

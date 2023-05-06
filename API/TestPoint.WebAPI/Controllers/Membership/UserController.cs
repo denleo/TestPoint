@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TestPoint.Application.Users;
+using TestPoint.Application.Users.Commands.ChangeAvatar;
+using TestPoint.Application.Users.Commands.ChangeContactInfo;
 using TestPoint.Application.Users.Commands.ChangePassword;
 using TestPoint.Application.Users.Commands.CreateUser;
 using TestPoint.Application.Users.Queries.FilterUsers;
@@ -43,7 +45,7 @@ public class UserController : BaseController
         return userData;
     }
 
-    [SwaggerOperation(Summary = "Change password for current user (roles:user)")]
+    [SwaggerOperation(Summary = "Change current user password (roles:user)")]
     [HttpPatch("session/user/password"), Authorize(Roles = "User")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
     {
@@ -55,6 +57,36 @@ public class UserController : BaseController
         };
 
         await Mediator.Send(changeUserPasswordCommand);
+        return Ok();
+    }
+
+    [SwaggerOperation(Summary = "Change current user avatar image (roles:user)")]
+    [HttpPatch("session/user/avatar"), Authorize(Roles = "User")]
+    public async Task<IActionResult> ChangeUserAvatar([FromBody] string base64Avatar)
+    {
+        var changeUserAvatarCommand = new ChangeUserAvatarCommand
+        {
+            UserId = LoginId!.Value,
+            Base64Avatar = base64Avatar
+        };
+
+        await Mediator.Send(changeUserAvatarCommand);
+        return Ok();
+    }
+
+    [SwaggerOperation(Summary = "Change current user contact information (roles:user)")]
+    [HttpPatch("session/user/contactinfo"), Authorize(Roles = "User")]
+    public async Task<IActionResult> ChangeUserContactInfo([FromBody] UserContactInfoDto userContactInfoDto)
+    {
+        var changeContactInfoCommand = new ChangeContactInfoCommand
+        {
+            UserId = LoginId!.Value,
+            FirstName = userContactInfoDto.FirstName,
+            LastName = userContactInfoDto.LastName,
+            Email = userContactInfoDto.Email
+        };
+
+        await Mediator.Send(changeContactInfoCommand);
         return Ok();
     }
 
