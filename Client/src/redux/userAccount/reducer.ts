@@ -21,10 +21,7 @@ export const userAccountSlice = createSlice({
       ...state,
       ...action.payload,
     }),
-    clearUserData: (state) => ({
-      ...state,
-      ...initialState,
-    }),
+    clearUserData: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(AccountActions.requestLogin.pending, (state) => {
@@ -44,9 +41,30 @@ export const userAccountSlice = createSlice({
         data: {
           ...action.payload,
           creationDate: new Date(action.payload.registryDate),
-          username: action.payload.username,
         },
         isAdmin: false,
+      };
+    });
+
+    builder.addCase(AccountActions.requestLoginAdmin.pending, (state) => {
+      state.status = ResponseStatuses.Pending;
+    });
+    builder.addCase(AccountActions.requestLoginAdmin.fulfilled, (state, action) => {
+      setUserTokenToStorage(String(action.payload));
+      state.status = ResponseStatuses.Success;
+    });
+
+    builder.addCase(AccountActions.getAdminData.pending, (state) => {
+      state.status = ResponseStatuses.Pending;
+    });
+    builder.addCase(AccountActions.getAdminData.fulfilled, (state, action) => {
+      return {
+        status: ResponseStatuses.Success,
+        adminData: {
+          ...action.payload,
+          registryDate: new Date(action.payload.registryDate),
+        },
+        isAdmin: true,
       };
     });
   },

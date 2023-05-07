@@ -1,13 +1,26 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 
 import userAccountReducer from "./userAccount/reducer";
 
+const persistConfig = {
+  key: "root",
+  storage,
+  blacklist: ["apiProductSlice"],
+};
+
+const persistedUserReducer = persistReducer(persistConfig, userAccountReducer);
+
 export const store = configureStore({
   reducer: {
-    userAccount: userAccountReducer,
+    userAccount: persistedUserReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(thunk),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
