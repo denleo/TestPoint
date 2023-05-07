@@ -16,14 +16,14 @@ internal sealed class TestAssignmentConfiguration : IEntityTypeConfiguration<Tes
         builder.Property(x => x.UserId).HasColumnName("UserId").IsRequired();
 
         builder
-            .HasOne<Test>()
+            .HasOne(x => x.Test)
             .WithMany()
             .HasForeignKey(x => x.TestId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
 
         builder
-            .HasOne<User>()
+            .HasOne(x => x.User)
             .WithMany()
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.NoAction)

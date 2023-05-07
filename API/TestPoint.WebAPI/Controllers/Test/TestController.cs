@@ -10,6 +10,7 @@ using TestPoint.Application.Tests.Commands.CreateTest;
 using TestPoint.Application.Tests.Commands.DeleteTest;
 using TestPoint.Application.Tests.Queries.GetTestById;
 using TestPoint.Application.Tests.Queries.GetTestsByAdmin;
+using TestPoint.Application.Tests.Queries.GetUsersOnTest;
 using TestPoint.Domain;
 using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 using TestPoint.WebAPI.Models.Test;
@@ -96,9 +97,28 @@ public class TestController : BaseController
         return Ok();
     }
 
+    [SwaggerOperation(Summary = "Get users assigned to the test (role:admin)")]
+    [HttpGet("tests/{testId:guid}/users"), Authorize(Roles = "Administrator")]
+    public async Task<ActionResult<List<UserOnTest>>> GetUsersOnTest([FromRoute] Guid testId)
+    {
+        var getUsersOnTestQuery = new GetUsersOnTestQuery()
+        {
+            TestId = testId
+        };
+
+        var users = await Mediator.Send(getUsersOnTestQuery);
+
+        if (users.Count == 0)
+        {
+            return NoContent();
+        }
+
+        return users;
+    }
+
     [SwaggerOperation(Summary = "Assign user to existing test (role:admin)")]
     [HttpPost("tests/{testId:guid}/users/{userId:guid}"), Authorize(Roles = "Administrator")]
-    public async Task<ActionResult<TestAssignment>> AssignUserToTest([FromRoute] Guid testId, [FromRoute] Guid userId)
+    public async Task<IActionResult> AssignUserToTest([FromRoute] Guid testId, [FromRoute] Guid userId)
     {
         var createTestAssignmentCommand = new CreateTestAssignmentCommand()
         {
@@ -106,8 +126,8 @@ public class TestController : BaseController
             UserId = userId
         };
 
-        var testAssignment = await Mediator.Send(createTestAssignmentCommand);
-        return testAssignment;
+        await Mediator.Send(createTestAssignmentCommand);
+        return Ok();
     }
 
     [SwaggerOperation(Summary = "Assign users from group to existing test (role:admin)")]
