@@ -29,6 +29,13 @@ internal sealed class TestAssignmentConfiguration : IEntityTypeConfiguration<Tes
             .OnDelete(DeleteBehavior.NoAction)
             .IsRequired();
 
+        builder
+            .HasOne(x => x.TestCompletion)
+            .WithOne()
+            .HasForeignKey<TestCompletion>(x => x.TestAssignmentId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired(false);
+
         builder.HasIndex("TestId", "UserId").IsUnique().HasDatabaseName("UQ_TestAssignment_TestId_UserId");
     }
 }

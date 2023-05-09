@@ -18,12 +18,14 @@ public sealed class UnitOfWork : IUnitOfWork
     private IUserGroupRepository _userGroupRepository = null!;
     private ITestRepository _testRepository = null!;
     private ITestAssignmentRepository _testAssignmentRepository = null!;
+    private ITestCompletionRepository _testCompletionRepository = null!;
 
     public IAdminRepository AdminRepository => _adminRepository ??= new AdminRepository(_context);
     public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
     public IUserGroupRepository UserGroupRepository => _userGroupRepository ??= new UserGroupRepository(_context);
     public ITestRepository TestRepository => _testRepository ??= new TestRepository(_context);
     public ITestAssignmentRepository TestAssignmentRepository => _testAssignmentRepository ??= new TestAssignmentRepository(_context);
+    public ITestCompletionRepository TestCompletionRepository => _testCompletionRepository ??= new TestCompletionRepository(_context);
 
     public UnitOfWork(AppDbContext appDbContext, ILogger<UnitOfWork> logger)
     {
@@ -52,7 +54,7 @@ public sealed class UnitOfWork : IUnitOfWork
         catch (Exception? ex)
         {
             _logger.LogError(ex, ex.Message);
-            throw new RepositoryException("Repository commit error");
+            throw new RepositoryException("An error ocсurred while saving data");
         }
 
         return affected;

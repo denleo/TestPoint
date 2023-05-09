@@ -293,6 +293,8 @@ namespace TestPoint.DAL.Migrations
                         .IsUnique();
 
                     b.ToTable("TestCompletion", (string)null);
+
+                    b.HasCheckConstraint("CK_TestCompletion_Score", "Score > 0");
                 });
 
             modelBuilder.Entity("TestPoint.Domain.User", b =>
@@ -452,17 +454,21 @@ namespace TestPoint.DAL.Migrations
 
             modelBuilder.Entity("TestPoint.Domain.TestAssignment", b =>
                 {
-                    b.HasOne("TestPoint.Domain.Test", null)
+                    b.HasOne("TestPoint.Domain.Test", "Test")
                         .WithMany()
                         .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TestPoint.Domain.User", null)
+                    b.HasOne("TestPoint.Domain.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Test");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TestPoint.Domain.TestCompletion", b =>
@@ -470,8 +476,7 @@ namespace TestPoint.DAL.Migrations
                     b.HasOne("TestPoint.Domain.TestAssignment", null)
                         .WithOne("TestCompletion")
                         .HasForeignKey("TestPoint.Domain.TestCompletion", "TestAssignmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TestPoint.Domain.User", b =>

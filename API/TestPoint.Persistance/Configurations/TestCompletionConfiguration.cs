@@ -18,9 +18,9 @@ internal sealed class TestCompletionConfiguration : IEntityTypeConfiguration<Tes
         builder.HasCheckConstraint("CK_TestCompletion_Score", "Score > 0");
 
         builder
-            .HasOne<TestAssignment>()
-            .WithOne(x => x.TestCompletion)
-            .HasForeignKey<TestCompletion>("TestAssignmentId")
+            .HasMany(x => x.Answers)
+            .WithOne()
+            .HasForeignKey("TestCompletionId")
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
     }
