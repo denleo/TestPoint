@@ -5,7 +5,7 @@ using TestPoint.Domain;
 
 namespace TestPoint.Application.TestAssignments.Commands.CreateTestAssignment;
 
-internal class CreateTestAssignmentHandler : IRequestHandler<CreateTestAssignmentCommand, TestAssignment>
+internal class CreateTestAssignmentHandler : IRequestHandler<CreateTestAssignmentCommand>
 {
     private readonly IUnitOfWork _uow;
 
@@ -14,7 +14,7 @@ internal class CreateTestAssignmentHandler : IRequestHandler<CreateTestAssignmen
         _uow = unitOfWork;
     }
 
-    public async Task<TestAssignment> Handle(CreateTestAssignmentCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(CreateTestAssignmentCommand request, CancellationToken cancellationToken)
     {
         var user = await _uow.UserRepository.FindOneAsync(user => user.Id == request.UserId);
 
@@ -31,9 +31,9 @@ internal class CreateTestAssignmentHandler : IRequestHandler<CreateTestAssignmen
         }
 
         var existingTestAssignment = await _uow.TestAssignmentRepository
-            .FindOneAsync(testAssignment => testAssignment.UserId == user.Id && testAssignment.TestId == test.Id);
+            .FindOneAsync(x => x.UserId == user.Id && x.TestId == test.Id);
 
-        if (existingTestAssignment is not null) 
+        if (existingTestAssignment is not null)
         {
             throw new EntityConflictException("Test assignment for this user and test already exists");
         }
@@ -47,6 +47,6 @@ internal class CreateTestAssignmentHandler : IRequestHandler<CreateTestAssignmen
         _uow.TestAssignmentRepository.Add(testAssignment);
         await _uow.SaveChangesAsync(cancellationToken);
 
-        return testAssignment;
+        return Unit.Value;
     }
 }

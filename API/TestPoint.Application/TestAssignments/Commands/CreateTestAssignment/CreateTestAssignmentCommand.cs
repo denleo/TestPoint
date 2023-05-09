@@ -3,7 +3,7 @@ using TestPoint.Domain;
 
 namespace TestPoint.Application.TestAssignments.Commands.CreateTestAssignment;
 
-public class CreateTestAssignmentCommand : IRequest<TestAssignment>
+public class CreateTestAssignmentCommand : IRequest
 {
     public Guid TestId { get; set; }
     public Guid UserId { get; set; }
