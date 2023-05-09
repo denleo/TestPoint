@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 
 import { useSelector } from "@/redux/hooks";
-import { userAccountDataSelector } from "@/redux/selectors";
+import { allDataSelector } from "@/redux/selectors";
 
 export const useStoreStates = () => {
-  const data = useSelector(userAccountDataSelector);
+  const data = useSelector(allDataSelector);
 
   useEffect(() => {
     const interval = setInterval(() => {

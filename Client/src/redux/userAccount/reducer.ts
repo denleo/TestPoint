@@ -9,6 +9,7 @@ import { AccountActions } from "./actions";
 import { AccountUserState, ResponseStatuses } from "./state";
 
 const initialState: AccountUserState = {
+  // userData: MOCK_USER,
   status: null,
   isAdmin: false,
 };
@@ -38,9 +39,9 @@ export const userAccountSlice = createSlice({
     builder.addCase(AccountActions.getUserData.fulfilled, (state, action) => {
       return {
         status: ResponseStatuses.Success,
-        data: {
+        userData: {
           ...action.payload,
-          creationDate: new Date(action.payload.registryDate),
+          registryDate: new Date(action.payload.registryDate),
         },
         isAdmin: false,
       };

@@ -11,7 +11,7 @@ export interface UserData {
   lastName: string;
   email: string;
   avatar?: string;
-  creationDate: Date;
+  registryDate: Date;
 }
 
 export interface AdminData {
@@ -22,7 +22,7 @@ export interface AdminData {
 }
 
 export interface AccountUserState {
-  data?: UserData;
+  userData?: UserData;
   adminData?: AdminData;
   status: ResponseStatuses | null;
   isAdmin: boolean;

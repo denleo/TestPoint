@@ -16,6 +16,17 @@ export interface RegisterUserPayload {
   password: string;
 }
 
+export interface ChangePasswordPayload {
+  oldPassword: string;
+  newPassword: string;
+}
+
+export interface ChangeProfilePayload {
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
 export interface UserDataResponse {
   userId: string;
   username: string;

@@ -12,3 +12,8 @@ export const setUserTokenToStorage = (token: string, useSessionStorage = false) 
   const storage = useSessionStorage ? sessionStorage : localStorage;
   storage.setItem(JWT_TOKEN, token);
 };
+
+export const clearUserTokenFromStorage = (useSessionStorage = false) => {
+  const storage = useSessionStorage ? sessionStorage : localStorage;
+  storage.removeItem(JWT_TOKEN);
+};

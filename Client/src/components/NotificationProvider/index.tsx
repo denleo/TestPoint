@@ -19,9 +19,7 @@ export const NotificationProvider = () => {
           TransitionComponent={TransitionLeft}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <Alert severity={type} sx={{ width: 200 }}>
-            {message}
-          </Alert>
+          <Alert severity={type}>{message}</Alert>
         </Snackbar>
       ))}
     </>

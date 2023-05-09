@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useBreakpoint } from "@/api/hooks/useBreakPoint";
 import { TESTPOINT_ROUTES } from "@/api/pageRoutes";
+import { clearUserTokenFromStorage } from "@/api/userToken";
 import { IconFullLogo } from "@/common/icons";
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { isAdminSelector } from "@/redux/selectors";
@@ -109,6 +110,7 @@ export const SideBar: FC = () => {
 
   const handleExit = useCallback(() => {
     dispatch(setUserData({ isAdmin: false, status: null }));
+    clearUserTokenFromStorage();
     navigate("/login");
   }, [dispatch, navigate]);
 

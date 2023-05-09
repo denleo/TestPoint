@@ -13,6 +13,13 @@ export const validationSchema = yup.object({
     .matches(/[A-Z]/, "1 UPPERCASE")
     .matches(/[a-z]/, "1 lowercase")
     .matches(/[0-9]/, "1 d1g1t"),
+  oldPassword: yup
+    .string()
+    .required("Required")
+    .min(10, "At least 10 characters")
+    .matches(/[A-Z]/, "1 UPPERCASE")
+    .matches(/[a-z]/, "1 lowercase")
+    .matches(/[0-9]/, "1 d1g1t"),
   repeatPassword: yup
     .string()
     .required("Required")

@@ -78,8 +78,8 @@ const config: Configuration = {
     historyApiFallback: true,
     port: 3000,
     open: true,
-    // hot: true,
-    hot: false,
+    hot: true,
+    // hot: false,
   },
 };
 
