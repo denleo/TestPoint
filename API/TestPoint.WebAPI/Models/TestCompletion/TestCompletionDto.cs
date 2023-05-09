@@ -17,5 +17,5 @@ public class TestCompletionDto
 
     [Required(ErrorMessage = "{0} field is required")]
     [MinLength(1, ErrorMessage = "Test completion must contain at least one answer")]
-    public AnswerHistoryDto[]? Answers { get; set; }
+    public AnswerHistoryDto[] History { get; set; }
 }

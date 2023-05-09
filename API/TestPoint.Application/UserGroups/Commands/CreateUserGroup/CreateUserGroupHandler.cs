@@ -33,6 +33,6 @@ public class CreateUserGroupHandler : IRequestHandler<CreateUserGroupCommand, Us
         _uow.UserGroupRepository.Add(userGroup);
         await _uow.SaveChangesAsync(cancellationToken);
 
-        return new UserGroupInformation(userGroup.Id, userGroup.Name, userGroup.Users.Count);
+        return new UserGroupInformation(userGroup.Id, userGroup.Name, 0);
     }
 }

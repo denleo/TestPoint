@@ -9,6 +9,7 @@ public interface IUnitOfWork : IDisposable
     public IUserGroupRepository UserGroupRepository { get; }
     public ITestRepository TestRepository { get; }
     public ITestAssignmentRepository TestAssignmentRepository { get; }
+    public ITestCompletionRepository TestCompletionRepository { get; }
 
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

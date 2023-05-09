@@ -214,15 +214,16 @@ namespace TestPoint.DAL.Migrations
                 columns: table => new
                 {
                     TestCompletionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TestAssignmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Score = table.Column<double>(type: "float", nullable: false),
                     CompletionTime = table.Column<double>(type: "float", nullable: false),
-                    TestAssignmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TestCompletion", x => x.TestCompletionId);
+                    table.CheckConstraint("CK_TestCompletion_Score", "Score > 0");
                     table.ForeignKey(
                         name: "FK_TestCompletion_TestAssignment_TestAssignmentId",
                         column: x => x.TestAssignmentId,
