@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState, useCallback } from "react";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -15,8 +15,9 @@ interface Props {
   onDelete: () => void;
 }
 
-export const ExpandedGroup: FC<Props> = ({ group, users, onClickUser, onBack, onDelete }) => {
+export const ExpandedGroup: FC<Props> = ({ group, users, onBack, onDelete, onClickUser }) => {
   const theme = useTheme();
+
   return (
     <Box>
       <Box display="flex" gap={1} alignItems="center">

@@ -12,7 +12,7 @@ export enum QuestionType {
 
 export interface QuestionVariant {
   id: string;
-  text: string;
+  answerText: string;
   isCorrect: boolean;
 }
 
@@ -21,28 +21,22 @@ export interface TestInfo {
   author: string;
   name: string;
   difficulty: TestDifficulty;
-  questionCount: 0;
-  estimatedTime: 0;
+  questionCount: number;
+  estimatedTime: number;
+}
+
+export interface TestQuestion {
+  id: string;
+  questionText: string;
+  questionType: QuestionType;
+  answers: QuestionVariant[];
 }
 
 export interface TestData {
   id: string;
   name: string;
-  difficulty: 0;
-  estimatedTime: 0;
+  difficulty: TestDifficulty;
+  estimatedTime: number;
   authorId: string;
-  questions: [
-    {
-      id: string;
-      questionText: string;
-      questionType: 0;
-      answers: [
-        {
-          id: string;
-          answerText: string;
-          isCorrect: boolean;
-        }
-      ];
-    }
-  ];
+  questions: TestQuestion[];
 }

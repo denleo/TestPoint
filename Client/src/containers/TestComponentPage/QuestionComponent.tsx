@@ -2,7 +2,7 @@ import React, { FC, useCallback } from "react";
 
 import { Box, Divider, List, Checkbox, ListItem, styled, Typography, Radio, TextField } from "@mui/material";
 
-import { TestQuestion, QuestionType } from "../TestsPage/data";
+import { QuestionType, TestQuestion } from "@/redux/adminData/state";
 
 const QuestionBlock = styled(Box)(({ theme }) => ({
   margin: theme.spacing(5, 2, 2, 2),
@@ -34,7 +34,7 @@ interface Props {
 }
 
 export const QuestionComponent: FC<Props> = ({ testQuestion, selectedAnswer, onSelectAnswer }) => {
-  const { question, variants, type } = { ...testQuestion };
+  const { questionText: question, answers: variants, questionType: type } = { ...testQuestion };
 
   const handleChangeSingleOption = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
@@ -75,7 +75,7 @@ export const QuestionComponent: FC<Props> = ({ testQuestion, selectedAnswer, onS
                 onChange={(e) => handleChangeSingleOption(e, variant.id)}
               />
               <Typography ml={2} variant="body2">
-                {variant.text}
+                {variant.answerText}
               </Typography>
             </QuestionVariant>
           ))}
@@ -90,7 +90,7 @@ export const QuestionComponent: FC<Props> = ({ testQuestion, selectedAnswer, onS
                 onChange={(e) => handleChangeMultipleOption(variant.id, e)}
               />
               <Typography ml={2} variant="body2">
-                {variant.text}
+                {variant.answerText}
               </Typography>
             </QuestionVariant>
           ))}

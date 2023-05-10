@@ -6,7 +6,7 @@ import { useFormikContext } from "formik";
 
 import { TextFieldFormik } from "@/components/TextFieldFormik";
 
-import { QuestionVariant, QuestionType } from "../../TestsPage/data";
+import { QuestionVariant, QuestionType } from "@redux/adminData/state";
 
 import { QuestionEditFormValues } from "./EditDialogActions";
 
@@ -19,30 +19,32 @@ export const AnswerRow: FC<Props> = ({ variant, questionType }) => {
   const { setFieldValue, values } = useFormikContext<QuestionEditFormValues>();
 
   const handleSelectCheckBox = useCallback(() => {
-    const newVariants = values.variants.map((item) =>
+    const newVariants = values.answers.map((item) =>
       item.id === variant.id ? { ...item, isCorrect: !item.isCorrect } : item
     );
-    setFieldValue("variants", newVariants);
-  }, [values.variants, setFieldValue, variant]);
+    setFieldValue("answers", newVariants);
+  }, [values.answers, setFieldValue, variant]);
 
   const handleSelectRadio = useCallback(() => {
-    const newVariants = values.variants.map((item) =>
+    const newVariants = values.answers.map((item) =>
       item.id === variant.id ? { ...item, isCorrect: true } : { ...item, isCorrect: false }
     );
-    setFieldValue("variants", newVariants);
-  }, [values.variants, setFieldValue, variant]);
+    setFieldValue("answers", newVariants);
+  }, [values.answers, setFieldValue, variant]);
 
   const handleDeleteAnswer = useCallback(() => {
-    const newVariants = values.variants.filter((item) => item.id !== variant.id);
-    setFieldValue("variants", newVariants);
-  }, [values.variants, setFieldValue, variant]);
+    const newVariants = values.answers.filter((item) => item.id !== variant.id);
+    setFieldValue("answers", newVariants);
+  }, [values.answers, setFieldValue, variant]);
 
   const handleEditAnswer = useCallback(
-    (text: string) => {
-      const newVariants = values.variants.map((item) => (item.id === variant.id ? { ...item, text } : item));
-      setFieldValue("variants", newVariants);
+    (text?: string) => {
+      const newVariants = values.answers.map((item) =>
+        item.id === variant.id ? { ...item, answerText: text ?? "" } : item
+      );
+      setFieldValue("answers", newVariants);
     },
-    [values.variants, setFieldValue, variant]
+    [values.answers, setFieldValue, variant]
   );
 
   return (
@@ -59,10 +61,10 @@ export const AnswerRow: FC<Props> = ({ variant, questionType }) => {
         <TextFieldFormik
           fullWidth
           size="small"
-          name="variants"
+          name="answers"
           color="secondary"
           variant="outlined"
-          value={variant.text}
+          value={variant.answerText}
           onChange={handleEditAnswer}
           sx={{
             minHeight: 71,

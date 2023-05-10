@@ -15,8 +15,7 @@ import {
 } from "@mui/material";
 
 import { QuestionIcon } from "@/components/QuestionIcon";
-
-import { TestQuestion, QuestionType } from "../TestsPage/data";
+import { QuestionType, TestQuestion } from "@/redux/adminData/state";
 
 const QuestionBlock = styled(Accordion)(({ theme }) => ({
   border: `2px solid ${theme.palette.divider}`,
@@ -58,30 +57,33 @@ export const Question: FC<Props> = ({ question, expanded, setExpanded, onEdit })
           expandIcon={<ExpandMoreIcon fontSize="large" />}
           sx={{ width: "100%", maxHeight: 100, overflow: "hidden" }}
         >
-          <QuestionIcon questionType={question.type} sx={{ width: 50, height: 50, mr: 2, alignSelf: "center" }} />
-          <Typography>{question.question}</Typography>
+          <QuestionIcon
+            questionType={question.questionType}
+            sx={{ width: 50, height: 50, mr: 2, alignSelf: "center" }}
+          />
+          <Typography>{question.questionText}</Typography>
           <IconButton sx={{ ml: "auto", width: 50, height: 50 }} onClick={handleEditQuestion}>
             <EditIcon />
           </IconButton>
         </AccordionSummary>
         <AccordionDetails aria-controls={`${question.id}-content`} id={`${question.id}-header`} sx={{ pl: "82px" }}>
-          {question.type === QuestionType.TextSubstitution ? (
+          {question.questionType === QuestionType.TextSubstitution ? (
             <>
               <Typography variant="h6" display="inline-flex">
                 Answer: &nbsp;
               </Typography>
-              <Typography display="inline-flex"> {question.variants[0].text}</Typography>
+              <Typography display="inline-flex"> {question.answers[0].answerText}</Typography>
             </>
           ) : (
-            question.variants.map((variant) => (
+            question.answers.map((variant) => (
               <div key={variant.id}>
-                {question.type === QuestionType.SingleOption && (
+                {question.questionType === QuestionType.SingleOption && (
                   <Radio checked={variant.isCorrect} key={variant.id} disabled />
                 )}
-                {question.type === QuestionType.MultipleOptions && (
+                {question.questionType === QuestionType.MultipleOptions && (
                   <Checkbox checked={variant.isCorrect} key={variant.id} disabled />
                 )}
-                <Typography display="inline-flex">{variant.text}</Typography>
+                <Typography display="inline-flex">{variant.answerText}</Typography>
               </div>
             ))
           )}

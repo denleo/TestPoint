@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback, SyntheticEvent, Fragment } from "react";
+import React, { FC, useState, useCallback, SyntheticEvent, Fragment, useEffect } from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
 import GroupIcon from "@mui/icons-material/Group";
@@ -20,12 +20,15 @@ import {
   useTheme,
 } from "@mui/material";
 
+import { httpAction } from "@/api/httpAction";
 import { TEST_USERS, UserGroup, UserInfo, USER_TEST_GROUPS } from "@/containers/UsersPage/data";
 import emptyAccountImage from "@/shared/emptyAvatar.png";
 
+import { useNotificationStore } from "./NotificationProvider/useNotificationStore";
 import { SearchField } from "./SearchField";
 
 interface Props {
+  testId: string;
   onClose: () => void;
 }
 
@@ -34,15 +37,56 @@ enum DialogTabs {
   Users,
 }
 
-export const AssignDialog: FC<Props> = ({ onClose }) => {
+export const AssignDialog: FC<Props> = ({ onClose, testId }) => {
   const theme = useTheme();
   const [selectedTab, setSelectedTab] = useState<DialogTabs>(DialogTabs.Group);
-  const [groups, setGroups] = useState<UserGroup[]>(USER_TEST_GROUPS);
-  const [users, setUsers] = useState<UserInfo[]>(TEST_USERS);
+  const [groups, setGroups] = useState<UserGroup[]>([]);
+  const [users, setUsers] = useState<UserInfo[]>([]);
+  const notify = useNotificationStore((store) => store.notify);
+
+  const fetchUserGroups = useCallback(async () => {
+    const response = await httpAction("usergroups");
+    setGroups((response ?? []) as UserGroup[]);
+  }, []);
+
+  const handleSearchUser = useCallback(async (search: string) => {
+    try {
+      const response = await httpAction(`users/?filter=${search}`);
+      setUsers((response ?? []) as UserInfo[]);
+    } catch {
+      setUsers([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUserGroups();
+  }, []);
 
   const handleChangeTab = useCallback((e: SyntheticEvent<Element, Event>, value: DialogTabs) => {
     setSelectedTab(value);
   }, []);
+
+  const assignGroupToTest = useCallback(
+    async (id: string) => {
+      try {
+        await httpAction(`tests/${testId}/groups/${id}`, undefined, "POST");
+      } catch (error) {
+        notify("Failed to assign group");
+      }
+    },
+    [testId]
+  );
+
+  const assignUserToTest = useCallback(
+    async (id: string) => {
+      try {
+        await httpAction(`tests/${testId}/users/${id}`, undefined, "POST");
+      } catch (error) {
+        notify("Failed to assign user");
+      }
+    },
+    [testId]
+  );
 
   const isUsers = selectedTab === DialogTabs.Users;
 
@@ -71,7 +115,7 @@ export const AssignDialog: FC<Props> = ({ onClose }) => {
         </Box>
         {isUsers ? (
           <>
-            <SearchField fullWidth />
+            <SearchField fullWidth onChange={(e) => handleSearchUser(e.target.value)} />
             {!users.length ? (
               <Box height="60%" display="flex" alignContent="center" justifyContent="center" flexDirection="column">
                 <PersonSearchIcon color="disabled" sx={{ alignSelf: "center", height: 70, width: 70, mb: 3 }} />
@@ -79,7 +123,7 @@ export const AssignDialog: FC<Props> = ({ onClose }) => {
               </Box>
             ) : (
               <List>
-                {users.map(({ avatar, firstName, lastName, email, id }) => (
+                {users.map(({ base64Avatar: avatar, firstName, lastName, email, id }) => (
                   <ListItem
                     disablePadding
                     key={id}
@@ -96,7 +140,7 @@ export const AssignDialog: FC<Props> = ({ onClose }) => {
                       </Typography>
                       <Typography variant="caption">{email}</Typography>
                     </Box>
-                    <Button variant="contained" color="primary">
+                    <Button variant="contained" color="primary" onClick={() => assignUserToTest(id)}>
                       Assign
                     </Button>
                   </ListItem>
@@ -112,9 +156,14 @@ export const AssignDialog: FC<Props> = ({ onClose }) => {
                   <Typography width="100%">
                     Group:&nbsp;<strong>{group.name}</strong>
                   </Typography>
-                  <Button variant="contained" color="primary" sx={{ minWidth: 130 }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ minWidth: 130 }}
+                    onClick={() => assignGroupToTest(group.id)}
+                  >
                     Assign&nbsp;
-                    {group.count}
+                    {group.membersCount}
                     &nbsp;
                     <GroupIcon />
                   </Button>

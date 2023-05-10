@@ -6,16 +6,15 @@ import { Button, DialogActions } from "@mui/material";
 import { useFormikContext } from "formik";
 
 import { generateUniqueId } from "@/api/generateId";
-
-import { QuestionType, QuestionVariant } from "../../TestsPage/data";
+import { QuestionType, QuestionVariant } from "@/redux/adminData/state";
 
 interface Props {
   questionType: QuestionType;
 }
 
 export interface QuestionEditFormValues {
-  question: string;
-  variants: QuestionVariant[];
+  questionText: string;
+  answers: QuestionVariant[];
 }
 
 export const EditDialogActions: FC<Props> = ({ questionType }) => {
@@ -23,15 +22,15 @@ export const EditDialogActions: FC<Props> = ({ questionType }) => {
 
   const handleAddAnswer = useCallback(() => {
     const newVariants = [
-      ...values.variants,
+      ...values.answers,
       {
         id: generateUniqueId(),
-        text: `answer ${values.variants.length}`,
+        text: `answer ${values.answers.length}`,
         isCorrect: false,
       },
     ];
-    setFieldValue("variants", newVariants);
-  }, [values.variants]);
+    setFieldValue("answers", newVariants);
+  }, [values.answers]);
 
   const isTextQuestion = questionType === QuestionType.TextSubstitution;
 

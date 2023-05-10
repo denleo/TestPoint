@@ -5,8 +5,7 @@ import { Dialog, DialogContent, DialogTitle, Grid, IconButton, Typography, useTh
 import { Form, Formik } from "formik";
 
 import { TextFieldFormik } from "@/components/TextFieldFormik";
-
-import { TestQuestion, QuestionType } from "../../TestsPage/data";
+import { QuestionType, TestQuestion } from "@/redux/adminData/state";
 
 import { AnswerRow } from "./AnswerRow";
 import { EditDialogActions, QuestionEditFormValues } from "./EditDialogActions";
@@ -24,8 +23,8 @@ export const QuestionEditFormDialog: FC<Props> = ({ question, onClose, onSubmit 
     <Formik
       initialValues={
         {
-          question: question.question,
-          variants: question.variants,
+          questionText: question.questionText,
+          answers: question.answers,
         } as QuestionEditFormValues
       }
       onSubmit={onSubmit}
@@ -56,7 +55,7 @@ export const QuestionEditFormDialog: FC<Props> = ({ question, onClose, onSubmit 
                     multiline
                     minRows={3}
                     size="small"
-                    name="question"
+                    name="questionText"
                     color="secondary"
                     variant="outlined"
                     sx={{
@@ -65,35 +64,35 @@ export const QuestionEditFormDialog: FC<Props> = ({ question, onClose, onSubmit 
                     }}
                   />
                 </Grid>
-                {question.type === QuestionType.TextSubstitution && (
+                {question.questionType === QuestionType.TextSubstitution && (
                   <Grid item>
                     <Typography variant="caption">Answer</Typography>
                     <TextFieldFormik
                       fullWidth
                       size="small"
-                      name="variants"
+                      name="answers"
                       color="secondary"
                       variant="outlined"
-                      value={values.variants[0].text}
+                      value={values.answers[0].answerText}
                       sx={{
                         minHeight: 71,
                       }}
                     />
                   </Grid>
                 )}
-                {question.type !== QuestionType.TextSubstitution && (
+                {question.questionType !== QuestionType.TextSubstitution && (
                   <Grid item sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography variant="caption" display="block">
                       Answers
                     </Typography>
-                    {values.variants.map((variant) => (
-                      <AnswerRow variant={variant} questionType={question.type} />
+                    {values.answers.map((variant) => (
+                      <AnswerRow variant={variant} questionType={question.questionType} />
                     ))}
                   </Grid>
                 )}
               </Grid>
             </DialogContent>
-            <EditDialogActions questionType={question.type} />
+            <EditDialogActions questionType={question.questionType} />
           </Dialog>
         </Form>
       )}

@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import {
-  Box,
   Button,
   List,
   ListItem,
@@ -18,10 +17,14 @@ import {
   useTheme,
 } from "@mui/material";
 
+import { httpAction } from "@/api/httpAction";
+import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
+import { QuestionType, TestDifficulty, TestQuestion, TestData } from "@/redux/adminData/state";
+
 import { useBreakpoint } from "@api/hooks/useBreakPoint";
 
 import { generateUniqueId } from "../../api/generateId";
-import { QuestionType, TestData, TestQuestion, getInitQuestionVariants, TestDifficulty } from "../TestsPage/data";
+import { getInitQuestionVariants } from "../TestsPage/data";
 
 import { QuestionEditFormValues } from "./Dialogs/EditDialogActions";
 import { QuestionEditFormDialog } from "./Dialogs/QuestionEditFormDialog";
@@ -55,6 +58,7 @@ const reorder = (questions: TestQuestion[], startIndex: number, endIndex: number
 const TestBuilderPage = () => {
   const test = useTestBuilderStore((store) => store.test);
   const setTest = useTestBuilderStore((store) => store.setTest);
+  const notify = useNotificationStore((store) => store.notify);
   const [expanded, setExpanded] = useState<string | false>(false);
   const [testName, setTestName] = useState<string>(test?.name ?? "Test Name");
   const [testDifficulty, setTestDifficulty] = useState<TestDifficulty>(test?.difficulty ?? TestDifficulty.Easy);
@@ -82,9 +86,9 @@ const TestBuilderPage = () => {
     (questionType: QuestionType) => {
       const newQuestion: TestQuestion = {
         id: generateUniqueId(),
-        type: questionType,
-        question: "Your question is here...",
-        variants: getInitQuestionVariants(questionType),
+        questionType,
+        questionText: "Your question is here...",
+        answers: getInitQuestionVariants(questionType),
       };
       setQuestions([...(questions ?? []), newQuestion]);
       setOpenQuestionDialog(false);
@@ -123,6 +127,22 @@ const TestBuilderPage = () => {
     setTest(null);
     setStart(true);
   }, [setTest]);
+
+  const saveTest = useCallback(async () => {
+    try {
+      await httpAction("tests", {
+        difficulty: testDifficulty,
+        estimatedTime: 120,
+        name: testName,
+        questions,
+      } as Omit<TestData, "authorId">);
+      setTest(null);
+      setStart(true);
+      notify("Test has been created.", NotificationType.Success);
+    } catch {
+      notify("Failed to create test.", NotificationType.Error);
+    }
+  }, [test, testDifficulty, testName, questions, notify]);
 
   return start ? (
     <StartScreen onCreate={createTest} />
@@ -172,6 +192,7 @@ const TestBuilderPage = () => {
               sx={{ mr: 1 }}
               disableElevation
               startIcon={<SaveIcon sx={{ height: 24, width: 24 }} />}
+              onClick={saveTest}
             >
               Save to system
             </Button>

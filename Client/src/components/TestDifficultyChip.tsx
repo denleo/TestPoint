@@ -2,7 +2,7 @@ import React, { FC, useMemo } from "react";
 
 import { Chip, ChipProps } from "@mui/material";
 
-import { TestDifficulty } from "../containers/TestsPage/data";
+import { TestDifficulty } from "@/redux/adminData/state";
 
 interface Props extends ChipProps {
   difficulty: TestDifficulty;

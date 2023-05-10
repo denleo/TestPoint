@@ -1,7 +1,7 @@
 import create from "zustand";
 import { combine } from "zustand/middleware";
 
-import { TestData } from "../TestsPage/data";
+import { TestData } from "@/redux/adminData/state";
 
 export const useTestBuilderStore = create(
   combine(

@@ -1,24 +1,16 @@
-import React, { useState, Fragment, useCallback, ChangeEvent } from "react";
+import React, { useState, Fragment, useCallback, ChangeEvent, useEffect } from "react";
 
 import AddIcon from "@mui/icons-material/Add";
 import GroupIcon from "@mui/icons-material/Group";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
-import {
-  Box,
-  Divider,
-  List,
-  ListItem,
-  styled,
-  Typography,
-  ListItemButton,
-  useTheme,
-  TextField,
-  IconButton,
-} from "@mui/material";
+import { Box, Divider, List, ListItem, styled, Typography, ListItemButton, TextField, IconButton } from "@mui/material";
+
+import { httpAction } from "@/api/httpAction";
+import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
 
 import { SearchField } from "../../components/SearchField";
 
-import { UserGroup, USER_TEST_GROUPS, UserInfo, TEST_USERS } from "./data";
+import { UserGroup, UserInfo } from "./data";
 import { ExpandedGroup } from "./ExpandedGroup";
 import { UserList } from "./UserList";
 
@@ -31,45 +23,98 @@ const LayoutPage = styled("div")(({ theme }) => ({
 
 const UsersPage = () => {
   const [expandedGroup, setExpandedGroup] = useState<UserGroup | false>();
-  const [groupUsers, setGroupUsers] = useState<UserInfo[]>([]);
   const [groupName, setGroupName] = useState<string>("");
-  const [groups, setGroups] = useState<UserGroup[]>(USER_TEST_GROUPS);
-  // const [users, setUsers] = useState<UserInfo[]>(TEST_USERS);
+  const [groups, setGroups] = useState<UserGroup[]>([]);
+  const notify = useNotificationStore((store) => store.notify);
   const [users, setUsers] = useState<UserInfo[]>([]);
+  const [groupUsers, setGroupUsers] = useState<UserInfo[]>([]);
 
-  const theme = useTheme();
+  const fetchUserGroups = useCallback(async () => {
+    const response = await httpAction("usergroups");
+    setGroups((response ?? []) as UserGroup[]);
+  }, []);
+
+  const fetchGroupUsers = useCallback(async () => {
+    if (!expandedGroup) return;
+    const response = await httpAction(`usergroups/${expandedGroup.id}/users`);
+    setGroupUsers((response ?? []) as UserInfo[]);
+  }, [expandedGroup]);
+
+  useEffect(() => {
+    try {
+      fetchUserGroups();
+    } catch (error) {
+      notify("Failed to load groups.", NotificationType.Error);
+    }
+  }, []);
 
   const handleOpenGroup = useCallback(
     (group: UserGroup) => () => {
       setExpandedGroup(group);
-      setGroupUsers(TEST_USERS.slice(0, 6));
     },
     []
   );
 
-  const removeUserFromGroup = useCallback((id: string) => console.log(`remove ${id}`), []);
-
   const addUserToGroup = useCallback(
-    (id: string) => {
+    async (id: string) => {
       if (!expandedGroup) return;
-      console.log(`add ${id}`);
+      await httpAction(`usergroups/${expandedGroup.id}/users/${id}`, undefined, "POST");
+      await fetchGroupUsers();
     },
     [expandedGroup]
   );
 
   const handleCloseGroup = useCallback(() => {
     setExpandedGroup(false);
-    setGroupUsers([]);
   }, []);
 
-  const deleteGroup = useCallback(() => {
+  const deleteGroup = useCallback(async () => {
+    if (!expandedGroup) return;
+    await httpAction(`usergroups/${expandedGroup.id}`, undefined, "DELETE");
+    await fetchUserGroups();
     setExpandedGroup(false);
-    setGroupUsers([]);
-  }, []);
+  }, [expandedGroup]);
 
   const handleChangeName = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setGroupName(e.target.value);
   }, []);
+
+  const addNewGroup = useCallback(async () => {
+    if (!groupName) {
+      notify("Can't create group with empty name!", NotificationType.Error);
+      return;
+    }
+
+    try {
+      const newUserGroup = (await httpAction("usergroups", { groupName })) as UserGroup;
+      await fetchUserGroups();
+      setExpandedGroup(newUserGroup);
+    } catch {
+      notify("Failed to create user group!", NotificationType.Error);
+    }
+  }, [groupName]);
+
+  const handleSearchUser = useCallback(async (search: string) => {
+    try {
+      const response = await httpAction(`users/?filter=${search}`);
+      setUsers((response ?? []) as UserInfo[]);
+    } catch {
+      setUsers([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchGroupUsers();
+  }, [expandedGroup]);
+
+  const removeUser = useCallback(
+    async (id: string) => {
+      if (!expandedGroup) return;
+      await httpAction(`usergroups/${expandedGroup.id}/users/${id}`, undefined, "DELETE");
+      await fetchGroupUsers();
+    },
+    [expandedGroup]
+  );
 
   return (
     <LayoutPage>
@@ -78,9 +123,9 @@ const UsersPage = () => {
           <ExpandedGroup
             group={expandedGroup}
             users={groupUsers}
-            onClickUser={removeUserFromGroup}
             onBack={handleCloseGroup}
             onDelete={deleteGroup}
+            onClickUser={removeUser}
           />
         ) : (
           <>
@@ -88,23 +133,24 @@ const UsersPage = () => {
               All Groups
             </Typography>
             <List>
-              {groups.map((group) => (
-                <Fragment key={group.id}>
-                  <ListItem disablePadding>
-                    <ListItemButton onClick={handleOpenGroup(group)} sx={{ p: 2 }}>
-                      <Typography width="100%">
-                        Group:&nbsp;<strong>{group.name}</strong>
-                      </Typography>
-                      <Typography display="inline-flex">
-                        {group.count}
-                        &nbsp;
-                      </Typography>
-                      <GroupIcon />
-                    </ListItemButton>
-                  </ListItem>
-                  <Divider />
-                </Fragment>
-              ))}
+              {!!groups.length &&
+                groups.map((group) => (
+                  <Fragment key={group.id}>
+                    <ListItem disablePadding>
+                      <ListItemButton onClick={handleOpenGroup(group)} sx={{ p: 2 }}>
+                        <Typography width="100%">
+                          Group:&nbsp;<strong>{group.name}</strong>
+                        </Typography>
+                        <Typography display="inline-flex">
+                          {group.membersCount}
+                          &nbsp;
+                        </Typography>
+                        <GroupIcon />
+                      </ListItemButton>
+                    </ListItem>
+                    <Divider />
+                  </Fragment>
+                ))}
               <ListItem disablePadding sx={{ p: 2, display: "flex", gap: 2, alignItems: "center" }}>
                 <Typography>Create New&nbsp;</Typography>
                 <Box flex={1}>
@@ -116,7 +162,7 @@ const UsersPage = () => {
                     onChange={handleChangeName}
                   />
                 </Box>
-                <IconButton color="info">
+                <IconButton color="info" onClick={addNewGroup}>
                   <AddIcon />
                 </IconButton>
               </ListItem>
@@ -130,7 +176,7 @@ const UsersPage = () => {
           <Typography variant="h4" sx={{ mr: 2 }}>
             Users
           </Typography>
-          <SearchField size="small" />
+          <SearchField size="small" onChange={(e) => handleSearchUser(e.target.value)} />
         </Box>
         {users.length ? (
           <UserList users={users} onClickUser={addUserToGroup} showIcon={!!expandedGroup} />

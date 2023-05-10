@@ -13,6 +13,7 @@ import { TEST_DATA_1 } from "./containers/TestsPage/data";
 import { useDispatch, useSelector } from "./redux/hooks";
 import { isAdminSelector } from "./redux/selectors";
 import { AccountActions } from "./redux/userAccount/actions";
+import { clearUserData } from "./redux/userAccount/reducer";
 
 const StartPage = lazy(() => import("./containers/StartPage"));
 const HomePage = lazy(() => import("./containers/Home"));
@@ -68,7 +69,11 @@ export const MainApp: FC = () => {
       }
     }
 
-    fetchData();
+    try {
+      fetchData();
+    } catch {
+      dispatch(clearUserData);
+    }
   }, [isAdmin, dispatch]);
 
   return (

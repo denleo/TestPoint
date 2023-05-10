@@ -5,18 +5,19 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import HandymanIcon from "@mui/icons-material/Handyman";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-import { Button, Chip, Grid, Paper, styled, Typography } from "@mui/material";
+import { Button, Grid, Paper, styled, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
+import { httpAction } from "@/api/httpAction";
 import { AssignDialog } from "@/components/AssignDialog";
+import { useNotificationStore, NotificationType } from "@/components/NotificationProvider/useNotificationStore";
 import { TestDifficultyChip } from "@/components/TestDifficultyChip";
+import { TestData, TestInfo } from "@/redux/adminData/state";
 import { useSelector } from "@/redux/hooks";
 import { isAdminSelector } from "@/redux/selectors";
 
 import { useTestBuilderStore } from "../TestBuilderPage/useTestBuilderPageStore";
 import { useTestComponentStore } from "../TestComponentPage/useTestComponentStore";
-
-import { TestData } from "./data";
 
 const PaperSection = styled(Paper)(({ theme }) => ({
   minHeight: 200,
@@ -49,30 +50,36 @@ const Dot = styled("p")(({ theme }) => ({
 }));
 
 interface Props {
-  testData: TestData;
+  testData: TestInfo;
 }
 
 export const TestPreviewCard: FC<Props> = ({ testData }) => {
-  const { id, name, questions, completionTime } = { ...testData };
+  const { name, questionCount, estimatedTime, author } = { ...testData };
   const isAdmin = useSelector(isAdminSelector);
   const [openAssign, setOpenAssign] = useState(false);
   const navigate = useNavigate();
   const setEditTest = useTestBuilderStore((store) => store.setTest);
   const setTest = useTestComponentStore((store) => store.setTest);
+  const notify = useNotificationStore((store) => store.notify);
 
-  const handleStartTest = useCallback(() => {
+  const handleStartTest = useCallback(async () => {
     navigate("/test");
-    setTest(testData);
+    // setTest(testData);
   }, [testData]);
 
   const toggleAssignDialog = useCallback(() => {
     setOpenAssign(!openAssign);
   }, [openAssign]);
 
-  const editTest = useCallback(() => {
-    navigate("/constructor");
-    setEditTest(testData);
-  }, [testData]);
+  const editTest = useCallback(async () => {
+    try {
+      const test = (await httpAction(`tests/${testData.id}`)) as TestData;
+      navigate("/constructor");
+      setEditTest(test);
+    } catch {
+      notify("Failed to open editor for this test.", NotificationType.Error);
+    }
+  }, [testData, notify]);
 
   return (
     <>
@@ -98,20 +105,19 @@ export const TestPreviewCard: FC<Props> = ({ testData }) => {
               <div>
                 <Dot />
                 <Typography component="span" variant="body2">
-                  Number of questions: <strong>{questions?.length ?? 0}</strong>
-                </Typography>
-              </div>
-              {/* TODO: use real author */}
-              <div>
-                <Dot />
-                <Typography component="span" variant="body2">
-                  Author: <strong>{testData.author}</strong>
+                  Number of questions: <strong>{questionCount}</strong>
                 </Typography>
               </div>
               <div>
                 <Dot />
                 <Typography component="span" variant="body2">
-                  Completion time: <strong>{completionTime}</strong>
+                  Author: <strong>{author}</strong>
+                </Typography>
+              </div>
+              <div>
+                <Dot />
+                <Typography component="span" variant="body2">
+                  Completion time: <strong>{estimatedTime}</strong>
                 </Typography>
               </div>
             </Grid>
@@ -173,7 +179,7 @@ export const TestPreviewCard: FC<Props> = ({ testData }) => {
           </Grid>
         </TestInformationWrapper>
       </PaperSection>
-      {isAdmin && openAssign && <AssignDialog onClose={toggleAssignDialog} />}
+      {isAdmin && openAssign && <AssignDialog onClose={toggleAssignDialog} testId={testData.id} />}
     </>
   );
 };

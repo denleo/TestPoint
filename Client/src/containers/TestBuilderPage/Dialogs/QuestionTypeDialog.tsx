@@ -1,10 +1,9 @@
 import React, { FC } from "react";
 
-import { Dialog, Grid, List, ListItemButton, Modal, Typography, useTheme } from "@mui/material";
+import { Dialog, List, ListItemButton, Typography, useTheme } from "@mui/material";
 
 import { QuestionIcon } from "@/components/QuestionIcon";
-
-import { QuestionType } from "../../TestsPage/data";
+import { QuestionType } from "@/redux/adminData/state";
 
 interface Props {
   onChooseQuestion: (type: QuestionType) => void;

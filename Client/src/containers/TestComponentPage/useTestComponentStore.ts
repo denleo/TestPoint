@@ -1,7 +1,7 @@
 import create from "zustand";
 import { combine } from "zustand/middleware";
 
-import { TestData, TEST_DATA_1 } from "../TestsPage/data";
+import { TestData } from "@/redux/adminData/state";
 
 interface StoreStates {
   test: TestData | null;
@@ -12,7 +12,7 @@ interface StoreStates {
 export const useTestComponentStore = create(
   combine(
     {
-      test: TEST_DATA_1,
+      test: null,
       questionIndex: 0,
       selectedAnswers: new Map(),
     } as StoreStates,

@@ -28,9 +28,11 @@ interface Props {
 
 export const UserList: FC<Props> = ({ users, onClickUser, isGroup = false, showIcon = true }) => {
   const theme = useTheme();
+  if (!users.length) return null;
+
   return (
     <List>
-      {users.map(({ avatar, firstName, lastName, email, id }) => (
+      {users.map(({ base64Avatar: avatar, firstName, lastName, email, id }) => (
         <ListItem disablePadding key={id}>
           <ListItemButton onClick={() => onClickUser(id)}>
             <ListItemAvatar>

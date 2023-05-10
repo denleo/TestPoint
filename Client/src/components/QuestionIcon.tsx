@@ -5,7 +5,7 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import TextFieldsOutlinedIcon from "@mui/icons-material/TextFieldsOutlined";
 import { SvgIconProps } from "@mui/material";
 
-import { QuestionType } from "../containers/TestsPage/data";
+import { QuestionType } from "@/redux/adminData/state";
 
 interface Props extends SvgIconProps {
   questionType: QuestionType;

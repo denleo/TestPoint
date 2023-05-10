@@ -5,7 +5,7 @@ import DoneOutlineRoundedIcon from "@mui/icons-material/DoneOutlineRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import { Button, IconButton, styled, Typography } from "@mui/material";
 
-import { QuestionType } from "../TestsPage/data";
+import { QuestionType } from "@/redux/adminData/state";
 
 import { QuestionComponent } from "./QuestionComponent";
 import { TestPagination } from "./TestPagination";
