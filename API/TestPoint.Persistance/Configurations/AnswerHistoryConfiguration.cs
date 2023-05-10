@@ -15,13 +15,6 @@ internal sealed class AnswerHistoryConfiguration : IEntityTypeConfiguration<Answ
         builder.Property(x => x.AnswerText).HasColumnName("AnswerText").HasMaxLength(1000).IsRequired();
 
         builder
-            .HasOne<TestCompletion>()
-            .WithMany(x => x.Answers)
-            .HasForeignKey("TestCompletionId")
-            .OnDelete(DeleteBehavior.Cascade)
-            .IsRequired();
-
-        builder
            .HasOne<Question>()
            .WithMany()
            .HasForeignKey(x => x.QuestionId)

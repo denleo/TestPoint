@@ -8,12 +8,15 @@ using TestPoint.Application.TestAssignments.Commands.DeleteTestAssignment;
 using TestPoint.Application.Tests;
 using TestPoint.Application.Tests.Commands.CreateTest;
 using TestPoint.Application.Tests.Commands.DeleteTest;
+using TestPoint.Application.Tests.Commands.SubmitTestResult;
 using TestPoint.Application.Tests.Queries.GetTestById;
+using TestPoint.Application.Tests.Queries.GetTestResult;
 using TestPoint.Application.Tests.Queries.GetTestsByAdmin;
 using TestPoint.Application.Tests.Queries.GetUsersOnTest;
 using TestPoint.Domain;
 using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 using TestPoint.WebAPI.Models.Test;
+using TestPoint.WebAPI.Models.TestCompletion;
 
 namespace TestPoint.WebAPI.Controllers.Test;
 
@@ -63,8 +66,8 @@ public class TestController : BaseController
         return tests;
     }
 
-    [SwaggerOperation(Summary = "Get test by id (role:admin)")]
-    [HttpGet("tests/{testId:guid}"), Authorize(Roles = "Administrator")]
+    [SwaggerOperation(Summary = "Get test by id (role:user,admin)")]
+    [HttpGet("tests/{testId:guid}"), Authorize(Roles = "User, Administrator")]
     public async Task<ActionResult<Domain.Test?>> GetTestById([FromRoute] Guid testId)
     {
         var getTestByIdQuery = new GetTestByIdQuery()
@@ -158,5 +161,66 @@ public class TestController : BaseController
         await Mediator.Send(deleteTestAssignmentCommand);
 
         return Ok();
+    }
+
+    [SwaggerOperation(Summary = "Submit test results (role:user)")]
+    [HttpPost("tests/{testId:guid}/results"), Authorize(Roles = "User")]
+    public async Task<IActionResult> SubmitTestResult([FromBody] TestCompletionDto testCompletionDto)
+    {
+        var submitTestResultCommand = new SubmitTestResultCommand()
+        {
+            UserId = LoginId!.Value,
+            TestId = testCompletionDto.TestId,
+            TestCompletion = new TestCompletion()
+            {
+                Score = testCompletionDto.Score,
+                CompletionTime = testCompletionDto.CompletionTime,
+                Answers = testCompletionDto.History
+                .SelectMany(x => x.Answers.Select(text => new AnswerHistory()
+                {
+                    QuestionId = x.QuestionId,
+                    AnswerText = text
+                })).ToArray()
+            }
+        };
+
+        await Mediator.Send(submitTestResultCommand);
+
+        return Ok();
+    }
+
+    [SwaggerOperation(Summary = "Get test results (role:user,admin)")]
+    [HttpGet("tests/{testId:guid}/results"), Authorize(Roles = "User, Administrator")]
+    public async Task<ActionResult<TestCompletionDto>> GetTestResult([FromRoute] Guid testId, [FromQuery] Guid userId = default)
+    {
+        var getTestResultQuery = new GetTestResultQuery()
+        {
+            TestId = testId
+        };
+
+        if (LoginRole!.Value == LoginType.Administrator)
+        {
+            getTestResultQuery.UserId = userId;
+        }
+        else if (LoginRole!.Value == LoginType.User)
+        {
+            getTestResultQuery.UserId = LoginId!.Value;
+        }
+
+        var testCompletion = await Mediator.Send(getTestResultQuery);
+
+        return new TestCompletionDto()
+        {
+            TestId = testId,
+            Score = testCompletion.Score,
+            CompletionTime = testCompletion.CompletionTime,
+            History = testCompletion.Answers
+            .GroupBy(x => x.QuestionId)
+            .Select(x => new AnswerHistoryDto()
+            {
+                QuestionId = x.Key,
+                Answers = x.Select(x => x.AnswerText).ToArray()
+            }).ToArray()
+        };
     }
 }

@@ -30,6 +30,9 @@ public class CustomExceptionHandlerMiddleware
 
         switch (exception)
         {
+            case RepositoryException:
+                break;
+
             case BadEntityException:
                 status = HttpStatusCode.BadRequest;
                 break;
