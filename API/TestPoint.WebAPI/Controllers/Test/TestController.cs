@@ -12,6 +12,7 @@ using TestPoint.Application.Tests.Commands.SubmitTestResult;
 using TestPoint.Application.Tests.Queries.GetTestById;
 using TestPoint.Application.Tests.Queries.GetTestResult;
 using TestPoint.Application.Tests.Queries.GetTestsByAdmin;
+using TestPoint.Application.Tests.Queries.GetTestsByUser;
 using TestPoint.Application.Tests.Queries.GetUsersOnTest;
 using TestPoint.Domain;
 using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
@@ -47,8 +48,8 @@ public class TestController : BaseController
         return await Mediator.Send(createTestCommand);
     }
 
-    [SwaggerOperation(Summary = "Get all tests (role:admin)")]
-    [HttpGet("tests"), Authorize(Roles = "Administrator")]
+    [SwaggerOperation(Summary = "Get all tests created by admin (role:admin)")]
+    [HttpGet("admin/tests"), Authorize(Roles = "Administrator")]
     public async Task<ActionResult<List<TestInformation>>> GetTestsByAdmin()
     {
         var getTestsByAdminQuery = new GetTestsByAdminQuery()
@@ -57,6 +58,32 @@ public class TestController : BaseController
         };
 
         var tests = await Mediator.Send(getTestsByAdminQuery);
+
+        if (tests.Count == 0)
+        {
+            return NoContent();
+        }
+
+        return tests;
+    }
+
+    [SwaggerOperation(Summary = "Get all tests assigned for user (role:user)")]
+    [HttpGet("user/tests"), Authorize(Roles = "User")]
+    public async Task<ActionResult<List<TestInformation>>> GetTestsByUser([FromQuery] string filter)
+    {
+        var parseResult = Enum.TryParse(filter, true, out UserTestsFilter filterValue);
+        if (!parseResult)
+        {
+            return BadRequest(new ErrorResult(HttpStatusCode.BadRequest, "Invalid filter value"));
+        }
+
+        var getTestsByUserQuery = new GetTestsByUserQuery()
+        {
+            UserId = LoginId!.Value,
+            Filter = filterValue
+        };
+
+        var tests = await Mediator.Send(getTestsByUserQuery);
 
         if (tests.Count == 0)
         {

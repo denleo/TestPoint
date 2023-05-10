@@ -22,10 +22,6 @@ public class GetTestsByAdminHandler : IRequestHandler<GetTestsByAdminQuery, List
             throw new EntityNotFoundException($"Administrator with {request.AdminId} id does not exist");
         }
 
-        var tests = await _uow.TestRepository.FilterByAsync(x => x.AuthorId == admin.Id);
-
-        return tests
-            .Select(t => new TestInformation(t.Id, admin.Login.Username, t.Name, t.Difficulty, t.Questions.Count(), t.EstimatedTime))
-            .ToList();
+        return await _uow.TestRepository.GetTestListByAuthor(admin.Id);
     }
 }
