@@ -1,4 +1,4 @@
-﻿using TestPoint.Application.Tests;
+﻿using TestPoint.Application.Tests.Queries.GetUsersOnTest;
 using TestPoint.Domain;
 
 namespace TestPoint.Application.Interfaces.Persistence.Repositories;

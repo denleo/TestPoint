@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TestPoint.Application.Interfaces.Persistence.Repositories;
-using TestPoint.Application.Tests;
+using TestPoint.Application.Tests.Queries.GetUsersOnTest;
 using TestPoint.Domain;
 
 namespace TestPoint.DAL.Repositories;
