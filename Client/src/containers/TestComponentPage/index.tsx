@@ -5,6 +5,7 @@ import DoneOutlineRoundedIcon from "@mui/icons-material/DoneOutlineRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import { Button, IconButton, styled, Typography } from "@mui/material";
 
+import { httpAction } from "@/api/httpAction";
 import { QuestionType } from "@/redux/adminData/state";
 
 import { QuestionComponent } from "./QuestionComponent";
@@ -123,6 +124,36 @@ const TestComponentPage = () => {
     setQuestionIndex(questionIndex - 1);
   }, [questionIndex]);
 
+  const finishTest = useCallback(async () => {
+    let rightAnswers = 0;
+    const questionsCount = testData.questions.length;
+
+    const history = testData.questions.map((question, index) => {
+      if (question.questionType === QuestionType.TextSubstitution) {
+        const answer = selectedAnswers.get(index) as string;
+        if (question.answers[0].answerText === answer) rightAnswers += 1;
+
+        return { questionId: question.id, answers: [answer] };
+      }
+
+      const answers = selectedAnswers.get(index) as string[];
+      const userAnswers = question.answers.map(
+        ({ answerText, isCorrect }) =>
+          (isCorrect && answers.includes(answerText)) || (!isCorrect && !answers.includes(answerText))
+      );
+      if (!userAnswers.includes(false)) rightAnswers += 1;
+
+      return { questionId: question.id, answers };
+    });
+
+    await httpAction(`tests/${testData.id}/results`, {
+      testId: testData.id,
+      score: (rightAnswers / questionsCount).toFixed(1),
+      completionTime: 20,
+      history,
+    });
+  }, [selectedAnswers, testData]);
+
   const numberQuestions = testData?.questions?.length ?? 0;
   const notFinished = selectedAnswers.size === numberQuestions;
 
@@ -164,6 +195,7 @@ const TestComponentPage = () => {
               color="success"
               variant="contained"
               endIcon={<DoneOutlineRoundedIcon fontSize="large" />}
+              onClick={finishTest}
             >
               Finish Test
             </ButtonFinish>

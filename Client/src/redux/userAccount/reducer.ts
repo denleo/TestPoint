@@ -9,7 +9,7 @@ import { AccountActions } from "./actions";
 import { AccountUserState, ResponseStatuses } from "./state";
 
 const initialState: AccountUserState = {
-  // userData: MOCK_USER,
+  userData: MOCK_USER,
   status: null,
   isAdmin: false,
 };

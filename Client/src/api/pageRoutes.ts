@@ -6,6 +6,7 @@ export enum TESTPOINT_ROUTE {
   PROFILE = "Profile",
   TEST_BUILDER = "Test Builder",
   USERS = "Users",
+  HISTORY = "History",
 }
 
 export interface TestpointRoutes {
@@ -52,5 +53,10 @@ export const TESTPOINT_ROUTES: TestpointRoutes = {
     name: TESTPOINT_ROUTE.USERS,
     path: "/users",
     showAdmin: true,
+  },
+  history: {
+    name: TESTPOINT_ROUTE.HISTORY,
+    path: "/history",
+    showAdmin: false,
   },
 };

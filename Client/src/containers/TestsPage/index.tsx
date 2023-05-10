@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 
-import { Grid, Typography } from "@mui/material";
+import AccessibleForwardIcon from "@mui/icons-material/AccessibleForward";
+import { Box, Grid, Typography } from "@mui/material";
 
 import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
 import { TestInfo } from "@/redux/adminData/state";
 import { useSelector } from "@/redux/hooks";
 import { isAdminSelector } from "@/redux/selectors";
 
-import { httpAction } from "../../api/httpAction";
+import { httpAction } from "@api/httpAction";
 
 import { TestPreviewCard } from "./TestPreviewCard";
 
@@ -29,19 +30,22 @@ const TestsPage = () => {
     }
   }, []);
 
+  if (!tests.length) {
+    return (
+      <Box height="80%" display="flex" alignContent="center" justifyContent="center" flexDirection="column">
+        <AccessibleForwardIcon color="disabled" sx={{ alignSelf: "center", height: 150, width: 150, mb: 3 }} />
+        <Typography align="center">Unfortunately there are no tests available to you</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Grid spacing={3} container>
-      {tests.length ? (
-        <>
-          {tests.map((test) => (
-            <Grid item xs={12} key={test.id}>
-              <TestPreviewCard testData={test} />
-            </Grid>
-          ))}
-        </>
-      ) : (
-        <Typography>There is no tests</Typography>
-      )}
+      {tests.map((test) => (
+        <Grid item xs={12} key={test.id}>
+          <TestPreviewCard testData={test} />
+        </Grid>
+      ))}
     </Grid>
   );
 };

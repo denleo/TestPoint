@@ -15,7 +15,8 @@ export const TEST_DATA_1: TestData = {
   questions: [
     {
       id: generateUniqueId(),
-      questionText: "Функциональное тестирование проводят в рамках ... ",
+      questionText:
+        "Функциональное тестирование проводят в рамках Функциональное тестирование проводят в рамкахФункциональное тестирование проводят в рамкахФункциональное тестирование проводят в рамкахФункциональное тестирование проводят в рамкахФункциональное тестирование проводят в рамкахФункциональное тестирование проводят в рамках",
       questionType: QuestionType.TextSubstitution,
       answers: [{ id: "1", answerText: "модульного тестирования", isCorrect: false }],
     },
@@ -53,6 +54,94 @@ export const TEST_DATA_1: TestData = {
         { id: "1", answerText: "модульного тестирования", isCorrect: false },
         { id: "2", answerText: "динамического тестирования", isCorrect: false },
         { id: "3", answerText: "статического тестирования", isCorrect: true },
+        { id: "4", answerText: "автоматизированного тестирования", isCorrect: false },
+      ],
+    },
+    {
+      id: generateUniqueId(),
+      questionText: "Функциональное тестирование проводят в рамках 5 ... ",
+      questionType: QuestionType.MultipleOptions,
+      answers: [
+        { id: "1", answerText: "модульного тестирования", isCorrect: true },
+        { id: "2", answerText: "динамического тестирования", isCorrect: false },
+        { id: "3", answerText: "статического тестирования", isCorrect: false },
+        { id: "4", answerText: "автоматизированного тестирования", isCorrect: false },
+      ],
+    },
+    {
+      id: generateUniqueId(),
+      questionText: "Функциональное тестирование проводят в рамках 5 ... ",
+      questionType: QuestionType.MultipleOptions,
+      answers: [
+        { id: "1", answerText: "модульного тестирования", isCorrect: true },
+        { id: "2", answerText: "динамического тестирования", isCorrect: false },
+        { id: "3", answerText: "статического тестирования", isCorrect: false },
+        { id: "4", answerText: "автоматизированного тестирования", isCorrect: false },
+      ],
+    },
+    {
+      id: generateUniqueId(),
+      questionText: "Функциональное тестирование проводят в рамках 5 ... ",
+      questionType: QuestionType.MultipleOptions,
+      answers: [
+        { id: "1", answerText: "модульного тестирования", isCorrect: true },
+        { id: "2", answerText: "динамического тестирования", isCorrect: false },
+        { id: "3", answerText: "статического тестирования", isCorrect: false },
+        { id: "4", answerText: "автоматизированного тестирования", isCorrect: false },
+      ],
+    },
+    {
+      id: generateUniqueId(),
+      questionText: "Функциональное тестирование проводят в рамках 5 ... ",
+      questionType: QuestionType.MultipleOptions,
+      answers: [
+        { id: "1", answerText: "модульного тестирования", isCorrect: true },
+        { id: "2", answerText: "динамического тестирования", isCorrect: false },
+        { id: "3", answerText: "статического тестирования", isCorrect: false },
+        { id: "4", answerText: "автоматизированного тестирования", isCorrect: false },
+      ],
+    },
+    {
+      id: generateUniqueId(),
+      questionText: "Функциональное тестирование проводят в рамках 5 ... ",
+      questionType: QuestionType.MultipleOptions,
+      answers: [
+        { id: "1", answerText: "модульного тестирования", isCorrect: true },
+        { id: "2", answerText: "динамического тестирования", isCorrect: false },
+        { id: "3", answerText: "статического тестирования", isCorrect: false },
+        { id: "4", answerText: "автоматизированного тестирования", isCorrect: false },
+      ],
+    },
+    {
+      id: generateUniqueId(),
+      questionText: "Функциональное тестирование проводят в рамках 5 ... ",
+      questionType: QuestionType.MultipleOptions,
+      answers: [
+        { id: "1", answerText: "модульного тестирования", isCorrect: true },
+        { id: "2", answerText: "динамического тестирования", isCorrect: false },
+        { id: "3", answerText: "статического тестирования", isCorrect: false },
+        { id: "4", answerText: "автоматизированного тестирования", isCorrect: false },
+      ],
+    },
+    {
+      id: generateUniqueId(),
+      questionText: "Функциональное тестирование проводят в рамках 5 ... ",
+      questionType: QuestionType.MultipleOptions,
+      answers: [
+        { id: "1", answerText: "модульного тестирования", isCorrect: true },
+        { id: "2", answerText: "динамического тестирования", isCorrect: false },
+        { id: "3", answerText: "статического тестирования", isCorrect: false },
+        { id: "4", answerText: "автоматизированного тестирования", isCorrect: false },
+      ],
+    },
+    {
+      id: generateUniqueId(),
+      questionText: "Функциональное тестирование проводят в рамках 5 ... ",
+      questionType: QuestionType.MultipleOptions,
+      answers: [
+        { id: "1", answerText: "модульного тестирования", isCorrect: true },
+        { id: "2", answerText: "динамического тестирования", isCorrect: false },
+        { id: "3", answerText: "статического тестирования", isCorrect: false },
         { id: "4", answerText: "автоматизированного тестирования", isCorrect: false },
       ],
     },

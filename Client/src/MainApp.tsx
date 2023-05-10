@@ -9,7 +9,6 @@ import LoadingPage from "@containers/LoadingPage";
 
 import { useStoreStates } from "./api/hooks/useStoreStates";
 import { TestpointRoutes, TESTPOINT_ROUTES } from "./api/pageRoutes";
-import { TEST_DATA_1 } from "./containers/TestsPage/data";
 import { useDispatch, useSelector } from "./redux/hooks";
 import { isAdminSelector } from "./redux/selectors";
 import { AccountActions } from "./redux/userAccount/actions";
@@ -23,6 +22,7 @@ const StatisticsPage = lazy(() => import("./containers/StatisticsPage"));
 const ProfilePage = lazy(() => import("./containers/ProfilePage"));
 const TestBuilderPage = lazy(() => import("./containers/TestBuilderPage"));
 const UsersPage = lazy(() => import("./containers/UsersPage"));
+const HistoryPage = lazy(() => import("./containers/HistoryPage"));
 
 export const routes: TestpointRoutes = {
   home: {
@@ -52,6 +52,10 @@ export const routes: TestpointRoutes = {
   users: {
     ...TESTPOINT_ROUTES.users,
     component: <UsersPage />,
+  },
+  history: {
+    ...TESTPOINT_ROUTES.history,
+    component: <HistoryPage />,
   },
 };
 

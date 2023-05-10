@@ -3,8 +3,8 @@ import React, { FC, useCallback } from "react";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
 import HandymanIcon from "@mui/icons-material/Handyman";
+import HistoryIcon from "@mui/icons-material/History";
 import HomeIcon from "@mui/icons-material/Home";
-import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import PeopleIcon from "@mui/icons-material/People";
 import QuizIcon from "@mui/icons-material/Quiz";
@@ -79,6 +79,10 @@ const routes = [
   {
     ...TESTPOINT_ROUTES.tests,
     icon: <QuizIcon />,
+  },
+  {
+    ...TESTPOINT_ROUTES.history,
+    icon: <HistoryIcon />,
   },
   {
     ...TESTPOINT_ROUTES.profile,

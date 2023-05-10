@@ -23,7 +23,6 @@ export const LoginForm: FC<Props> = ({ isUser }) => {
       <Grid container spacing={1} direction="column" sx={{ minHeight: 187 }}>
         <Grid item>
           <TextFieldFormik
-            autoFocus
             fullWidth
             size="small"
             name="username"

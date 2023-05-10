@@ -75,15 +75,6 @@ export const SignUp = () => {
     setSignUpStep(SIGN_UP_STEPS.USERNAME);
   }, []);
 
-  const submitForm = useCallback(async (values: SignUpUserFormValues) => {
-    try {
-      await dispatch(AccountActions.registerUser(values));
-      setPageStep(START_PAGE_STEPS.LOGIN);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
   return (
     <ModalPaper>
       <Formik
@@ -92,7 +83,7 @@ export const SignUp = () => {
         initialValues={initialFormValues}
         validate={validateForm}
         validationSchema={validationSchema}
-        onSubmit={submitForm}
+        onSubmit={() => console.log("submit")}
         onReset={handleResetForm}
       >
         <Form style={{ height: "100%" }} id="sign-up">
