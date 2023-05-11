@@ -6,6 +6,8 @@ import { Box, ContainerProps, Divider, styled } from "@mui/material";
 import { useBreakpoint } from "@/api/hooks/useBreakPoint";
 import { theme } from "@/common/theme/createTheme";
 
+import backImage from "../../shared/backgroundImage.svg";
+
 import { DRAWER_WIDTH, HEADER_HEIGHT } from "./common";
 import { Header } from "./Header";
 import { SideBar } from "./SideBar";
@@ -56,15 +58,19 @@ export const LayoutContainer: FC<Props> = ({ children, footer, ...props }) => {
     <>
       <Box
         sx={{
-          backgroundColor: theme.palette.background.default,
           minHeight: "100vh",
+          background: "linear-gradient(180deg, #C1C1C1 0%, #B8F2FF 100%)",
+          backgroundImage: `url(${backImage})`,
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "bottom center",
+          backgroundSize: "830px 75%",
         }}
       >
         <SideBar />
         <Header />
         <Divider />
         {children && (
-          <MainContainer isMinimized={isMinimized} {...props}>
+          <MainContainer isMinimized={isMinimized} {...props} sx={{ zIndex: 2 }}>
             {children}
           </MainContainer>
         )}

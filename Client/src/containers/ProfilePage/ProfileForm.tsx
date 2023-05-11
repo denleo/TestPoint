@@ -83,8 +83,9 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = async () => {
+        const base64Data = (reader.result as string).split(",")[1];
         setFieldValue("image", reader.result as string);
-        const resultAction = await dispatch(AccountActions.changeAvatar(reader.result as string));
+        const resultAction = await dispatch(AccountActions.changeAvatar(base64Data));
         if ("abort" in resultAction || "error" in resultAction) {
           console.log(resultAction);
           notify("Failed to update avatar", NotificationType.Error);

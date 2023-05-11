@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
-import { alpha, Box, Grid, Typography, useTheme } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
+import { alpha, Box, Button, Grid, styled, Typography, useTheme } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
@@ -13,6 +14,14 @@ import { httpAction } from "@api/httpAction";
 import { TestResult } from "./common";
 import { QuestionList } from "./QuestionsList";
 import { useResultsPageStore } from "./useResultsPageStore";
+
+const BackButton = styled(Button)(({ theme }) => ({
+  position: "absolute",
+  left: 0,
+  bottom: 0,
+  marginLeft: theme.spacing(1),
+  marginBottom: theme.spacing(1),
+}));
 
 const ResultsPage = () => {
   const [testData, setTestData] = useState<TestData | null>(null);
@@ -44,10 +53,14 @@ const ResultsPage = () => {
     fetchData();
   }, [testId]);
 
+  const handleClickBack = useCallback(() => {
+    navigate(from);
+  }, [from]);
+
   if (!testData || !testResult) return null;
 
   return (
-    <Box display="flex" width="100%" height="100%" flexDirection="column" alignItems="center">
+    <Box display="flex" width="100%" height="100%" flexDirection="column" alignItems="center" position="relative">
       <Grid
         container
         sx={{ maxWidth: 1280, backgroundColor: alpha(theme.palette.info.light, 0.32), p: 4, borderRadius: 4 }}
@@ -73,12 +86,15 @@ const ResultsPage = () => {
           </Typography>
         </Grid>
         <Grid item xs={6} display="flex" alignItems="center" justifyContent="flex-end" sx={{ mt: 5 }}>
-          <ProgressScore percent={(testResult.score ?? 0) * 10} label={testResult.score.toString() ?? "0"} />
+          <ProgressScore percent={testResult.score * 10} label={testResult.score.toFixed(1)} />
         </Grid>
       </Grid>
       <Box>
         <QuestionList questions={testData.questions} history={testResult.history} />
       </Box>
+      <BackButton size="large" variant="contained" color="info" onClick={handleClickBack} startIcon={<ArrowBack />}>
+        Back
+      </BackButton>
     </Box>
   );
 };

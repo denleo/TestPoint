@@ -38,7 +38,7 @@ export const TESTPOINT_ROUTES: TestpointRoutes = {
   statistics: {
     name: TESTPOINT_ROUTE.STATISTICS,
     path: "/statistics",
-    showAdmin: "both",
+    showAdmin: true,
   },
   profile: {
     name: TESTPOINT_ROUTE.PROFILE,

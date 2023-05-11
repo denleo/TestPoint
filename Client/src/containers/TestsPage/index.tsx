@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import AccessibleForwardIcon from "@mui/icons-material/AccessibleForward";
+import EmojiNatureOutlinedIcon from "@mui/icons-material/EmojiNatureOutlined";
 import { Box, Grid, Typography } from "@mui/material";
 
 import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
@@ -42,7 +42,7 @@ const TestsPage = () => {
   if (!tests.length) {
     return (
       <Box height="80%" display="flex" alignContent="center" justifyContent="center" flexDirection="column">
-        <AccessibleForwardIcon color="disabled" sx={{ alignSelf: "center", height: 150, width: 150, mb: 3 }} />
+        <EmojiNatureOutlinedIcon color="disabled" sx={{ alignSelf: "center", height: 150, width: 150, mb: 3 }} />
         <Typography align="center">Unfortunately there are no tests available to you</Typography>
       </Box>
     );
@@ -51,7 +51,7 @@ const TestsPage = () => {
   return (
     <Grid spacing={3} container>
       {tests.map((test) => (
-        <Grid item xs={12} key={test.id}>
+        <Grid item xs={12} key={test.id} justifyContent="center" display="flex">
           <TestPreviewCard testData={test} />
         </Grid>
       ))}

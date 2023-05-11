@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { FC, useState, useMemo } from "react";
 
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
@@ -49,7 +50,8 @@ const isQuestionRight = (question: TestQuestion, answers: [string]) => {
 
 export const QuestionList: FC<Props> = ({ questions, history }) => {
   const [expanded, setExpanded] = useState<string | false>(false);
-  const xlUp = useBreakpoint("xs");
+  const lgUp = useBreakpoint("lg");
+  const mdUp = useBreakpoint("md");
   const theme = useTheme();
 
   const testResult = useMemo(() => {
@@ -69,7 +71,7 @@ export const QuestionList: FC<Props> = ({ questions, history }) => {
     setExpanded(newExpanded ? panel : false);
   };
 
-  const questionLength = xlUp ? 720 : 365;
+  const questionLength = lgUp ? 1000 : mdUp ? 500 : 365;
 
   return (
     <List>
@@ -78,7 +80,10 @@ export const QuestionList: FC<Props> = ({ questions, history }) => {
         return (
           <ListItem key={id}>
             <QuestionBlock expanded={expanded === id} onChange={handleChangeExpanded(id)}>
-              <AccordionSummary expandIcon={<ExpandMoreIcon fontSize="large" />} sx={{ overflow: "hidden" }}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon fontSize="large" />}
+                sx={{ overflow: "hidden", width: "100%" }}
+              >
                 {isCorrect ? <DoneOutlineIcon color="success" sx={{ mr: 1 }} /> : <CancelOutlinedIcon color="error" />}
                 <Typography
                   noWrap={expanded !== id}
@@ -87,7 +92,7 @@ export const QuestionList: FC<Props> = ({ questions, history }) => {
                   {questionText}
                 </Typography>
               </AccordionSummary>
-              <AccordionDetails aria-controls={`${id}-content`} id={`${id}-header`} sx={{ pl: "82px" }}>
+              <AccordionDetails aria-controls={`${id}-content`} id={`${id}-header`} sx={{ pl: "82px", width: "100%" }}>
                 {questionType === QuestionType.TextSubstitution ? (
                   <>
                     <Typography variant="h6" display="inline-flex">

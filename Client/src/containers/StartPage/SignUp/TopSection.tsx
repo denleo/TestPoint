@@ -11,12 +11,7 @@ interface Props {
 
 export const TopSection: FC<Props> = ({ onBack }) => {
   return (
-    <Box
-      display="flex"
-      width="100%"
-      alignItems="center"
-      justifyContent="space-between"
-    >
+    <Box display="flex" width="100%" alignItems="center" justifyContent="space-between">
       <Button startIcon={<ArrowBack />} onClick={onBack}>
         Back
       </Button>

@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useMemo } from "react";
 
 import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
 
@@ -21,9 +21,23 @@ export const ProgressScore: FC<Props> = ({ percent, label }) => {
     };
   }, [percent]);
 
+  const color = useMemo(() => {
+    if (percent >= 0 && percent < 33) return theme.palette.error.light;
+
+    if (percent >= 33 && percent < 66) return theme.palette.warning.light;
+
+    return theme.palette.success.light;
+  }, [percent]);
+
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>
-      <CircularProgress value={progress} variant="determinate" size={80} sx={{ color: theme.palette.success.light }} />
+      <CircularProgress value={progress} variant="determinate" size={80} sx={{ color, zIndex: 100 }} />
+      <CircularProgress
+        value={100}
+        variant="determinate"
+        size={80}
+        sx={{ color: theme.palette.divider, zIndex: 1, position: "absolute" }}
+      />
       <Box
         sx={{
           top: 0,

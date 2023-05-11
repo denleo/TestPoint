@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useState } from "react";
 
-import { QuestionMarkRounded, PlayArrowRounded } from "@mui/icons-material";
+import { QuestionMarkRounded, PlayArrowRounded, ThreeMp } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import HandymanIcon from "@mui/icons-material/Handyman";
@@ -8,6 +8,7 @@ import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { Button, Grid, Paper, styled, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
+import { useBreakpoint } from "@/api/hooks/useBreakPoint";
 import { httpAction } from "@/api/httpAction";
 import { AssignDialog } from "@/components/AssignDialog";
 import { useNotificationStore, NotificationType } from "@/components/NotificationProvider/useNotificationStore";
@@ -21,11 +22,12 @@ import { useTestComponentStore } from "../TestComponentPage/useTestComponentStor
 
 const PaperSection = styled(Paper)(({ theme }) => ({
   minHeight: 200,
-  maxWidth: 1200,
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
   padding: theme.spacing(2),
+  width: "100%",
+  maxWidth: 960,
 }));
 
 const QuestionMarkWrapper = styled("div")(({ theme }) => ({
@@ -58,6 +60,8 @@ export const TestPreviewCard: FC<Props> = ({ testData }) => {
   const isAdmin = useSelector(isAdminSelector);
   const [openAssign, setOpenAssign] = useState(false);
   const navigate = useNavigate();
+  const mdUp = useBreakpoint("md");
+
   const setEditTest = useTestBuilderStore((store) => store.setTest);
   const setTest = useTestComponentStore((store) => store.setTest);
   const notify = useNotificationStore((store) => store.notify);
@@ -107,7 +111,7 @@ export const TestPreviewCard: FC<Props> = ({ testData }) => {
 
         <TestInformationWrapper>
           <Grid container>
-            <Grid item flexDirection="column" xs>
+            <Grid item flexDirection="column" xs={mdUp ? true : 12}>
               <Typography variant="subtitle2">Test Information:</Typography>
               <div>
                 <Dot />
@@ -124,11 +128,11 @@ export const TestPreviewCard: FC<Props> = ({ testData }) => {
               <div>
                 <Dot />
                 <Typography component="span" variant="body2">
-                  Completion time: <strong>{estimatedTime}</strong>
+                  Estimated time: <strong>{estimatedTime}</strong>
                 </Typography>
               </div>
             </Grid>
-            <Grid item display="flex" alignItems="flex-end">
+            <Grid item display="flex" alignItems="flex-end" sx={{ mt: !mdUp ? 1 : undefined }}>
               {isAdmin ? (
                 <>
                   <Button
