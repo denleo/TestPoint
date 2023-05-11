@@ -16,7 +16,9 @@ internal sealed class TestCompletionConfiguration : IEntityTypeConfiguration<Tes
         builder.Property(x => x.CorrectAnswersCount).HasColumnName("CorrectAnswersCount").IsRequired();
         builder.Property(x => x.CompletionTime).HasColumnName("CompletionTime").IsRequired();
 
-        builder.HasCheckConstraint("CK_TestCompletion_Score", "Score > 0");
+        builder.HasCheckConstraint("CK_TestCompletion_Score", "Score >= 0");
+        builder.HasCheckConstraint("CK_TestCompletion_CorrectAnswersCount", "CorrectAnswersCount >= 0");
+        builder.HasCheckConstraint("CK_TestCompletion_CompletionTime", "CompletionTime > 0");
 
         builder
             .HasMany(x => x.Answers)

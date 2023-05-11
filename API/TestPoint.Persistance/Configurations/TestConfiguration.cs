@@ -16,6 +16,8 @@ internal sealed class TestConfiguration : IEntityTypeConfiguration<Test>
         builder.Property(x => x.Difficulty).HasColumnName("Difficulty").IsRequired();
         builder.Property(x => x.EstimatedTime).HasColumnName("EstimatedTime").IsRequired();
 
+        builder.HasCheckConstraint("CK_Test_EstimatedTime", "EstimatedTime > 0");
+
         builder.HasOne<Administrator>().WithMany().HasForeignKey(x => x.AuthorId).IsRequired();
         builder.HasIndex("AuthorId", "Name").IsUnique().HasDatabaseName("UQ_Test_AuthorId_Name");
     }

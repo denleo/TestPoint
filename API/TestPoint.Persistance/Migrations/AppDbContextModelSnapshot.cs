@@ -230,6 +230,8 @@ namespace TestPoint.DAL.Migrations
                         .HasDatabaseName("UQ_Test_AuthorId_Name");
 
                     b.ToTable("Test", (string)null);
+
+                    b.HasCheckConstraint("CK_Test_EstimatedTime", "EstimatedTime > 0");
                 });
 
             modelBuilder.Entity("TestPoint.Domain.TestAssignment", b =>
@@ -299,7 +301,11 @@ namespace TestPoint.DAL.Migrations
 
                     b.ToTable("TestCompletion", (string)null);
 
-                    b.HasCheckConstraint("CK_TestCompletion_Score", "Score > 0");
+                    b.HasCheckConstraint("CK_TestCompletion_CompletionTime", "CompletionTime > 0");
+
+                    b.HasCheckConstraint("CK_TestCompletion_CorrectAnswersCount", "CorrectAnswersCount >= 0");
+
+                    b.HasCheckConstraint("CK_TestCompletion_Score", "Score >= 0");
                 });
 
             modelBuilder.Entity("TestPoint.Domain.User", b =>
