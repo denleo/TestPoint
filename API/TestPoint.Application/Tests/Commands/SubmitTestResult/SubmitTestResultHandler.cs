@@ -39,7 +39,7 @@ public class SubmitTestResultHandler : IRequestHandler<SubmitTestResultCommand>
         var testCompletion = request.TestCompletion;
 
         testCompletion.CorrectAnswersCount = GetCorrectAnswersCount(testData, request.TestCompletion);
-        testCompletion.Score = Math.Round(testCompletion.CorrectAnswersCount / (double)testData.Questions.Count, 1, MidpointRounding.AwayFromZero) * 10;
+        testCompletion.Score = Math.Round(testCompletion.CorrectAnswersCount / (double)testData.Questions.Count * 10, 1, MidpointRounding.AwayFromZero);
         testCompletion.TestAssignmentId = testAssignment.Id;
 
         _uow.TestCompletionRepository.Add(testCompletion);

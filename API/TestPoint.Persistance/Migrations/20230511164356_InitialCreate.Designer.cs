@@ -12,7 +12,7 @@ using TestPoint.DAL.Contexts;
 namespace TestPoint.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230511131852_InitialCreate")]
+    [Migration("20230511164356_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -232,6 +232,8 @@ namespace TestPoint.DAL.Migrations
                         .HasDatabaseName("UQ_Test_AuthorId_Name");
 
                     b.ToTable("Test", (string)null);
+
+                    b.HasCheckConstraint("CK_Test_EstimatedTime", "EstimatedTime > 0");
                 });
 
             modelBuilder.Entity("TestPoint.Domain.TestAssignment", b =>
@@ -301,7 +303,11 @@ namespace TestPoint.DAL.Migrations
 
                     b.ToTable("TestCompletion", (string)null);
 
-                    b.HasCheckConstraint("CK_TestCompletion_Score", "Score > 0");
+                    b.HasCheckConstraint("CK_TestCompletion_CompletionTime", "CompletionTime > 0");
+
+                    b.HasCheckConstraint("CK_TestCompletion_CorrectAnswersCount", "CorrectAnswersCount >= 0");
+
+                    b.HasCheckConstraint("CK_TestCompletion_Score", "Score >= 0");
                 });
 
             modelBuilder.Entity("TestPoint.Domain.User", b =>

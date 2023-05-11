@@ -60,6 +60,7 @@ public class UserController : BaseController
         return Ok();
     }
 
+    [DisableRequestSizeLimit]
     [SwaggerOperation(Summary = "Change current user avatar image (roles:user)")]
     [HttpPatch("session/user/avatar"), Authorize(Roles = "User")]
     public async Task<IActionResult> ChangeUserAvatar([FromBody] string base64Avatar)

@@ -87,6 +87,7 @@ namespace TestPoint.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Test", x => x.TestId);
+                    table.CheckConstraint("CK_Test_EstimatedTime", "EstimatedTime > 0");
                     table.ForeignKey(
                         name: "FK_Test_Administrator_AuthorId",
                         column: x => x.AuthorId,
@@ -224,7 +225,9 @@ namespace TestPoint.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TestCompletion", x => x.TestCompletionId);
-                    table.CheckConstraint("CK_TestCompletion_Score", "Score > 0");
+                    table.CheckConstraint("CK_TestCompletion_CompletionTime", "CompletionTime > 0");
+                    table.CheckConstraint("CK_TestCompletion_CorrectAnswersCount", "CorrectAnswersCount >= 0");
+                    table.CheckConstraint("CK_TestCompletion_Score", "Score >= 0");
                     table.ForeignKey(
                         name: "FK_TestCompletion_TestAssignment_TestAssignmentId",
                         column: x => x.TestAssignmentId,
