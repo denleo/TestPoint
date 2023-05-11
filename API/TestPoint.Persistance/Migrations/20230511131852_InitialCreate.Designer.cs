@@ -12,7 +12,7 @@ using TestPoint.DAL.Contexts;
 namespace TestPoint.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230509141923_InitialCreate")]
+    [Migration("20230511131852_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,7 +64,8 @@ namespace TestPoint.DAL.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsCorrect")
+                    b.Property<bool?>("IsCorrect")
+                        .IsRequired()
                         .HasColumnType("bit")
                         .HasColumnName("IsCorrect");
 
@@ -275,6 +276,10 @@ namespace TestPoint.DAL.Migrations
                     b.Property<double>("CompletionTime")
                         .HasColumnType("float")
                         .HasColumnName("CompletionTime");
+
+                    b.Property<int>("CorrectAnswersCount")
+                        .HasColumnType("int")
+                        .HasColumnName("CorrectAnswersCount");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");

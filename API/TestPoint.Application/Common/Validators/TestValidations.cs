@@ -25,7 +25,7 @@ internal static class TestValidations
             throw new BadEntityException("Question doesn't contain any answers.");
         }
 
-        if (!question.Answers.Any(x => x.IsCorrect))
+        if (!question.Answers.Any(x => x.IsCorrect!.Value))
         {
             throw new BadEntityException("Question should contain at least one correct answer.");
         }
@@ -34,7 +34,7 @@ internal static class TestValidations
         {
             case QuestionType.SingleOption:
 
-                if (question.Answers.Where(x => x.IsCorrect).Count() > 1)
+                if (question.Answers.Where(x => x.IsCorrect!.Value).Count() > 1)
                 {
                     throw new BadEntityException("Single option question can have only one correct answer.");
                 }
@@ -50,6 +50,11 @@ internal static class TestValidations
 
             default:
                 break;
+        }
+
+        if (question!.Answers.GroupBy(a => a.AnswerText).Any(g => g.Count() > 1))
+        {
+            throw new BadEntityException("Question can't contain duplicate answers");
         }
     }
 }

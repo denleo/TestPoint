@@ -216,6 +216,7 @@ namespace TestPoint.DAL.Migrations
                     TestCompletionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TestAssignmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Score = table.Column<double>(type: "float", nullable: false),
+                    CorrectAnswersCount = table.Column<int>(type: "int", nullable: false),
                     CompletionTime = table.Column<double>(type: "float", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
