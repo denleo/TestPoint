@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -40,6 +41,13 @@ builder.Services.AddCors(setup =>
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.Configure<FormOptions>(opt =>
+{
+    opt.KeyLengthLimit = int.MaxValue;
+    opt.ValueCountLimit = int.MaxValue;
+    opt.ValueLengthLimit = int.MaxValue;
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

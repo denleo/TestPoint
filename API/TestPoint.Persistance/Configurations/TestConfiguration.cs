@@ -15,6 +15,7 @@ internal sealed class TestConfiguration : IEntityTypeConfiguration<Test>
         builder.Property(x => x.Name).HasColumnName("Name").HasMaxLength(256).IsRequired();
         builder.Property(x => x.Difficulty).HasColumnName("Difficulty").IsRequired();
         builder.Property(x => x.EstimatedTime).HasColumnName("EstimatedTime").IsRequired();
+        builder.Property(x => x.Author).HasColumnName("Author").HasMaxLength(16).IsRequired();
 
         builder.HasCheckConstraint("CK_Test_EstimatedTime", "EstimatedTime > 0");
 
