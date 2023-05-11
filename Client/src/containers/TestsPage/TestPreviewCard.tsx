@@ -63,8 +63,13 @@ export const TestPreviewCard: FC<Props> = ({ testData }) => {
   const notify = useNotificationStore((store) => store.notify);
 
   const handleStartTest = useCallback(async () => {
-    navigate("/test");
-    // setTest(testData);
+    try {
+      const test = await httpAction(`tests/${testData.id}`);
+      navigate("/test");
+      setTest(test as TestData);
+    } catch (error) {
+      notify("An error occurred while loading test", NotificationType.Error);
+    }
   }, [testData]);
 
   const toggleAssignDialog = useCallback(() => {

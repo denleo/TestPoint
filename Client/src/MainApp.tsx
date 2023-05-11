@@ -23,6 +23,7 @@ const ProfilePage = lazy(() => import("./containers/ProfilePage"));
 const TestBuilderPage = lazy(() => import("./containers/TestBuilderPage"));
 const UsersPage = lazy(() => import("./containers/UsersPage"));
 const HistoryPage = lazy(() => import("./containers/HistoryPage"));
+const ResultsPage = lazy(() => import("./containers/ResultsPage"));
 
 export const routes: TestpointRoutes = {
   home: {
@@ -56,6 +57,10 @@ export const routes: TestpointRoutes = {
   history: {
     ...TESTPOINT_ROUTES.history,
     component: <HistoryPage />,
+  },
+  results: {
+    ...TESTPOINT_ROUTES.results,
+    component: <ResultsPage />,
   },
 };
 

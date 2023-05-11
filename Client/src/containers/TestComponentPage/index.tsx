@@ -4,8 +4,10 @@ import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRound
 import DoneOutlineRoundedIcon from "@mui/icons-material/DoneOutlineRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import { Button, IconButton, styled, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 import { httpAction } from "@/api/httpAction";
+import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
 import { QuestionType } from "@/redux/adminData/state";
 
 import { QuestionComponent } from "./QuestionComponent";
@@ -79,11 +81,14 @@ const ButtonFinish = styled(Button)(({ theme }) => ({
 }));
 
 const TestComponentPage = () => {
+  const notify = useNotificationStore((store) => store.notify);
   const testData = useTestComponentStore((store) => store.test);
   const questionIndex = useTestComponentStore((store) => store.questionIndex);
   const selectedAnswers = useTestComponentStore((store) => store.selectedAnswers);
   const setQuestionIndex = useTestComponentStore((store) => store.setQuestionIndex);
   const setSelectedAnswers = useTestComponentStore((store) => store.setSelectedAnswers);
+
+  const navigate = useNavigate();
 
   if (!testData || !testData?.questions) return null;
 
@@ -125,33 +130,37 @@ const TestComponentPage = () => {
   }, [questionIndex]);
 
   const finishTest = useCallback(async () => {
-    let rightAnswers = 0;
-    const questionsCount = testData.questions.length;
+    // let rightAnswers = 0;
+    // const questionsCount = testData.questions.length;
 
     const history = testData.questions.map((question, index) => {
-      if (question.questionType === QuestionType.TextSubstitution) {
-        const answer = selectedAnswers.get(index) as string;
-        if (question.answers[0].answerText === answer) rightAnswers += 1;
+      // if (question.questionType === QuestionType.TextSubstitution) {
+      //   const answer = selectedAnswers.get(index) as string;
+      //   if (question.answers[0].answerText === answer) rightAnswers += 1;
 
-        return { questionId: question.id, answers: [answer] };
-      }
+      //   return { questionId: question.id, answers: [answer] };
+      // }
 
-      const answers = selectedAnswers.get(index) as string[];
-      const userAnswers = question.answers.map(
-        ({ answerText, isCorrect }) =>
-          (isCorrect && answers.includes(answerText)) || (!isCorrect && !answers.includes(answerText))
-      );
-      if (!userAnswers.includes(false)) rightAnswers += 1;
+      const answersIds = selectedAnswers.get(index) as string[];
+      // const userAnswers = question.answers.map(
+      //   ({ id, isCorrect }) => (isCorrect && answersIds.includes(id)) || (!isCorrect && !answersIds.includes(id))
+      // );
+      // if (!userAnswers.includes(false)) rightAnswers += 1;
+      const answers = question.answers.filter(({ id }) => answersIds.includes(id)).map(({ answerText }) => answerText);
 
       return { questionId: question.id, answers };
     });
-
-    await httpAction(`tests/${testData.id}/results`, {
-      testId: testData.id,
-      score: (rightAnswers / questionsCount).toFixed(1),
-      completionTime: 20,
-      history,
-    });
+    try {
+      await httpAction(`tests/${testData.id}/results`, {
+        testId: testData.id,
+        completionTime: 20,
+        history,
+      });
+      notify("You have successfully completed the test.", NotificationType.Success);
+      navigate(`/results/?testId=${testData.id}`);
+    } catch {
+      notify("Failed to submit test.", NotificationType.Error);
+    }
   }, [selectedAnswers, testData]);
 
   const numberQuestions = testData?.questions?.length ?? 0;

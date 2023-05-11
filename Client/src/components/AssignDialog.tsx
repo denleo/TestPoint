@@ -150,26 +150,27 @@ export const AssignDialog: FC<Props> = ({ onClose, testId }) => {
           </>
         ) : (
           <List>
-            {groups.map((group) => (
-              <Fragment key={group.id}>
-                <ListItem disablePadding sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, mb: 1 }}>
-                  <Typography width="100%">
-                    Group:&nbsp;<strong>{group.name}</strong>
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ minWidth: 130 }}
-                    onClick={() => assignGroupToTest(group.id)}
-                  >
-                    Assign&nbsp;
-                    {group.membersCount}
-                    &nbsp;
-                    <GroupIcon />
-                  </Button>
-                </ListItem>
-              </Fragment>
-            ))}
+            {!!groups.length &&
+              groups.map((group) => (
+                <Fragment key={group.id}>
+                  <ListItem disablePadding sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, mb: 1 }}>
+                    <Typography width="100%">
+                      Group:&nbsp;<strong>{group.name}</strong>
+                    </Typography>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ minWidth: 130 }}
+                      onClick={() => assignGroupToTest(group.id)}
+                    >
+                      Assign&nbsp;
+                      {group.membersCount}
+                      &nbsp;
+                      <GroupIcon />
+                    </Button>
+                  </ListItem>
+                </Fragment>
+              ))}
           </List>
         )}
       </DialogContent>

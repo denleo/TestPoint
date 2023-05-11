@@ -18,13 +18,22 @@ const TestsPage = () => {
   const notify = useNotificationStore((store) => store.notify);
 
   useEffect(() => {
-    const getTests = async () => {
-      const response = await httpAction("tests");
+    const getAdminTests = async () => {
+      const response = await httpAction("admin/tests");
+      setTests((response ?? []) as TestInfo[]);
+    };
+
+    const getUserTests = async () => {
+      const response = await httpAction(`user/tests/?filter=notPassed`);
       setTests((response ?? []) as TestInfo[]);
     };
 
     try {
-      if (isAdmin) getTests();
+      if (isAdmin) {
+        getAdminTests();
+      } else {
+        getUserTests();
+      }
     } catch (error) {
       notify("Failed to load tests.", NotificationType.Error);
     }
