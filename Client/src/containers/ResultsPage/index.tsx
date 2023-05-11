@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { alpha, Box, Grid, Typography, useTheme } from "@mui/material";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
 import { ProgressScore } from "@/components/ProgressScore";
@@ -12,14 +12,14 @@ import { httpAction } from "@api/httpAction";
 
 import { TestResult } from "./common";
 import { QuestionList } from "./QuestionsList";
+import { useResultsPageStore } from "./useResultsPageStore";
 
 const ResultsPage = () => {
   const [testData, setTestData] = useState<TestData | null>(null);
   const [testResult, setTestResult] = useState<TestResult | null>(null);
+  const testId = useResultsPageStore((store) => store.testId);
 
-  const [searchParams] = useSearchParams();
   const notify = useNotificationStore((store) => store.notify);
-  const testId = searchParams.get("testId");
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -76,7 +76,7 @@ const ResultsPage = () => {
           <ProgressScore percent={(testResult.score ?? 0) * 10} label={testResult.score.toString() ?? "0"} />
         </Grid>
       </Grid>
-      <Box width={1280}>
+      <Box>
         <QuestionList questions={testData.questions} history={testResult.history} />
       </Box>
     </Box>

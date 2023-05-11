@@ -1,6 +1,8 @@
 import React, { FC, useState, useMemo } from "react";
 
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -13,8 +15,10 @@ import {
   Radio,
   styled,
   Typography,
+  useTheme,
 } from "@mui/material";
 
+import { useBreakpoint } from "@/api/hooks/useBreakPoint";
 import { QuestionType, TestQuestion } from "@/redux/adminData/state";
 
 import { UserAnswer } from "./common";
@@ -45,6 +49,8 @@ const isQuestionRight = (question: TestQuestion, answers: [string]) => {
 
 export const QuestionList: FC<Props> = ({ questions, history }) => {
   const [expanded, setExpanded] = useState<string | false>(false);
+  const xlUp = useBreakpoint("xs");
+  const theme = useTheme();
 
   const testResult = useMemo(() => {
     return questions.map((question) => {
@@ -63,6 +69,8 @@ export const QuestionList: FC<Props> = ({ questions, history }) => {
     setExpanded(newExpanded ? panel : false);
   };
 
+  const questionLength = xlUp ? 720 : 365;
+
   return (
     <List>
       {testResult.map(({ question, userAnswer, isCorrect }, index) => {
@@ -74,7 +82,7 @@ export const QuestionList: FC<Props> = ({ questions, history }) => {
                 {isCorrect ? <DoneOutlineIcon color="success" sx={{ mr: 1 }} /> : <CancelOutlinedIcon color="error" />}
                 <Typography
                   noWrap={expanded !== id}
-                  sx={{ width: expanded !== id ? 720 : undefined, textOverflow: "ellipsis" }}
+                  sx={{ width: expanded !== id ? questionLength : undefined, textOverflow: "ellipsis" }}
                 >
                   {questionText}
                 </Typography>
@@ -96,27 +104,26 @@ export const QuestionList: FC<Props> = ({ questions, history }) => {
                     )}
                   </>
                 ) : (
-                  answers.map((variant) => (
-                    <div key={variant.id}>
-                      {questionType === QuestionType.SingleOption && (
-                        <Radio
-                          checked={variant.isCorrect}
-                          key={variant.id}
-                          color={userAnswer.includes(variant.answerText) ? "success" : "error"}
-                          disabled
-                        />
-                      )}
-                      {questionType === QuestionType.MultipleOptions && (
-                        <Checkbox
-                          checked={variant.isCorrect}
-                          key={variant.id}
-                          disabled
-                          color={userAnswer.includes(variant.answerText) ? "success" : "error"}
-                        />
-                      )}
-                      <Typography display="inline-flex">{variant.answerText}</Typography>
-                    </div>
-                  ))
+                  answers.map((variant) => {
+                    const isUserCorrect = userAnswer.includes(variant.answerText);
+                    return (
+                      <div key={variant.id}>
+                        {questionType === QuestionType.SingleOption && (
+                          <Radio checked={variant.isCorrect || isUserCorrect} key={variant.id} disabled />
+                        )}
+                        {questionType === QuestionType.MultipleOptions && (
+                          <Checkbox checked={variant.isCorrect} key={variant.id} disabled />
+                        )}
+                        <Typography display="inline-flex">{variant.answerText}</Typography>
+                        {(variant.isCorrect || isUserCorrect) &&
+                          (variant.isCorrect ? (
+                            <CheckRoundedIcon fontSize="small" color="success" />
+                          ) : (
+                            <CloseRoundedIcon fontSize="small" color="error" />
+                          ))}
+                      </div>
+                    );
+                  })
                 )}
               </AccordionDetails>
             </QuestionBlock>

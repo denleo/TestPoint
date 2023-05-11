@@ -10,6 +10,8 @@ import { httpAction } from "@/api/httpAction";
 import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
 import { QuestionType } from "@/redux/adminData/state";
 
+import { useResultsPageStore } from "../ResultsPage/useResultsPageStore";
+
 import { QuestionComponent } from "./QuestionComponent";
 import { TestPagination } from "./TestPagination";
 import { useTestComponentStore } from "./useTestComponentStore";
@@ -87,6 +89,7 @@ const TestComponentPage = () => {
   const selectedAnswers = useTestComponentStore((store) => store.selectedAnswers);
   const setQuestionIndex = useTestComponentStore((store) => store.setQuestionIndex);
   const setSelectedAnswers = useTestComponentStore((store) => store.setSelectedAnswers);
+  const setTestResult = useResultsPageStore((store) => store.setTest);
 
   const navigate = useNavigate();
 
@@ -157,7 +160,8 @@ const TestComponentPage = () => {
         history,
       });
       notify("You have successfully completed the test.", NotificationType.Success);
-      navigate(`/results/?testId=${testData.id}`);
+      navigate("/results");
+      setTestResult(testData.id);
     } catch {
       notify("Failed to submit test.", NotificationType.Error);
     }

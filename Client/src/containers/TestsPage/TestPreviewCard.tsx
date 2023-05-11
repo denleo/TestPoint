@@ -99,6 +99,8 @@ export const TestPreviewCard: FC<Props> = ({ testData }) => {
             <Typography mr={0.5} display="inline-block" variant="h4">
               TEST: {name}
             </Typography>
+          </Grid>
+          <Grid item>
             <TestDifficultyChip difficulty={testData.difficulty} />
           </Grid>
         </Grid>

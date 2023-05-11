@@ -29,7 +29,7 @@ import { clearUserTokenFromStorage } from "@/api/userToken";
 import { IconFullLogo } from "@/common/icons";
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { isAdminSelector } from "@/redux/selectors";
-import { setUserData } from "@/redux/userAccount/reducer";
+import { clearUserData } from "@/redux/userAccount/reducer";
 
 import { DRAWER_WIDTH, HEADER_HEIGHT } from "./common";
 import { useSidebarStore } from "./useLayoutStore";
@@ -113,7 +113,7 @@ export const SideBar: FC = () => {
   const dispatch = useDispatch();
 
   const handleExit = useCallback(() => {
-    dispatch(setUserData({ isAdmin: false, status: null }));
+    dispatch(clearUserData());
     clearUserTokenFromStorage();
     navigate("/login");
   }, [dispatch, navigate]);

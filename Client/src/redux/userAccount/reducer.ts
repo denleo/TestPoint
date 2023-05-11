@@ -9,7 +9,7 @@ import { AccountActions } from "./actions";
 import { AccountUserState, ResponseStatuses } from "./state";
 
 const initialState: AccountUserState = {
-  userData: MOCK_USER,
+  // userData: MOCK_USER,
   status: null,
   isAdmin: false,
 };
@@ -22,7 +22,10 @@ export const userAccountSlice = createSlice({
       ...state,
       ...action.payload,
     }),
-    clearUserData: (state) => initialState,
+    clearUserData: (state) => {
+      localStorage.removeItem("persist:root");
+      return initialState;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(AccountActions.requestLogin.pending, (state) => {
