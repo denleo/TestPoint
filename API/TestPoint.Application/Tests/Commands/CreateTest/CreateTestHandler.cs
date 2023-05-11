@@ -27,6 +27,15 @@ public class CreateTestHandler : IRequestHandler<CreateTestCommand, Test>
             throw new EntityConflictException("Test with the same name already exists.");
         }
 
+        var author = await _uow.AdminRepository.GetByIdAsync(request.AuthorId);
+
+        if (author is null)
+        {
+            throw new EntityNotFoundException($"Admin with {request.AuthorId} id does not exist.");
+        }
+
+        request.Author = author.Login.Username;
+
         _uow.TestRepository.Add(request);
         await _uow.SaveChangesAsync(cancellationToken);
 

@@ -200,6 +200,12 @@ namespace TestPoint.DAL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("TestId");
 
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)")
+                        .HasColumnName("Author");
+
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uniqueidentifier");
 

@@ -12,8 +12,8 @@ using TestPoint.DAL.Contexts;
 namespace TestPoint.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230511164356_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230511191921_InitialCreation")]
+    partial class InitialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -201,6 +201,12 @@ namespace TestPoint.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("TestId");
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)")
+                        .HasColumnName("Author");
 
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uniqueidentifier");

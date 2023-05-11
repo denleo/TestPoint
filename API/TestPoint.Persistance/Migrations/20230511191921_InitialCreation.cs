@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TestPoint.DAL.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -81,6 +81,7 @@ namespace TestPoint.DAL.Migrations
                     Difficulty = table.Column<byte>(type: "tinyint", nullable: false),
                     EstimatedTime = table.Column<int>(type: "int", nullable: false),
                     AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Author = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },

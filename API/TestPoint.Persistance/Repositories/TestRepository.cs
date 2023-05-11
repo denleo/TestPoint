@@ -12,7 +12,7 @@ public class TestRepository : RepositoryBase<Test, Guid>, ITestRepository
         return await DbSet
             .Include(x => x.Questions)
             .Where(x => x.AuthorId == authorId)
-            .Select(t => new TestInformation(t.Id, "to remove", t.Name, t.Difficulty, t.Questions.Count(), t.EstimatedTime))
+            .Select(t => new TestInformation(t.Id, t.Author, t.Name, t.Difficulty, t.Questions.Count(), t.EstimatedTime))
             .ToListAsync();
     }
 
@@ -21,7 +21,7 @@ public class TestRepository : RepositoryBase<Test, Guid>, ITestRepository
         return await DbSet
             .Include(x => x.Questions)
             .Where(x => ids.Contains(x.Id))
-            .Select(t => new TestInformation(t.Id, "to remove", t.Name, t.Difficulty, t.Questions.Count(), t.EstimatedTime))
+            .Select(t => new TestInformation(t.Id, t.Author, t.Name, t.Difficulty, t.Questions.Count(), t.EstimatedTime))
             .ToListAsync();
     }
 
