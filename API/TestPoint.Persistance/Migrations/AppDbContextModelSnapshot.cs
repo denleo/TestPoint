@@ -62,7 +62,8 @@ namespace TestPoint.DAL.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsCorrect")
+                    b.Property<bool?>("IsCorrect")
+                        .IsRequired()
                         .HasColumnType("bit")
                         .HasColumnName("IsCorrect");
 
@@ -273,6 +274,10 @@ namespace TestPoint.DAL.Migrations
                     b.Property<double>("CompletionTime")
                         .HasColumnType("float")
                         .HasColumnName("CompletionTime");
+
+                    b.Property<int>("CorrectAnswersCount")
+                        .HasColumnType("int")
+                        .HasColumnName("CorrectAnswersCount");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");

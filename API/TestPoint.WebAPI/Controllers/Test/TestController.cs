@@ -48,6 +48,20 @@ public class TestController : BaseController
         return await Mediator.Send(createTestCommand);
     }
 
+    [SwaggerOperation(Summary = "Get test by id (role:user,admin)")]
+    [HttpGet("tests/{testId:guid}"), Authorize(Roles = "User, Administrator")]
+    public async Task<ActionResult<Domain.Test>> GetTestById([FromRoute] Guid testId)
+    {
+        var getTestByIdQuery = new GetTestByIdQuery()
+        {
+            TestId = testId,
+            LoginId = LoginId!.Value,
+            Role = LoginRole!.Value
+        };
+
+        return await Mediator.Send(getTestByIdQuery);
+    }
+
     [SwaggerOperation(Summary = "Get all tests created by admin (role:admin)")]
     [HttpGet("admin/tests"), Authorize(Roles = "Administrator")]
     public async Task<ActionResult<List<TestInformation>>> GetTestsByAdmin()
@@ -91,25 +105,6 @@ public class TestController : BaseController
         }
 
         return tests;
-    }
-
-    [SwaggerOperation(Summary = "Get test by id (role:user,admin)")]
-    [HttpGet("tests/{testId:guid}"), Authorize(Roles = "User, Administrator")]
-    public async Task<ActionResult<Domain.Test?>> GetTestById([FromRoute] Guid testId)
-    {
-        var getTestByIdQuery = new GetTestByIdQuery()
-        {
-            TestId = testId
-        };
-
-        var test = await Mediator.Send(getTestByIdQuery);
-
-        if (test is null)
-        {
-            return NotFound(new ErrorResult(HttpStatusCode.NotFound, $"Test with {testId} doesn't exist"));
-        }
-
-        return test;
     }
 
     [SwaggerOperation(Summary = "Delete test (role:admin)")]
@@ -192,17 +187,16 @@ public class TestController : BaseController
 
     [SwaggerOperation(Summary = "Submit test results (role:user)")]
     [HttpPost("tests/{testId:guid}/results"), Authorize(Roles = "User")]
-    public async Task<IActionResult> SubmitTestResult([FromBody] TestCompletionDto testCompletionDto)
+    public async Task<IActionResult> SubmitTestResult([FromBody] TestSubmitDto testSubmitDto)
     {
         var submitTestResultCommand = new SubmitTestResultCommand()
         {
             UserId = LoginId!.Value,
-            TestId = testCompletionDto.TestId,
+            TestId = testSubmitDto.TestId,
             TestCompletion = new TestCompletion()
             {
-                Score = testCompletionDto.Score,
-                CompletionTime = testCompletionDto.CompletionTime,
-                Answers = testCompletionDto.History
+                CompletionTime = testSubmitDto.CompletionTime,
+                Answers = testSubmitDto.History
                 .SelectMany(x => x.Answers.Select(text => new AnswerHistory()
                 {
                     QuestionId = x.QuestionId,
@@ -238,8 +232,8 @@ public class TestController : BaseController
 
         return new TestCompletionDto()
         {
-            TestId = testId,
             Score = testCompletion.Score,
+            CorrectAnswersCount = testCompletion.CorrectAnswersCount,
             CompletionTime = testCompletion.CompletionTime,
             History = testCompletion.Answers
             .GroupBy(x => x.QuestionId)
