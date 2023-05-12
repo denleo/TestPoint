@@ -5,5 +5,5 @@ namespace TestPoint.Application.Interfaces.Persistence.Repositories;
 
 public interface IUserRepository : IRepository<User, Guid>
 {
-    Task<List<UserInformationShort>> FilterUsersByFIO(string filter);
+    Task<List<UserInformation>> FilterUsersByFIO(string filter);
 }
