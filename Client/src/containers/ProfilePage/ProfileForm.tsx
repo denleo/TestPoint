@@ -1,9 +1,10 @@
 import React, { useState, useCallback, useRef, FC } from "react";
 
 import EditIcon from "@mui/icons-material/Edit";
-import { Box, BoxProps, Collapse, Grid, styled, Typography, IconButton } from "@mui/material";
+import { Box, BoxProps, Collapse, Grid, styled, Typography, IconButton, alpha } from "@mui/material";
 import { Form, useFormikContext } from "formik";
 
+import { WHITE } from "@/common/theme/colors";
 import { useNotificationStore, NotificationType } from "@/components/NotificationProvider/useNotificationStore";
 import { TextFieldFormik } from "@/components/TextFieldFormik";
 import { useDispatch } from "@/redux/hooks";
@@ -129,7 +130,12 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
           </ImageBox>
         </Grid>
         <Grid item xs>
-          <Grid container direction="column" spacing={1}>
+          <Grid
+            container
+            direction="column"
+            spacing={1}
+            sx={{ backgroundColor: alpha(WHITE, 0.82), borderRadius: 2, p: 2 }}
+          >
             <Grid item sx={{ pb: 3 }}>
               <TextFieldFormik
                 fullWidth
