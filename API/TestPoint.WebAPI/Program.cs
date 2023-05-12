@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -8,10 +7,9 @@ using System.Text;
 using TestPoint.Application;
 using TestPoint.Cache;
 using TestPoint.DAL;
-using TestPoint.DAL.Contexts;
-using TestPoint.Domain;
 using TestPoint.EmailService;
 using TestPoint.JwtService;
+using TestPoint.WebAPI.Database;
 using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -81,6 +79,13 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+app.MigrateDatabase(); // Code-first DB creation
+
+if (app.Environment.IsDevelopment())
+{
+    app.PopulateTestData();
+}
+
 #region HTTP request pipeline
 
 if (app.Environment.IsDevelopment())
@@ -101,40 +106,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-InitializeDatabase(); // Code-first DB creation
-
 app.Run();
 
 #endregion
-
-
-void InitializeDatabase()
-{
-    using (var serviceScope = app.Services.CreateScope())
-    {
-        var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        //context.Database.EnsureDeleted();
-        //context.Database.EnsureCreated();
-        context.Database.Migrate();
-
-        var defaultAdmin = new Administrator // [makima, makima12345]
-        {
-            Login = new SystemLogin
-            {
-                LoginType = LoginType.Administrator,
-                Username = "makima",
-                PasswordHash = "i7phShT1JsaP7dLz05tc1FzmSiixX5pIuexRMQlrerdq2qtiVIMEQNnHfJ8U+CUlRHouGETIuUL+BYMD4hGOsw==OxoaYEtzmx3EyLg3Oex6qzZzMeKgPcUJLNQViqKphZs=",
-                PasswordReseted = false,
-                RegistryDate = DateTime.MinValue
-            }
-        };
-
-        var adminsSet = context.Set<Administrator>();
-        if (adminsSet.Include(x => x.Login).FirstOrDefault(x => x.Login.Username == defaultAdmin.Login.Username && x.Login.LoginType == LoginType.Administrator) is null)
-        {
-            context.Set<Administrator>().Add(defaultAdmin);
-            context.SaveChanges();
-        }
-    }
-}
