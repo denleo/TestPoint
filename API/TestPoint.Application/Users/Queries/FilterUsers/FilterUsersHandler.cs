@@ -3,7 +3,7 @@ using TestPoint.Application.Interfaces.Persistence;
 
 namespace TestPoint.Application.Users.Queries.FilterUsers;
 
-public class FilterUsersHandler : IRequestHandler<FilterUsersQuery, List<UserInformationShort>>
+public class FilterUsersHandler : IRequestHandler<FilterUsersQuery, List<UserInformation>>
 {
     private readonly IUnitOfWork _uow;
 
@@ -12,11 +12,11 @@ public class FilterUsersHandler : IRequestHandler<FilterUsersQuery, List<UserInf
         _uow = unitOfWork;
     }
 
-    public async Task<List<UserInformationShort>> Handle(FilterUsersQuery request, CancellationToken cancellationToken)
+    public async Task<List<UserInformation>> Handle(FilterUsersQuery request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(request.FilterParameter))
         {
-            return new List<UserInformationShort>(0);
+            return new List<UserInformation>(0);
         }
 
         var users = await _uow.UserRepository.FilterUsersByFIO(request.FilterParameter);

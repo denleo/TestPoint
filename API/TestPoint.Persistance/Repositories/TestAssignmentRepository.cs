@@ -21,6 +21,7 @@ public class TestAssignmentRepository : RepositoryBase<TestAssignment, Guid>, IT
                     x.User.FirstName,
                     x.User.LastName,
                     x.User.Email,
+                    x.User.Avatar != null ? Convert.ToBase64String(x.User.Avatar) : null,
                     x.TestCompletion != null)
             )
             .ToListAsync();
