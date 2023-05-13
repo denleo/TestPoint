@@ -33,12 +33,17 @@ public class GetTestByIdHandler : IRequestHandler<GetTestByIdQuery, Test>
                 throw new ActionNotAllowedException($"User is not assigned to the test");
             }
 
-            if (assignment.TestCompletion is null)
+            if (assignment.TestCompletion is null) // remove answers if the user has not passed the test yet
             {
                 testData.Questions
                     .SelectMany(x => x.Answers)
                     .ToList()
                     .ForEach(x => x.IsCorrect = null);
+
+                testData.Questions
+                    .Where(x => x.QuestionType == QuestionType.TextSubstitution)
+                    .ToList()
+                    .ForEach(x => x.Answers = null);
             }
         }
 
