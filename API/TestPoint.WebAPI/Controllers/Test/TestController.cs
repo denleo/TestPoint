@@ -13,8 +13,10 @@ using TestPoint.Application.Tests.Queries.GetTestById;
 using TestPoint.Application.Tests.Queries.GetTestResult;
 using TestPoint.Application.Tests.Queries.GetTestsByAdmin;
 using TestPoint.Application.Tests.Queries.GetTestsByUser;
+using TestPoint.Application.Tests.Queries.GetTestStatistics;
 using TestPoint.Application.Tests.Queries.GetUsersOnTest;
 using TestPoint.Domain;
+using TestPoint.WebAPI.Attributes;
 using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 using TestPoint.WebAPI.Models.Test;
 using TestPoint.WebAPI.Models.TestCompletion;
@@ -243,5 +245,26 @@ public class TestController : BaseController
                 Answers = x.Select(x => x.AnswerText).ToArray()
             }).ToArray()
         };
+    }
+
+    [RedisCache(300)]
+    [SwaggerOperation(Summary = "Get test statistics (role:admin) !cached:5min")]
+    [HttpGet("tests/{testId:guid}/statistics"), Authorize(Roles = "Administrator")]
+    public async Task<ActionResult<TestStatistics>> GetTestResult([FromRoute] Guid testId)
+    {
+        var getTestStatisticsQuery = new GetTestStatisticsQuery()
+        {
+            TestId = testId
+        };
+
+        var statistics = await Mediator.Send(getTestStatisticsQuery);
+        if (statistics is null)
+        {
+            return NoContent();
+        }
+        else
+        {
+            return statistics;
+        }
     }
 }
