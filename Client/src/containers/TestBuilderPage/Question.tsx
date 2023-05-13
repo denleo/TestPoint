@@ -1,5 +1,6 @@
 import React, { FC, useCallback, MouseEvent } from "react";
 
+import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
@@ -31,10 +32,11 @@ interface Props {
   question: TestQuestion;
   expanded: string | false;
   onEdit: (question: TestQuestion) => void;
+  onDelete: (question: TestQuestion) => void;
   setExpanded: (panel: string | false) => void;
 }
 
-export const Question: FC<Props> = ({ question, expanded, setExpanded, onEdit }) => {
+export const Question: FC<Props> = ({ question, expanded, setExpanded, onEdit, onDelete }) => {
   const handleChangeExpanded = (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
     setExpanded(newExpanded ? panel : false);
   };
@@ -47,6 +49,16 @@ export const Question: FC<Props> = ({ question, expanded, setExpanded, onEdit })
     },
     [onEdit, question]
   );
+
+  const handleDeleteQuestion = useCallback(
+    (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onDelete(question);
+    },
+    [onEdit, question]
+  );
+
   return (
     <>
       <IconButton>
@@ -64,6 +76,9 @@ export const Question: FC<Props> = ({ question, expanded, setExpanded, onEdit })
           <Typography>{question.questionText}</Typography>
           <IconButton sx={{ ml: "auto", width: 50, height: 50 }} onClick={handleEditQuestion}>
             <EditIcon />
+          </IconButton>
+          <IconButton sx={{ width: 50, height: 50 }} onClick={handleDeleteQuestion}>
+            <DeleteIcon />
           </IconButton>
         </AccordionSummary>
         <AccordionDetails aria-controls={`${question.id}-content`} id={`${question.id}-header`} sx={{ pl: "82px" }}>

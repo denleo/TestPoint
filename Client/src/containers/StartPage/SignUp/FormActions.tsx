@@ -1,8 +1,10 @@
 import React, { FC, useCallback } from "react";
 
 import { Box, Button } from "@mui/material";
+import { AxiosError } from "axios";
 import { useFormikContext } from "formik";
 
+import { useNotificationStore, NotificationType } from "@/components/NotificationProvider/useNotificationStore";
 import { useDispatch } from "@/redux/hooks";
 import { AccountActions } from "@/redux/userAccount/actions";
 
@@ -19,15 +21,16 @@ interface Props {
 export const FormActions: FC<Props> = ({ onBack, onNext, disabled, isSubmit = false }) => {
   const { values } = useFormikContext<SignUpUserFormValues>();
   const dispatch = useDispatch();
+  const notify = useNotificationStore((store) => store.notify);
   const setPageStep = useStartPageStore((state) => state.setPageStep);
 
   const submitForm = useCallback(async () => {
-    try {
-      await dispatch(AccountActions.registerUser(values));
-      setPageStep(START_PAGE_STEPS.LOGIN);
-    } catch (error) {
-      console.log(error);
+    const resultAction = await dispatch(AccountActions.registerUser(values));
+    if ("error" in resultAction) {
+      notify(resultAction.error.message ?? "Failed to create user", NotificationType.Error);
     }
+
+    setPageStep(START_PAGE_STEPS.LOGIN);
   }, [values]);
 
   return (

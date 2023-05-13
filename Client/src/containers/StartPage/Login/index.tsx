@@ -132,7 +132,7 @@ export const Login = () => {
             } as LoginUserFormValues
           }
           validationSchema={yup.object().shape({
-            username: yup.string().min(3, "Minimum 3 symbols").max(255, "Maximum 255 symbols").required("Required"),
+            username: yup.string().min(5, "Minimum 5 symbols").max(255, "Maximum 255 symbols").required("Required"),
             password: yup.string().min(10, "At least 10 characters").required("Required"),
             rememberMe: yup.boolean(),
           })}

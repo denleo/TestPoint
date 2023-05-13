@@ -40,7 +40,7 @@ export const useNotificationStore = create(
         });
         setTimeout(() => {
           set({ notifications: get().notifications.filter((item) => item.id !== id) });
-        }, 2000);
+        }, 5000);
       },
     })
   )

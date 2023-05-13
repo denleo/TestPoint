@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 
 import { ArrowBack } from "@mui/icons-material";
 import { alpha, Box, Button, Grid, styled, Typography, useTheme } from "@mui/material";
+import { AxiosError } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
@@ -16,7 +17,7 @@ import { QuestionList } from "./QuestionsList";
 import { useResultsPageStore } from "./useResultsPageStore";
 
 const BackButton = styled(Button)(({ theme }) => ({
-  position: "absolute",
+  position: "fixed",
   left: 0,
   bottom: 0,
   marginLeft: theme.spacing(1),
@@ -46,7 +47,7 @@ const ResultsPage = () => {
         setTestData(fetchTestData);
         setTestResult(fetchTestResult);
       } catch (error) {
-        notify("Failed to load test", NotificationType.Error);
+        notify(error instanceof AxiosError ? error.message : "Failed to load test", NotificationType.Error);
         navigate(from);
       }
     };

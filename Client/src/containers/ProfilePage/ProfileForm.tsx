@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useRef, FC } from "react";
 
 import EditIcon from "@mui/icons-material/Edit";
-import { Box, BoxProps, Collapse, Grid, styled, Typography, IconButton, alpha } from "@mui/material";
+import { Box, BoxProps, Collapse, Grid, styled, Typography, IconButton, alpha, Tooltip } from "@mui/material";
 import { Form, useFormikContext } from "formik";
 
-import { WHITE } from "@/common/theme/colors";
+import { BLACK, WHITE } from "@/common/theme/colors";
 import { useNotificationStore, NotificationType } from "@/components/NotificationProvider/useNotificationStore";
 import { TextFieldFormik } from "@/components/TextFieldFormik";
 import { useDispatch } from "@/redux/hooks";
@@ -13,6 +13,7 @@ import { AccountActions } from "../../redux/userAccount/actions";
 import { useSidebarStore } from "../layout/useLayoutStore";
 
 import { defaultPassword, ProfileFormValues } from "./common";
+import { EmailConfirmedCheck } from "./EmailConfirmedCheck";
 import ProfileFormActions from "./ProfileFormActions";
 
 const ImageBox = styled(Box, {
@@ -82,14 +83,21 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
   const handleImageInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
+      const fileName = file.name;
+      const fileExtension = fileName.split(".").pop()?.toLowerCase();
+
+      if (!fileExtension || fileExtension !== "png") {
+        notify("Only png format for avatar is allowed", NotificationType.Error);
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = async () => {
         const base64Data = (reader.result as string).split(",")[1];
         setFieldValue("image", reader.result as string);
-        const resultAction = await dispatch(AccountActions.changeAvatar(base64Data));
-        if ("abort" in resultAction || "error" in resultAction) {
-          console.log(resultAction);
-          notify("Failed to update avatar", NotificationType.Error);
+        const resultAction = await dispatch(AccountActions.changeAvatar(`"${base64Data}"`));
+        if ("error" in resultAction) {
+          notify(resultAction.error.message ?? "Failed to update avatar", NotificationType.Error);
         } else {
           await dispatch(AccountActions.getUserData());
         }
@@ -105,8 +113,8 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
         oldPassword,
       })
     );
-    if ("abort" in resultAction || "error" in resultAction) {
-      notify("Failed to update password", NotificationType.Error);
+    if ("error" in resultAction) {
+      notify(resultAction.error.message ?? "Failed to update password", NotificationType.Error);
     } else {
       notify("Password has been changed", NotificationType.Success);
     }
@@ -117,13 +125,17 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
   return (
     <Form id="profile">
       <Grid container sx={{ maxWidth: 900 }} spacing={4} pb={3}>
-        <Grid item xs={12} mb={4} sx={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
+        <Grid item xs={12} mb={4} sx={{ display: "flex", alignItems: "flex-end", justifyContent: "space-around" }}>
           <Typography variant="h2">Personal Information</Typography>
           <Typography variant="caption">{`account was created on ${creationDate} 🚀`}</Typography>
         </Grid>
         <Grid item xs={12} md={isMinimized ? 12 : 6} lg={6}>
           <ImageBox width={250} height={250} image={avatar} ml="auto" mr="auto">
-            <ButtonChangeImage size="large" onClick={handleChangeImageClick}>
+            <ButtonChangeImage
+              size="large"
+              onClick={handleChangeImageClick}
+              sx={{ color: WHITE, backgroundColor: alpha(BLACK, 0.32) }}
+            >
               <EditIcon />
             </ButtonChangeImage>
             <input type="file" hidden ref={imageInputRef} onChange={handleImageInputChange} />
@@ -194,7 +206,7 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
                 />
               </Box>
             </Grid>
-            <Grid item>
+            <Grid item sx={{ position: "relative" }}>
               <TextFieldFormik
                 fullWidth
                 disabled={!isEdit}
@@ -206,6 +218,7 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
                   minHeight: 71,
                 }}
               />
+              <EmailConfirmedCheck />
             </Grid>
             <Grid item>
               <TextFieldFormik

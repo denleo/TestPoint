@@ -39,7 +39,11 @@ export const AccountActions = {
   }),
 
   changeAvatar: createAsyncThunk("user/avatar", async (avatar: string, thunkAPI) => {
-    const response = await httpAction("session/user/avatar", avatar, "PATCH");
+    const response = await httpAction("session/user/avatar", avatar, "PATCH", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     return response;
   }),
 

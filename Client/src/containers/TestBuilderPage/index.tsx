@@ -16,6 +16,7 @@ import {
   TextField,
   useTheme,
 } from "@mui/material";
+import { AxiosError } from "axios";
 
 import { httpAction } from "@/api/httpAction";
 import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
@@ -139,10 +140,14 @@ const TestBuilderPage = () => {
       setTest(null);
       setStart(true);
       notify("Test has been created.", NotificationType.Success);
-    } catch {
-      notify("Failed to create test.", NotificationType.Error);
+    } catch (error) {
+      notify(error instanceof AxiosError ? error.message : "Failed to create test.", NotificationType.Error);
     }
   }, [test, testDifficulty, testName, questions, notify]);
+
+  const deleteQuestion = useCallback((question: TestQuestion) => {
+    setQuestions((questions) => questions.filter((item) => item.id !== question.id));
+  }, []);
 
   return start ? (
     <StartScreen onCreate={createTest} />
@@ -221,6 +226,7 @@ const TestBuilderPage = () => {
                             expanded={expanded}
                             question={question}
                             onEdit={setEditQuestion}
+                            onDelete={deleteQuestion}
                           />
                         </QuestionBlock>
                       )}

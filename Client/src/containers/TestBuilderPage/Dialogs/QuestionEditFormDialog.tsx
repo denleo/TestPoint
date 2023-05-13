@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogTitle, Grid, IconButton, Typography, useTh
 import { Form, Formik } from "formik";
 
 import { TextFieldFormik } from "@/components/TextFieldFormik";
-import { QuestionType, TestQuestion } from "@/redux/adminData/state";
+import { QuestionType, QuestionVariant, TestQuestion } from "@/redux/adminData/state";
 
 import { AnswerRow } from "./AnswerRow";
 import { EditDialogActions, QuestionEditFormValues } from "./EditDialogActions";
@@ -74,6 +74,9 @@ export const QuestionEditFormDialog: FC<Props> = ({ question, onClose, onSubmit 
                       color="secondary"
                       variant="outlined"
                       value={values.answers[0].answerText}
+                      onChange={(text) =>
+                        setFieldValue("answers", [{ ...values.answers[0], answerText: text } as QuestionVariant])
+                      }
                       sx={{
                         minHeight: 71,
                       }}

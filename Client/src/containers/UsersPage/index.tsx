@@ -4,6 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import GroupIcon from "@mui/icons-material/Group";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import { Box, Divider, List, ListItem, styled, Typography, ListItemButton, TextField, IconButton } from "@mui/material";
+import { AxiosError } from "axios";
 
 import { httpAction } from "@/api/httpAction";
 import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
@@ -64,8 +65,9 @@ const UsersPage = () => {
     [expandedGroup]
   );
 
-  const handleCloseGroup = useCallback(() => {
+  const handleCloseGroup = useCallback(async () => {
     setExpandedGroup(false);
+    await fetchUserGroups();
   }, []);
 
   const deleteGroup = useCallback(async () => {
@@ -89,8 +91,9 @@ const UsersPage = () => {
       const newUserGroup = (await httpAction("usergroups", { groupName })) as UserGroup;
       await fetchUserGroups();
       setExpandedGroup(newUserGroup);
-    } catch {
-      notify("Failed to create user group!", NotificationType.Error);
+      setGroupName("");
+    } catch (error) {
+      notify(error instanceof AxiosError ? error.message : "Failed to create user group!", NotificationType.Error);
     }
   }, [groupName]);
 

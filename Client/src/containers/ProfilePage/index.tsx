@@ -9,8 +9,7 @@ import { userDataSelector } from "@/redux/selectors";
 import emptyAccountImage from "@/shared/emptyAvatar.png";
 
 import { validationSchema, validateForm } from "@api/validation";
-
-import { AccountActions } from "../../redux/userAccount/actions";
+import { AccountActions } from "@redux/userAccount/actions";
 
 import { ProfileFormValues } from "./common";
 import ProfileForm from "./ProfileForm";
@@ -21,7 +20,7 @@ const ProfilePage = () => {
   const notify = useNotificationStore((store) => store.notify);
 
   if (!data) return null;
-  const { registryDate, email, firstName, lastName, username, avatar } = data;
+  const { registryDate, email, firstName, lastName, username, base64Avatar } = data;
 
   const creationDateString = useMemo(() => {
     const day = registryDate.getDay();
@@ -37,7 +36,7 @@ const ProfilePage = () => {
       firstName,
       lastName,
       username,
-      avatar,
+      avatar: base64Avatar ? `data:image/png;base64,${base64Avatar}` : emptyAccountImage,
       oldPassword: "",
       password: "",
       repeatPassword: "",
@@ -48,8 +47,8 @@ const ProfilePage = () => {
   const submitForm = useCallback(
     async (values: ProfileFormValues) => {
       const resultAction = await dispatch(AccountActions.changeProfile({ ...values }));
-      if ("abort" in resultAction || "error" in resultAction) {
-        notify("Failed to update profile", NotificationType.Error);
+      if ("error" in resultAction) {
+        notify(resultAction.error.message ?? "Failed to update profile", NotificationType.Error);
       } else {
         notify("Profile has been updated", NotificationType.Success);
         await dispatch(AccountActions.getUserData());
@@ -68,7 +67,10 @@ const ProfilePage = () => {
         validationSchema={validationSchema}
         validate={validateForm}
       >
-        <ProfileForm creationDate={creationDateString} avatar={avatar ?? emptyAccountImage} />
+        <ProfileForm
+          creationDate={creationDateString}
+          avatar={base64Avatar ? `data:image/png;base64,${base64Avatar}` : emptyAccountImage}
+        />
       </Formik>
     </Box>
   );

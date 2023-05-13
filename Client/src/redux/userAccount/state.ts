@@ -10,7 +10,7 @@ export interface UserData {
   firstName: string;
   lastName: string;
   email: string;
-  avatar?: string;
+  base64Avatar?: string;
   registryDate: Date;
 }
 

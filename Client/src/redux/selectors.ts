@@ -16,4 +16,10 @@ export const userAccountNameSelector = (state: { userAccount: AccountUserState }
 
 export const adminNameSelector = (state: { userAccount: AccountUserState }) => state.userAccount.adminData?.username;
 
+export const userAvatarSelector = (state: { userAccount: AccountUserState }) =>
+  state.userAccount.userData?.base64Avatar;
+
 export const isAdminSelector = (state: { userAccount: AccountUserState }) => state.userAccount.isAdmin;
+
+export const isEmailConfirmedSelector = (state: { userAccount: AccountUserState }) =>
+  state.userAccount.userData?.emailConfirmed;

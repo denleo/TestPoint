@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { FC, useState, useCallback, SyntheticEvent, Fragment, useEffect } from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
@@ -19,6 +20,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { AxiosError } from "axios";
 
 import { httpAction } from "@/api/httpAction";
 import { TEST_USERS, UserGroup, UserInfo, USER_TEST_GROUPS } from "@/containers/UsersPage/data";
@@ -50,6 +52,11 @@ export const AssignDialog: FC<Props> = ({ onClose, testId }) => {
   }, []);
 
   const handleSearchUser = useCallback(async (search: string) => {
+    if (!search) {
+      setUsers([]);
+      return;
+    }
+
     try {
       const response = await httpAction(`users/?filter=${search}`);
       setUsers((response ?? []) as UserInfo[]);
@@ -71,7 +78,7 @@ export const AssignDialog: FC<Props> = ({ onClose, testId }) => {
       try {
         await httpAction(`tests/${testId}/groups/${id}`, undefined, "POST");
       } catch (error) {
-        notify("Failed to assign group");
+        notify(error instanceof AxiosError ? error.message : "Failed to assign group");
       }
     },
     [testId]
@@ -82,7 +89,7 @@ export const AssignDialog: FC<Props> = ({ onClose, testId }) => {
       try {
         await httpAction(`tests/${testId}/users/${id}`, undefined, "POST");
       } catch (error) {
-        notify("Failed to assign user");
+        notify(error instanceof AxiosError ? error.message : "Failed to assign user");
       }
     },
     [testId]
@@ -105,49 +112,48 @@ export const AssignDialog: FC<Props> = ({ onClose, testId }) => {
         <IconButton aria-label="close" onClick={onClose} sx={{ right: 8, top: 8, position: "absolute" }}>
           <CloseIcon />
         </IconButton>
+        <Tabs value={selectedTab} onChange={handleChangeTab} aria-label="dialog tabs" sx={{ mb: 1, mt: 1 }}>
+          <Tab label="Groups" />
+          <Tab label="Users" sx={{ ml: 1 }} />
+        </Tabs>
+        {isUsers && <SearchField fullWidth onChange={(e) => handleSearchUser(e.target.value)} />}
       </DialogTitle>
       <DialogContent sx={{ "&:first-of-type": { p: theme.spacing(0, 2) } }}>
-        <Box sx={{}}>
-          <Tabs value={selectedTab} onChange={handleChangeTab} aria-label="dialog tabs" sx={{ mb: 1 }}>
-            <Tab label="Groups" />
-            <Tab label="Users" sx={{ ml: 1 }} />
-          </Tabs>
-        </Box>
         {isUsers ? (
-          <>
-            <SearchField fullWidth onChange={(e) => handleSearchUser(e.target.value)} />
-            {!users.length ? (
-              <Box height="60%" display="flex" alignContent="center" justifyContent="center" flexDirection="column">
-                <PersonSearchIcon color="disabled" sx={{ alignSelf: "center", height: 70, width: 70, mb: 3 }} />
-                <Typography align="center">Enter the last name of an existing user to search</Typography>
-              </Box>
-            ) : (
-              <List>
-                {users.map(({ base64Avatar: avatar, firstName, lastName, email, id }) => (
-                  <ListItem
-                    disablePadding
-                    key={id}
-                    sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, mb: 1, display: "flex" }}
-                  >
-                    <ListItemAvatar>
-                      <Avatar alt={[firstName, lastName].join("-")} src={emptyAccountImage} />
-                    </ListItemAvatar>
-                    <Box flex={1}>
-                      <Typography>
-                        {firstName}
-                        &nbsp;
-                        {lastName}
-                      </Typography>
-                      <Typography variant="caption">{email}</Typography>
-                    </Box>
-                    <Button variant="contained" color="primary" onClick={() => assignUserToTest(id)}>
-                      Assign
-                    </Button>
-                  </ListItem>
-                ))}
-              </List>
-            )}
-          </>
+          !users.length ? (
+            <Box height="60%" display="flex" alignContent="center" justifyContent="center" flexDirection="column">
+              <PersonSearchIcon color="disabled" sx={{ alignSelf: "center", height: 70, width: 70, mb: 3 }} />
+              <Typography align="center">Enter the last name of an existing user to search</Typography>
+            </Box>
+          ) : (
+            <List>
+              {users.map(({ base64Avatar, firstName, lastName, email, id }) => (
+                <ListItem
+                  disablePadding
+                  key={id}
+                  sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, mb: 1, display: "flex" }}
+                >
+                  <ListItemAvatar>
+                    <Avatar
+                      alt={[firstName, lastName].join("-")}
+                      src={base64Avatar ? `data:image/png;base64,${base64Avatar}` : emptyAccountImage}
+                    />
+                  </ListItemAvatar>
+                  <Box flex={1}>
+                    <Typography>
+                      {firstName}
+                      &nbsp;
+                      {lastName}
+                    </Typography>
+                    <Typography variant="caption">{email}</Typography>
+                  </Box>
+                  <Button variant="contained" color="primary" onClick={() => assignUserToTest(id)}>
+                    Assign
+                  </Button>
+                </ListItem>
+              ))}
+            </List>
+          )
         ) : (
           <List>
             {!!groups.length &&

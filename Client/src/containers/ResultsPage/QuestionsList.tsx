@@ -2,14 +2,13 @@
 import React, { FC, useState, useMemo } from "react";
 
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Checkbox,
   List,
   ListItem,
@@ -87,7 +86,7 @@ export const QuestionList: FC<Props> = ({ questions, history }) => {
                 {isCorrect ? <DoneOutlineIcon color="success" sx={{ mr: 1 }} /> : <CancelOutlinedIcon color="error" />}
                 <Typography
                   noWrap={expanded !== id}
-                  sx={{ width: expanded !== id ? questionLength : undefined, textOverflow: "ellipsis" }}
+                  sx={{ width: expanded !== id ? questionLength : undefined, textOverflow: "ellipsis", ml: 1 }}
                 >
                   {questionText}
                 </Typography>
@@ -104,7 +103,7 @@ export const QuestionList: FC<Props> = ({ questions, history }) => {
                         <Typography variant="h6" display="inline-flex">
                           Your answer: &nbsp;
                         </Typography>
-                        <Typography> {answers[0].answerText}</Typography>
+                        <Typography> {userAnswer[0]}</Typography>
                       </>
                     )}
                   </>
@@ -112,21 +111,21 @@ export const QuestionList: FC<Props> = ({ questions, history }) => {
                   answers.map((variant) => {
                     const isUserCorrect = userAnswer.includes(variant.answerText);
                     return (
-                      <div key={variant.id}>
+                      <Box
+                        key={variant.id}
+                        sx={{
+                          backgroundColor: variant.isCorrect ? theme.palette.success.light : undefined,
+                          borderRadius: 1,
+                        }}
+                      >
                         {questionType === QuestionType.SingleOption && (
-                          <Radio checked={variant.isCorrect || isUserCorrect} key={variant.id} disabled />
+                          <Radio checked={isUserCorrect} key={variant.id} disabled />
                         )}
                         {questionType === QuestionType.MultipleOptions && (
-                          <Checkbox checked={variant.isCorrect} key={variant.id} disabled />
+                          <Checkbox checked={isUserCorrect} key={variant.id} disabled />
                         )}
                         <Typography display="inline-flex">{variant.answerText}</Typography>
-                        {(variant.isCorrect || isUserCorrect) &&
-                          (variant.isCorrect ? (
-                            <CheckRoundedIcon fontSize="small" color="success" />
-                          ) : (
-                            <CloseRoundedIcon fontSize="small" color="error" />
-                          ))}
-                      </div>
+                      </Box>
                     );
                   })
                 )}

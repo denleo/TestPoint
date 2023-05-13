@@ -23,8 +23,8 @@ export const httpAction = async <T = any>(
   axiosOptions: AxiosRequestConfig = {}
 ) => {
   const jwtToken = getUserTokenFromStorage();
-  console.log(jwtToken);
   // if (!jwtToken) throw Error("Not logged in");
+  const headers = { ...axiosConfig(jwtToken).headers, ...axiosOptions.headers };
   try {
     const response = await instance.request<T>({
       method,
@@ -32,16 +32,17 @@ export const httpAction = async <T = any>(
       data,
       ...axiosConfig(jwtToken),
       ...axiosOptions,
+      ...{ headers },
     });
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
       const err =
-        error.response?.data?.response?.errors?.message ||
+        error.response?.data?.error ||
+        // error.response?.errors?.message ||
         error.response?.data?.message ||
         error.response?.data?.reason ||
         error.message;
-      console.error(err);
       throw new Error(err);
     } else {
       throw error;

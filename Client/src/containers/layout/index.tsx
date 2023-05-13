@@ -18,6 +18,33 @@ interface Props extends ContainerProps {
   footer?: NonNullable<ReactNode>;
 }
 
+const Background = styled(Box)(({ theme }) => ({
+  minHeight: "100vh",
+  "&::before": {
+    content: "''",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    background: "linear-gradient(180deg, #C1C1C1 0%, #B8F2FF 100%)",
+    zIndex: -2,
+  },
+  "&::after": {
+    content: "''",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundImage: `url(${backImage})`,
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "bottom center",
+    backgroundSize: "830px 75%",
+    zIndex: -1,
+  },
+}));
+
 const MainContainer = styled("main", {
   shouldForwardProp: (prop) => prop !== "isMinimized",
 })<{
@@ -56,16 +83,7 @@ export const LayoutContainer: FC<Props> = ({ children, footer, ...props }) => {
 
   return (
     <>
-      <Box
-        sx={{
-          minHeight: "100vh",
-          background: "linear-gradient(180deg, #C1C1C1 0%, #B8F2FF 100%)",
-          backgroundImage: `url(${backImage})`,
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "bottom center",
-          backgroundSize: "830px 75%",
-        }}
-      >
+      <Background>
         <SideBar />
         <Header />
         <Divider />
@@ -75,7 +93,7 @@ export const LayoutContainer: FC<Props> = ({ children, footer, ...props }) => {
           </MainContainer>
         )}
         {footer}
-      </Box>
+      </Background>
       <div id="footer" />
     </>
   );

@@ -2,8 +2,10 @@ import React, { FC } from "react";
 
 import BackupIcon from "@mui/icons-material/Backup";
 import ConstructionIcon from "@mui/icons-material/Construction";
-import { styled, Typography, Box, Button } from "@mui/material";
+import { styled, Typography, Box, Button, alpha } from "@mui/material";
 import Dropzone from "react-dropzone";
+
+import { WHITE } from "@/common/theme/colors";
 
 import { useBreakpoint } from "@api/hooks/useBreakPoint";
 
@@ -29,6 +31,7 @@ const SelectionBlock = styled(Box)(({ theme }) => ({
   alignItems: "center",
   flexDirection: "column",
   gap: theme.spacing(2),
+  backgroundColor: alpha(WHITE, 0.82),
 }));
 
 const DropBlock = styled("div")(({ theme }) => ({

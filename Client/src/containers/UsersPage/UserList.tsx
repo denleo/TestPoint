@@ -32,13 +32,13 @@ export const UserList: FC<Props> = ({ users, onClickUser, isGroup = false, showI
 
   return (
     <List>
-      {users.map(({ base64Avatar: avatar, firstName, lastName, email, id }) => (
+      {users.map(({ base64Avatar, firstName, lastName, email, id }) => (
         <ListItem disablePadding key={id}>
           <ListItemButton onClick={() => onClickUser(id)}>
             <ListItemAvatar>
               <Avatar
                 alt={[firstName, lastName].join("-")}
-                src={isGroup ? avatar ?? emptyAccountImage : emptyAccountImage}
+                src={base64Avatar ? `data:image/png;base64,${base64Avatar}` : emptyAccountImage}
               />
             </ListItemAvatar>
             <Box>

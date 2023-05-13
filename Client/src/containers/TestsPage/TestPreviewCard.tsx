@@ -6,6 +6,7 @@ import EqualizerIcon from "@mui/icons-material/Equalizer";
 import HandymanIcon from "@mui/icons-material/Handyman";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { Button, Grid, Paper, styled, Typography } from "@mui/material";
+import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 
 import { useBreakpoint } from "@/api/hooks/useBreakPoint";
@@ -72,7 +73,10 @@ export const TestPreviewCard: FC<Props> = ({ testData }) => {
       navigate("/test");
       setTest(test as TestData);
     } catch (error) {
-      notify("An error occurred while loading test", NotificationType.Error);
+      notify(
+        error instanceof AxiosError ? error.message : "An error occurred while loading test",
+        NotificationType.Error
+      );
     }
   }, [testData]);
 

@@ -4,6 +4,7 @@ import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRound
 import DoneOutlineRoundedIcon from "@mui/icons-material/DoneOutlineRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import { Button, IconButton, styled, Typography } from "@mui/material";
+import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 
 import { httpAction } from "@/api/httpAction";
@@ -133,24 +134,12 @@ const TestComponentPage = () => {
   }, [questionIndex]);
 
   const finishTest = useCallback(async () => {
-    // let rightAnswers = 0;
-    // const questionsCount = testData.questions.length;
-
     const history = testData.questions.map((question, index) => {
-      // if (question.questionType === QuestionType.TextSubstitution) {
-      //   const answer = selectedAnswers.get(index) as string;
-      //   if (question.answers[0].answerText === answer) rightAnswers += 1;
-
-      //   return { questionId: question.id, answers: [answer] };
-      // }
-
       const answersIds = selectedAnswers.get(index) as string[];
-      // const userAnswers = question.answers.map(
-      //   ({ id, isCorrect }) => (isCorrect && answersIds.includes(id)) || (!isCorrect && !answersIds.includes(id))
-      // );
-      // if (!userAnswers.includes(false)) rightAnswers += 1;
-      const answers = question.answers.filter(({ id }) => answersIds.includes(id)).map(({ answerText }) => answerText);
-
+      const answers =
+        question.questionType === QuestionType.TextSubstitution
+          ? [answersIds]
+          : question.answers.filter(({ id }) => answersIds.includes(id)).map(({ answerText }) => answerText);
       return { questionId: question.id, answers };
     });
     try {
@@ -162,8 +151,8 @@ const TestComponentPage = () => {
       notify("You have successfully completed the test.", NotificationType.Success);
       navigate("/results");
       setTestResult(testData.id);
-    } catch {
-      notify("Failed to submit test.", NotificationType.Error);
+    } catch (error) {
+      notify(error instanceof AxiosError ? error.message : "Failed to submit test.", NotificationType.Error);
     }
   }, [selectedAnswers, testData]);
 

@@ -35,8 +35,8 @@ const ProfileFormActions: FC<Props> = ({ isEdit, toggleEditMode, password = fals
 
   const submitForm = useCallback(async () => {
     const resultAction = await dispatch(AccountActions.changeProfile({ ...values }));
-    if ("abort" in resultAction || "error" in resultAction) {
-      notify("Failed to update profile", NotificationType.Error);
+    if ("error" in resultAction) {
+      notify(resultAction.error.message ?? "Failed to update profile", NotificationType.Error);
     } else {
       notify("Profile has been updated", NotificationType.Success);
       await dispatch(AccountActions.getUserData());

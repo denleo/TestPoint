@@ -1,7 +1,7 @@
 import { UserData } from "@/redux/userAccount/state";
 
 export const MOCK_USER: UserData = {
-  avatar: undefined,
+  base64Avatar: undefined,
   email: "testuser@gmail.com",
   emailConfirmed: true,
   registryDate: new Date(2023, 4, 25),
