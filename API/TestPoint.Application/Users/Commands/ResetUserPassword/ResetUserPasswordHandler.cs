@@ -48,9 +48,7 @@ public class ResetUserPasswordHandler : IRequestHandler<ResetUserPasswordCommand
         {
             Reciever = user.Email,
             Title = "Password Reset",
-            Body = $"<h3><b>Hello, {user.FirstName}</b></h3>" +
-                   $"<div>Here is your new temporary password to enter the platform: <b>{tempPassword}</b></div>" +
-                   "<div><b>Test Point System</b>, do not reply on this message.</div>"
+            Body = EmailConstants.GetResetedPasswordResponse(user.FirstName, tempPassword)
         };
 
         _emailService.SendEmail(message);

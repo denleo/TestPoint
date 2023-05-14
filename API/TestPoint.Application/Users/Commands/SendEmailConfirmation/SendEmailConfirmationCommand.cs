@@ -5,5 +5,4 @@ namespace TestPoint.Application.Users.Commands.SendEmailConfirmation;
 public class SendEmailConfirmationCommand : IRequest
 {
     public Guid UserId { get; set; }
-    public string EmailConfirmUrl { get; set; }
 }
