@@ -59,8 +59,12 @@ const UsersPage = () => {
   const addUserToGroup = useCallback(
     async (id: string) => {
       if (!expandedGroup) return;
-      await httpAction(`usergroups/${expandedGroup.id}/users/${id}`, undefined, "POST");
-      await fetchGroupUsers();
+      try {
+        await httpAction(`usergroups/${expandedGroup.id}/users/${id}`, undefined, "POST");
+        await fetchGroupUsers();
+      } catch (error) {
+        notify(error instanceof AxiosError ? error.message : "Failed to add user for group");
+      }
     },
     [expandedGroup]
   );

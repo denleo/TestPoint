@@ -39,9 +39,10 @@ const ButtonChangeImage = styled(IconButton)(() => ({
 interface Props {
   creationDate: string;
   avatar: string;
+  fetchData: () => void;
 }
 
-const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
+const ProfileForm: FC<Props> = ({ creationDate, avatar, fetchData }) => {
   const [isEdit, setEdit] = useState(false);
   const [isEditPassword, setEditPassword] = useState(false);
   const {
@@ -199,6 +200,7 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
               <Box sx={{ justifyContent: "flex-end", display: "flex" }}>
                 <ProfileFormActions
                   password
+                  fetchData={fetchData}
                   isEdit={isEditPassword}
                   toggleEditMode={openEditPasswordMode}
                   onReset={resetPasswordEdit}
@@ -247,7 +249,7 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
               />
             </Grid>
             <Grid item sx={{ justifyContent: "flex-end", display: "flex" }}>
-              <ProfileFormActions isEdit={isEdit} toggleEditMode={toggleEditMode} />
+              <ProfileFormActions fetchData={fetchData} isEdit={isEdit} toggleEditMode={toggleEditMode} />
             </Grid>
           </Grid>
         </Grid>

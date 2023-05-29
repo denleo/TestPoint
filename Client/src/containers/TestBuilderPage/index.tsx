@@ -17,6 +17,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { AxiosError } from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { httpAction } from "@/api/httpAction";
 import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
@@ -67,9 +68,13 @@ const TestBuilderPage = () => {
   const [openQuestionDialog, setOpenQuestionDialog] = useState(false);
   const [questions, setQuestions] = useState<TestQuestion[]>(test?.questions ?? []);
   const [editQuestion, setEditQuestion] = useState<TestQuestion | false>(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const theme = useTheme();
   const mdUp = useBreakpoint("md");
+
+  const from = location.state?.from?.pathname || "/";
 
   const handleDragEnd = useCallback(
     (result: DropResult) => {
@@ -127,6 +132,7 @@ const TestBuilderPage = () => {
   const handleClickCancel = useCallback(() => {
     setTest(null);
     setStart(true);
+    if (from) navigate(from, { replace: true });
   }, [setTest]);
 
   const saveTest = useCallback(async () => {
@@ -139,6 +145,7 @@ const TestBuilderPage = () => {
       } as Omit<TestData, "authorId">);
       setTest(null);
       setStart(true);
+      if (from) navigate(from, { replace: true });
       notify("Test has been created.", NotificationType.Success);
     } catch (error) {
       notify(error instanceof AxiosError ? error.message : "Failed to create test.", NotificationType.Error);
@@ -199,7 +206,7 @@ const TestBuilderPage = () => {
               startIcon={<SaveIcon sx={{ height: 24, width: 24 }} />}
               onClick={saveTest}
             >
-              Save to system
+              Create
             </Button>
             <Button variant="contained" color="error" disableElevation onClick={handleClickCancel}>
               Cancel

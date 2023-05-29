@@ -5,6 +5,7 @@ import { alpha, Box, Button, Grid, styled, Typography, useTheme } from "@mui/mat
 import { AxiosError } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { WHITE } from "@/common/theme/colors";
 import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
 import { ProgressScore } from "@/components/ProgressScore";
 import { TestDifficultyChip } from "@/components/TestDifficultyChip";
@@ -62,10 +63,7 @@ const ResultsPage = () => {
 
   return (
     <Box display="flex" width="100%" height="100%" flexDirection="column" alignItems="center" position="relative">
-      <Grid
-        container
-        sx={{ maxWidth: 1280, backgroundColor: alpha(theme.palette.info.light, 0.32), p: 4, borderRadius: 4 }}
-      >
+      <Grid container sx={{ maxWidth: 1150, backgroundColor: alpha(WHITE, 0.82), p: 4, borderRadius: 4 }}>
         <Grid item display="flex" justifyContent="space-between" xs={12}>
           <Typography variant="h4">
             Test: <strong>{testData.name}</strong>
@@ -74,7 +72,7 @@ const ResultsPage = () => {
         </Grid>
         <Grid item xs={6} sx={{ mt: 5 }}>
           <Typography>
-            Author: <strong>{testData.authorId}</strong>
+            Author: <strong>{testData.author}</strong>
           </Typography>
           <Typography>
             Estimated time: <strong>{testData.estimatedTime}</strong>

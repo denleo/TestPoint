@@ -8,6 +8,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  alpha,
   Box,
   Checkbox,
   List,
@@ -19,6 +20,7 @@ import {
 } from "@mui/material";
 
 import { useBreakpoint } from "@/api/hooks/useBreakPoint";
+import { WHITE } from "@/common/theme/colors";
 import { QuestionType, TestQuestion } from "@/redux/adminData/state";
 
 import { UserAnswer } from "./common";
@@ -29,7 +31,7 @@ interface Props {
 }
 
 const QuestionBlock = styled(Accordion)(({ theme }) => ({
-  backgroundColor: theme.palette.common.white,
+  backgroundColor: alpha(WHITE, 0.82),
   padding: theme.spacing(1),
   alignItems: "center",
   flex: 1,
@@ -116,6 +118,7 @@ export const QuestionList: FC<Props> = ({ questions, history }) => {
                         sx={{
                           backgroundColor: variant.isCorrect ? theme.palette.success.light : undefined,
                           borderRadius: 1,
+                          mb: 0.5,
                         }}
                       >
                         {questionType === QuestionType.SingleOption && (

@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback, useState } from "react";
 
 import { Box } from "@mui/material";
 import { Formik } from "formik";
@@ -18,6 +18,7 @@ const ProfilePage = () => {
   const data = useSelector(userDataSelector);
   const dispatch = useDispatch();
   const notify = useNotificationStore((store) => store.notify);
+  const [fetchData, setFetchData] = useState(false);
 
   if (!data) return null;
   const { registryDate, email, firstName, lastName, username, base64Avatar } = data;
@@ -41,7 +42,7 @@ const ProfilePage = () => {
       password: "",
       repeatPassword: "",
     }),
-    [data]
+    [data, data.username, data.firstName, data.email, data.lastName, fetchData]
   );
 
   const submitForm = useCallback(
@@ -70,6 +71,7 @@ const ProfilePage = () => {
         <ProfileForm
           creationDate={creationDateString}
           avatar={base64Avatar ? `data:image/png;base64,${base64Avatar}` : emptyAccountImage}
+          fetchData={() => setFetchData(!fetchData)}
         />
       </Formik>
     </Box>

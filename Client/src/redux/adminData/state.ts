@@ -38,5 +38,6 @@ export interface TestData {
   difficulty: TestDifficulty;
   estimatedTime: number;
   authorId: string;
+  author: string;
   questions: TestQuestion[];
 }

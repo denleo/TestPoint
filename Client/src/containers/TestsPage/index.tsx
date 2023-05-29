@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 
 import EmojiNatureOutlinedIcon from "@mui/icons-material/EmojiNatureOutlined";
 import { Box, Grid, Typography } from "@mui/material";
@@ -16,6 +16,7 @@ const TestsPage = () => {
   const [tests, setTests] = useState<TestInfo[]>([]);
   const isAdmin = useSelector(isAdminSelector);
   const notify = useNotificationStore((store) => store.notify);
+  const [fetchData, setFetchData] = useState(false);
 
   useEffect(() => {
     const getAdminTests = async () => {
@@ -37,7 +38,7 @@ const TestsPage = () => {
     } catch (error) {
       notify("Failed to load tests.", NotificationType.Error);
     }
-  }, []);
+  }, [fetchData]);
 
   if (!tests.length) {
     return (
@@ -52,7 +53,7 @@ const TestsPage = () => {
     <Grid spacing={3} container>
       {tests.map((test) => (
         <Grid item xs={12} key={test.id} justifyContent="center" display="flex">
-          <TestPreviewCard testData={test} />
+          <TestPreviewCard testData={test} rerender={() => setFetchData(!fetchData)} />
         </Grid>
       ))}
     </Grid>

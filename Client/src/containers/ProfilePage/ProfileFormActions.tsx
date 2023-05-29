@@ -13,11 +13,12 @@ interface Props {
   isEdit: boolean;
   password?: boolean;
   toggleEditMode: () => void;
+  fetchData: () => void;
   onReset?: () => void;
   onSubmit?: () => void;
 }
 
-const ProfileFormActions: FC<Props> = ({ isEdit, toggleEditMode, password = false, onReset, onSubmit }) => {
+const ProfileFormActions: FC<Props> = ({ isEdit, toggleEditMode, password = false, onReset, onSubmit, fetchData }) => {
   const { resetForm, errors, values } = useFormikContext<ProfileFormValues>();
   const dispatch = useDispatch();
   const notify = useNotificationStore((store) => store.notify);
@@ -40,11 +41,12 @@ const ProfileFormActions: FC<Props> = ({ isEdit, toggleEditMode, password = fals
     } else {
       notify("Profile has been updated", NotificationType.Success);
       await dispatch(AccountActions.getUserData());
+      fetchData();
     }
 
     resetForm();
     toggleEditMode();
-  }, [dispatch, notify, values, toggleEditMode, resetForm]);
+  }, [dispatch, notify, values, toggleEditMode, resetForm, fetchData]);
 
   return !isEdit ? (
     <Button size="small" variant="outlined" color="secondary" onClick={toggleEditMode} sx={{ minWidth: 160 }}>
