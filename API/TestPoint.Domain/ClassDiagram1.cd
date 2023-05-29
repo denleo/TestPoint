@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TestPoint.Domain.Administrator">
+    <Position X="5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Administrator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TestPoint.Domain.Answer">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAIAAAAAAAA=</HashCode>
+      <FileName>Answer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TestPoint.Domain.AnswerHistory">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAQAAAA=</HashCode>
+      <FileName>AnswerHistory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TestPoint.Domain.Question">
+    <Position X="7.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAAAACAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Question.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TestPoint.Domain.SystemLogin">
+    <Position X="11.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAQAAIAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>SystemLogin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TestPoint.Domain.Test">
+    <Position X="14" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAgAAAAAQAAAAAAACEABAAAAAAAAA=</HashCode>
+      <FileName>Test.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TestPoint.Domain.TestAssignment">
+    <Position X="18.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAgAAAAAAEAAgAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>TestAssignment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TestPoint.Domain.TestCompletion">
+    <Position X="20.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAgAAAIAAAAAAAAAAAAAQAAAAAAAIAA=</HashCode>
+      <FileName>TestCompletion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TestPoint.Domain.User">
+    <Position X="9.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAACAAAAQAAAQAAAAAAAAAAAAAAAQQAAAAAAg=</HashCode>
+      <FileName>User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TestPoint.Domain.UserGroup">
+    <Position X="16.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAQAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>UserGroup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TestPoint.Domain.Entity">
+    <Position X="10.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TestPoint.Domain.AuditableEntity">
+    <Position X="10.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAACAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AuditableEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="TestPoint.Domain.LoginType">
+    <Position X="13.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LoginType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TestPoint.Domain.QuestionType">
+    <Position X="15.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>QuestionType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TestPoint.Domain.TestDifficulty">
+    <Position X="17.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiAAQ=</HashCode>
+      <FileName>TestDifficulty.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
