@@ -6,7 +6,7 @@ using TestPoint.Domain;
 
 namespace TestPoint.Application.Users.Commands.CreateUser;
 
-public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserResponse>
+public class CreateUserHandler : IRequestHandler<CreateUserCommand, User>
 {
     private readonly IUnitOfWork _uow;
     public CreateUserHandler(IUnitOfWork unitOfWork)
@@ -14,7 +14,7 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserRe
         _uow = unitOfWork;
     }
 
-    public async Task<CreateUserResponse> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<User> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var userWithSameUsername = await _uow.UserRepository
             .FindOneAsync(x => x.Login.Username == request.Username);
@@ -37,13 +37,13 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserRe
             Login = new SystemLogin
             {
                 LoginType = LoginType.User,
-                Username = request.Username,
-                PasswordHash = PasswordHelper.ComputeHash(request.Password),
+                Username = request.IsGoogleAccount ? $"{request.Email.Split('@')[0]} (google)" : request.Username,
+                PasswordHash = request.IsGoogleAccount ? null : PasswordHelper.ComputeHash(request.Password),
                 PasswordReseted = false,
                 RegistryDate = DateTime.Now
             },
             Email = request.Email,
-            EmailConfirmed = false,
+            EmailConfirmed = request.IsGoogleAccount,
             FirstName = request.FirstName,
             LastName = request.LastName
         };
@@ -51,9 +51,6 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserRe
         _uow.UserRepository.Add(newUser);
         await _uow.SaveChangesAsync(cancellationToken);
 
-        return new CreateUserResponse
-        {
-            UserId = newUser.Id
-        };
+        return newUser;
     }
 }

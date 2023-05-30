@@ -16,10 +16,11 @@ public class UserController : BaseController
 {
     [SwaggerOperation(Summary = "Create a new user")]
     [HttpPost("users"), AllowAnonymous]
-    public async Task<ActionResult<CreateUserResponse>> CreateUser([FromBody] UserDto newUser)
+    public async Task<IActionResult> CreateUser([FromBody] UserDto newUser)
     {
         var createUserCommand = new CreateUserCommand
         {
+            IsGoogleAccount = false,
             Username = newUser.Username,
             Password = newUser.Password,
             Email = newUser.Email,
@@ -27,8 +28,9 @@ public class UserController : BaseController
             LastName = newUser.LastName
         };
 
-        var response = await Mediator.Send(createUserCommand);
-        return response;
+        await Mediator.Send(createUserCommand);
+
+        return Ok();
     }
 
     [SwaggerOperation(Summary = "Get current user data (roles:user)")]

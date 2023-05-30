@@ -15,8 +15,8 @@ namespace TestPoint.DAL.Migrations
                 {
                     LoginId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LoginType = table.Column<byte>(type: "tinyint", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     PasswordReseted = table.Column<bool>(type: "bit", nullable: false),
                     RegistryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),

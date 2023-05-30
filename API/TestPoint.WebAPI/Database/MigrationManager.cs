@@ -14,9 +14,12 @@ public static class MigrationManager
 
         try
         {
-            //context.Database.EnsureDeleted();
-            //context.Database.EnsureCreated();
             appContext.Database.Migrate();
+
+            if (webApp.Environment.IsDevelopment())
+            {
+                webApp.PopulateTestData();
+            }
         }
         catch (Exception exception)
         {
@@ -27,7 +30,7 @@ public static class MigrationManager
         return webApp;
     }
 
-    public static WebApplication PopulateTestData(this WebApplication webApp)
+    private static WebApplication PopulateTestData(this WebApplication webApp)
     {
         using var scope = webApp.Services.CreateScope();
         using var appContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();

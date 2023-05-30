@@ -40,6 +40,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddHttpClient();
+
 builder.Services.Configure<FormOptions>(opt =>
 {
     opt.KeyLengthLimit = int.MaxValue;
@@ -76,15 +78,9 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-
 var app = builder.Build();
 
 app.MigrateDatabase(); // Code-first DB creation
-
-if (app.Environment.IsDevelopment())
-{
-    app.PopulateTestData();
-}
 
 #region HTTP request pipeline
 
