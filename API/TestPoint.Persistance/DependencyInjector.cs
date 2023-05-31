@@ -10,11 +10,14 @@ public static class DependencyInjector
 {
     public static IServiceCollection AddDal(this IServiceCollection services, IConfiguration appConfig)
     {
-        var databaseSettings = new DatabaseSettings();
-        appConfig.GetSection(nameof(DatabaseSettings)).Bind(databaseSettings);
-        services.AddSingleton(databaseSettings);
+        var connectionString = appConfig.GetSection("DatabaseSettings:ConnectionString").Value;
 
-        services.AddDbContext<AppDbContext>(options => options.UseSqlServer(databaseSettings.ConnectionString));
+        if (connectionString is null)
+        {
+            throw new ArgumentNullException(nameof(connectionString), "Database connection string cannot be null");
+        }
+
+        services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;

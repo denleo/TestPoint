@@ -20,11 +20,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLogging(b => b.AddLog4Net("log4net.config", true));
 builder.Services.AddRedisCache(builder.Configuration);
 builder.Services.AddDal(builder.Configuration);
-builder.Services.AddJwtService();
-builder.Services.AddEmailService();
-builder.Services.AddApplication();
-
-#endregion
+builder.Services.AddEmailService(builder.Configuration);
+builder.Services.AddJwtService(builder.Configuration);
+builder.Services.AddApplication(builder.Configuration);
 
 builder.Services.AddCors(setup =>
 {
@@ -54,13 +52,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JwtAuthSettings:TokenSecurityKey").Value!)),
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:TokenSecurityKey").Value!)),
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidateAudience = true,
             ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
+            ClockSkew = TimeSpan.Zero,
+            ValidIssuer = builder.Configuration.GetSection("JwtAuthSettings:Issuer").Value!,
+            ValidAudience = builder.Configuration.GetSection("JwtAuthSettings:Audience").Value!
         };
     });
 
@@ -77,10 +76,12 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
+#endregion
+
 
 var app = builder.Build();
-
 app.MigrateDatabase(); // Code-first DB creation
+
 
 #region HTTP request pipeline
 
