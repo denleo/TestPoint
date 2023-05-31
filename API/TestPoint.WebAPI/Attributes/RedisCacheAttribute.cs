@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Options;
 using System.Text;
 using TestPoint.Application.Interfaces.Services;
 using TestPoint.Cache;
@@ -17,9 +18,9 @@ public class RedisCacheAttribute : Attribute, IAsyncActionFilter
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        var cacheSettings = context.HttpContext.RequestServices.GetRequiredService<RedisCacheSettings>();
+        var cacheOptions = context.HttpContext.RequestServices.GetRequiredService<IOptionsSnapshot<RedisCacheSettings>>().Value;
 
-        if (!cacheSettings.Enabled)
+        if (!cacheOptions.Enabled)
         {
             await next();
             return;

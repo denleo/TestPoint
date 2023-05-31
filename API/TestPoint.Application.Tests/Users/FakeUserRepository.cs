@@ -34,7 +34,7 @@ public class FakeUserRepository : IUserRepository
         return Task.FromResult(user);
     }
 
-    public Task<List<UserInformationShort>> FilterUsersByFIO(string filter)
+    public Task<List<UserInformation>> FilterUsersByFIO(string filter)
     {
         throw new NotImplementedException();
     }

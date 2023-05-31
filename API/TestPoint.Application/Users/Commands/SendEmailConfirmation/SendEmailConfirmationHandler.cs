@@ -48,9 +48,7 @@ public class SendEmailConfirmationHandler : IRequestHandler<SendEmailConfirmatio
         {
             Reciever = user.Email,
             Title = "Email Confirmation",
-            Body = $"<h3><b>Hello, {user.FirstName}</b></h3>" + // TODO: REPLACE WITH HTML FILE
-                   $"<div>Follow the link to complete email confirmation: <a href='{request.EmailConfirmUrl + token}'>confirm email</a></div>" +
-                   "<div><b>Test Point System</b>, do not reply on this message.</div>"
+            Body = EmailConstants.GetEmailConfirmation(user.FirstName, token)
         };
 
         _emailService.SendEmail(message);

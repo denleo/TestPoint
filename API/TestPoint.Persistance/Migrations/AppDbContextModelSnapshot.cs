@@ -162,7 +162,6 @@ namespace TestPoint.DAL.Migrations
                         .HasColumnName("LoginType");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)")
                         .HasColumnName("PasswordHash");
@@ -180,8 +179,8 @@ namespace TestPoint.DAL.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
                         .HasColumnName("Username");
 
                     b.HasKey("Id");

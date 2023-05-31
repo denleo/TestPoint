@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -9,31 +9,25 @@ namespace TestPoint.JwtService;
 
 public class JwtService : IJwtService
 {
-    private readonly IConfiguration _configuration;
+    private readonly JwtAuthSettings _jwtSettings;
 
-    public JwtService(IConfiguration configuration)
+    public JwtService(IOptions<JwtAuthSettings> jwtSettings)
     {
-        _configuration = configuration;
+        _jwtSettings = jwtSettings.Value;
     }
 
     public string CreateToken(IEnumerable<Claim> claims, bool isShortToken = false)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            _configuration.GetSection("Jwt:TokenSecurityKey").Value));
-
-        var tokenExpiration = int.Parse(isShortToken ?
-            _configuration.GetSection("Jwt:ShortTokenExp").Value :
-            _configuration.GetSection("Jwt:TokenExp").Value);
-
-        //var issuer = _configuration.GetSection("Jwt:Issuer").Value;
-        //var audience = _configuration.GetSection("Jwt:Audience").Value;
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.TokenSecurityKey));
 
         var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
         var token = new JwtSecurityToken(
+            signingCredentials: signingCredentials,
             claims: claims,
-            expires: DateTime.Now.AddMinutes(tokenExpiration),
-            signingCredentials: signingCredentials);
+            issuer: _jwtSettings.Issuer,
+            audience: _jwtSettings.Audience,
+            expires: DateTime.Now.AddMinutes(isShortToken ? _jwtSettings.ShortTokenExp : _jwtSettings.TokenExp));
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
@@ -43,13 +37,14 @@ public class JwtService : IJwtService
         var tokenHandler = new JwtSecurityTokenHandler();
         var validationParameters = new TokenValidationParameters
         {
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.TokenSecurityKey)),
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes(_configuration.GetSection("Jwt:TokenSecurityKey").Value)),
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidateAudience = true,
             ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
+            ClockSkew = TimeSpan.Zero,
+            ValidAudience = _jwtSettings.Audience,
+            ValidIssuer = _jwtSettings.Issuer
         };
 
         tokenHandler.ValidateToken(token, validationParameters, out var validatedToken);

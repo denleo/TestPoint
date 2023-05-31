@@ -8,11 +8,9 @@ public static class DependencyInjector
 {
     public static IServiceCollection AddRedisCache(this IServiceCollection services, IConfiguration appConfig)
     {
-        var cacheSettings = new RedisCacheSettings();
-        appConfig.GetSection(nameof(RedisCacheSettings)).Bind(cacheSettings);
-        services.AddSingleton(cacheSettings);
+        var cacheSettings = appConfig.GetSection(nameof(RedisCacheSettings)).Get<RedisCacheSettings>();
 
-        if (!cacheSettings.Enabled)
+        if (cacheSettings is null)
         {
             return services;
         }
@@ -23,6 +21,7 @@ public static class DependencyInjector
             x.Configuration = cacheSettings.ConnectionString;
         });
 
+        services.Configure<RedisCacheSettings>(appConfig.GetSection(nameof(RedisCacheSettings)));
         services.AddSingleton<IResponseCacheService, ResponseCacheService>();
 
         return services;

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using TestPoint.Application.Common.Encryption;
 using TestPoint.Application.Common.Entities;
 using TestPoint.Application.Common.Exceptions;
@@ -12,13 +12,13 @@ public class ResetUserPasswordHandler : IRequestHandler<ResetUserPasswordCommand
 {
     private readonly IUnitOfWork _uow;
     private readonly IEmailService _emailService;
-    private readonly IConfiguration _config;
+    private readonly DomainSettings _domainSettings;
 
-    public ResetUserPasswordHandler(IUnitOfWork unitOfWork, IEmailService emailService, IConfiguration config)
+    public ResetUserPasswordHandler(IUnitOfWork unitOfWork, IEmailService emailService, IOptionsSnapshot<DomainSettings> domainSettings)
     {
         _uow = unitOfWork;
         _emailService = emailService;
-        _config = config;
+        _domainSettings = domainSettings.Value;
     }
 
     public async Task<ResetUserPasswordResponse> Handle(ResetUserPasswordCommand request, CancellationToken cancellationToken)
@@ -31,7 +31,7 @@ public class ResetUserPasswordHandler : IRequestHandler<ResetUserPasswordCommand
             throw new EntityNotFoundException($"User with {request.UserId} id does not exist.");
         }
 
-        var timeout = int.Parse(_config.GetSection("DomainSettings:PasswordResetTimeout").Value);
+        var timeout = _domainSettings.PasswordResetTimeout;
         if (user.Login.PasswordReseted && timeout > 0 && DateTime.Now <= user.Login.UpdatedAt!.Value.AddHours(timeout))
         {
             throw new ActionNotAllowedException($"The password was recently reset, please wait {timeout} " +
@@ -48,9 +48,7 @@ public class ResetUserPasswordHandler : IRequestHandler<ResetUserPasswordCommand
         {
             Reciever = user.Email,
             Title = "Password Reset",
-            Body = $"<h3><b>Hello, {user.FirstName}</b></h3>" +
-                   $"<div>Here is your new temporary password to enter the platform: <b>{tempPassword}</b></div>" +
-                   "<div><b>Test Point System</b>, do not reply on this message.</div>"
+            Body = EmailConstants.GetResetedPasswordResponse(user.FirstName, tempPassword)
         };
 
         _emailService.SendEmail(message);

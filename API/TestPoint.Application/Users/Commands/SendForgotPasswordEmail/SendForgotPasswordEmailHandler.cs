@@ -40,16 +40,14 @@ public class SendForgotPasswordEmailHandler : IRequestHandler<SendForgotPassword
             new(ClaimTypes.Sid, user.Id.ToString()),
             new("TokenType", "PasswordReset")
         };
+
         var token = _jwtService.CreateToken(claims, true);
 
         var message = new EmailMessage
         {
             Reciever = user.Email,
             Title = "Password Reset",
-            Body = $"<h3><b>Hello, {user.FirstName}</b></h3>" + // TODO: REPLACE WITH HTML FILE
-                   $"<div>The password reset request for your account was sent from the platform.</div>" +
-                   $"<div>Click here to receive email with new password: <a href='{request.PasswordResetUrl + token}'>reset password</a></div>" +
-                   "<div><b>Test Point System</b>, do not reply on this message.</div>"
+            Body = EmailConstants.GetPasswordResetRequest(user.FirstName, token)
         };
 
         _emailService.SendEmail(message);

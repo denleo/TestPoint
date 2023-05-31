@@ -1,6 +1,6 @@
 ﻿using MailKit.Net.Smtp;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MimeKit;
 using TestPoint.Application.Common.Entities;
 using TestPoint.Application.Interfaces.Services;
@@ -9,22 +9,20 @@ namespace TestPoint.EmailService;
 
 public class MailKitService : IEmailService
 {
-    private readonly IConfiguration _config;
+    private readonly EmailServiceSettings _emailOptions;
     private readonly ILogger<MailKitService> _logger;
 
-    public MailKitService(IConfiguration configuration, ILogger<MailKitService> logger)
+    public MailKitService(IOptions<EmailServiceSettings> emailOptions, ILogger<MailKitService> logger)
     {
-        _config = configuration;
+        _emailOptions = emailOptions.Value;
         _logger = logger;
     }
 
     public async Task SendEmail(EmailMessage message)
     {
-        GetConfigValues(out var smtpHost, out var smtpPort, out var username, out var password);
-
         var emailMessage = new MimeMessage();
 
-        emailMessage.From.Add(new MailboxAddress("Test Point System", username));
+        emailMessage.From.Add(new MailboxAddress("Test Point System", _emailOptions.Username));
         emailMessage.To.Add(MailboxAddress.Parse(message.Reciever));
         emailMessage.Subject = message.Title;
         emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
@@ -35,8 +33,8 @@ public class MailKitService : IEmailService
         using var client = new SmtpClient();
         try
         {
-            await client.ConnectAsync(smtpHost, smtpPort, true);
-            await client.AuthenticateAsync(username, password);
+            await client.ConnectAsync(_emailOptions.Host, _emailOptions.Port, true);
+            await client.AuthenticateAsync(_emailOptions.Username, _emailOptions.Password);
             await client.SendAsync(emailMessage);
 
             await client.DisconnectAsync(true);
@@ -45,13 +43,5 @@ public class MailKitService : IEmailService
         {
             _logger.LogError(ex, "Email Service Error");
         }
-    }
-
-    private void GetConfigValues(out string smtpHost, out int smtpPort, out string username, out string password)
-    {
-        smtpHost = _config.GetSection("EmailService:Host").Value;
-        smtpPort = int.Parse(_config.GetSection("EmailService:Port").Value);
-        username = _config.GetSection("EmailService:Username").Value;
-        password = _config.GetSection("EmailService:Password").Value;
     }
 }
