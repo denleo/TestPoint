@@ -32,7 +32,7 @@ services:
    container_name: testpoint-backend
    image: denleo/testpoint-backend:latest
    build:
-     context: /API
+     context: ./API
    restart: always
    environment:
      TZ: ${TIMEZONE}
@@ -50,7 +50,7 @@ services:
    container_name: testpoint-client
    image: denleo/testpoint-client:latest
    build:
-     context: /Client
+     context: ./Client
    restart: always
    depends_on:
      - backend
@@ -60,7 +60,7 @@ services:
    container_name: testpoint-proxy
    image: denleo/testpoint-proxy:latest
    build:
-     context: /Nginx
+     context: ./Nginx
    restart: always
    ports:
      - "8080:443"
