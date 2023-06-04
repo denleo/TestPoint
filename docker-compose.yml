@@ -30,6 +30,7 @@ services:
      - backend-network
  backend:
    container_name: testpoint-backend
+   image: denleo/testpoint-backend:latest
    build:
      context: /API
    restart: always
@@ -47,6 +48,7 @@ services:
      - proxy-network
  client:
    container_name: testpoint-client
+   image: denleo/testpoint-client:latest
    build:
      context: /Client
    restart: always
@@ -56,6 +58,7 @@ services:
      - proxy-network
  proxy:
    container_name: testpoint-proxy
+   image: denleo/testpoint-proxy:latest
    build:
      context: /Nginx
    restart: always
