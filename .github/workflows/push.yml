@@ -13,9 +13,6 @@ jobs:
     timeout-minutes: 5
     name: build-api
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: API
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET
@@ -23,18 +20,18 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: Restore dependencies
+        working-directory: API
         run: dotnet restore
       - name: Build
+        working-directory: API
         run: dotnet build --no-restore
       - name: Test
+        working-directory: API
         run: dotnet test --no-build --verbosity normal
   docker-push:
     needs: build-api
     name: docker-push
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: /
     steps:
       - name: Checkout
         uses: actions/checkout@v3
