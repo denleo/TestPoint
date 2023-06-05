@@ -31,15 +31,13 @@ services:
  backend:
    container_name: testpoint-backend
    image: denleo/testpoint-backend:latest
-   build:
-     context: ./API
    restart: always
    environment:
      TZ: ${TIMEZONE}
      ASPNETCORE_ENVIRONMENT: Production
-     PROXY_HOST: "172-104-135-55.ip.linodeusercontent.com"
-     PROXY_HTTP_PORT: "8081"
-     PROXY_HTTPS_PORT: "8080"
+     HOST: "172.104.135.55"
+     HTTP_PORT: "8081"
+     HTTPS_PORT: "8080"
    depends_on:
      - db
      - redis
@@ -49,8 +47,6 @@ services:
  client:
    container_name: testpoint-client
    image: denleo/testpoint-client:latest
-   build:
-     context: ./Client
    restart: always
    depends_on:
      - backend
@@ -59,8 +55,6 @@ services:
  proxy:
    container_name: testpoint-proxy
    image: denleo/testpoint-proxy:latest
-   build:
-     context: ./Nginx
    restart: always
    ports:
      - "8080:443"

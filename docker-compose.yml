@@ -37,9 +37,9 @@ services:
    environment:
      TZ: ${TIMEZONE}
      ASPNETCORE_ENVIRONMENT: Development
-     PROXY_HOST: "localhost"
-     PROXY_HTTP_PORT: "8081"
-     PROXY_HTTPS_PORT: "8080"
+     HOST: "localhost"
+     HTTP_PORT: "8081"
+     HTTPS_PORT: "8080"
    depends_on:
      - db
      - redis

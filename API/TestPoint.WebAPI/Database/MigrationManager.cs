@@ -16,7 +16,7 @@ public static class MigrationManager
         {
             appContext.Database.Migrate();
 
-            if (webApp.Environment.IsDevelopment())
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Development)
             {
                 webApp.PopulateTestData();
             }

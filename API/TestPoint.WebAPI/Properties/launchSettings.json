@@ -17,9 +17,9 @@
       "applicationUrl": "https://localhost:8080;http://localhost:8081",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "PROXY_HOST": "localhost",
-        "PROXY_HTTP_PORT": "8081",
-        "PROXY_HTTPS_PORT": "8080"
+        "HOST": "localhost",
+        "HTTP_PORT": "8081",
+        "HTTPS_PORT": "8080"
       }
     },
     "IIS Express": {
@@ -28,9 +28,9 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "PROXY_HOST": "localhost",
-        "PROXY_HTTP_PORT": "8081",
-        "PROXY_HTTPS_PORT": "8080"
+        "HOST": "localhost",
+        "HTTP_PORT": "8081",
+        "HTTPS_PORT": "8080"
       }
     }
   }
