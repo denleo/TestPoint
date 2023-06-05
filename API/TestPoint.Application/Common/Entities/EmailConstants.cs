@@ -2,8 +2,8 @@
 
 public static class EmailConstants
 {
-    private static readonly string ServerHost = Environment.GetEnvironmentVariable("HOST")!;
-    private static readonly string ServerPort = Environment.GetEnvironmentVariable("HTTPS_PORT")!;
+    private static readonly string ServerHost = Environment.GetEnvironmentVariable("SERVER_HOST")!;
+    private static readonly string ServerPort = Environment.GetEnvironmentVariable("SERVER_HTTPS_PORT")!;
 
     public static string GetEmailConfirmation(string name, string emailConfirmationToken)
     {

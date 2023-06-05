@@ -37,9 +37,9 @@ services:
    environment:
      TZ: ${TIMEZONE}
      ASPNETCORE_ENVIRONMENT: Development
-     HOST: "localhost"
-     HTTP_PORT: "8081"
-     HTTPS_PORT: "8080"
+     SERVER_HOST: "localhost"
+     SERVER_HTTP_PORT: "8081"
+     SERVER_HTTPS_PORT: "8080"
    depends_on:
      - db
      - redis
