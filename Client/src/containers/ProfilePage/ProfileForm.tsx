@@ -162,42 +162,44 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
                   minHeight: 71,
                 }}
               />
-              <Collapse in={isEditPassword}>
-                <TextFieldFormik
-                  fullWidth
-                  autoFocus
-                  size="small"
-                  type="password"
-                  name="oldPassword"
-                  label="Old Password"
-                  color="secondary"
-                  sx={{
-                    minHeight: 71,
-                  }}
-                />
-                <TextFieldFormik
-                  fullWidth
-                  size="small"
-                  type="password"
-                  name="password"
-                  label="Password"
-                  color="secondary"
-                  sx={{
-                    minHeight: 71,
-                  }}
-                />
-                <TextFieldFormik
-                  fullWidth
-                  size="small"
-                  type="password"
-                  name="repeatPassword"
-                  label="Repeat password"
-                  color="secondary"
-                  sx={{
-                    minHeight: 71,
-                  }}
-                />
-              </Collapse>
+              {!isGoogleAuthenticated && (
+                <Collapse in={isEditPassword}>
+                  <TextFieldFormik
+                    fullWidth
+                    autoFocus
+                    size="small"
+                    type="password"
+                    name="oldPassword"
+                    label="Old Password"
+                    color="secondary"
+                    sx={{
+                      minHeight: 71,
+                    }}
+                  />
+                  <TextFieldFormik
+                    fullWidth
+                    size="small"
+                    type="password"
+                    name="password"
+                    label="Password"
+                    color="secondary"
+                    sx={{
+                      minHeight: 71,
+                    }}
+                  />
+                  <TextFieldFormik
+                    fullWidth
+                    size="small"
+                    type="password"
+                    name="repeatPassword"
+                    label="Repeat password"
+                    color="secondary"
+                    sx={{
+                      minHeight: 71,
+                    }}
+                  />
+                </Collapse>
+              )}
               <Box sx={{ justifyContent: "flex-end", display: "flex" }}>
                 <ProfileFormActions
                   password
