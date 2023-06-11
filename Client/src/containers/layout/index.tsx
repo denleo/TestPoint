@@ -4,7 +4,6 @@ import React, { FC, ReactNode, useEffect } from "react";
 import { Box, ContainerProps, Divider, styled } from "@mui/material";
 
 import { useBreakpoint } from "@/api/hooks/useBreakPoint";
-import { theme } from "@/common/theme/createTheme";
 
 import backImage from "../../shared/backgroundImage.svg";
 

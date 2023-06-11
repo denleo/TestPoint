@@ -11,8 +11,6 @@ import { useNotificationStore, NotificationType } from "@/components/Notificatio
 import { ProgressScore } from "@/components/ProgressScore";
 import { TestDifficultyChip } from "@/components/TestDifficultyChip";
 import { TestInfo } from "@/redux/adminData/state";
-import { useSelector } from "@/redux/hooks";
-import { isAdminSelector } from "@/redux/selectors";
 
 import { TestResult } from "../ResultsPage/common";
 import { useResultsPageStore } from "../ResultsPage/useResultsPageStore";
@@ -54,7 +52,6 @@ interface Props {
 
 export const TestResultCard: FC<Props> = ({ testInfo }) => {
   const { name, questionCount, estimatedTime, author } = { ...testInfo };
-  const isAdmin = useSelector(isAdminSelector);
   const notify = useNotificationStore((store) => store.notify);
   const location = useLocation();
   const theme = useTheme();
