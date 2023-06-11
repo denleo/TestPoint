@@ -56,6 +56,7 @@ namespace TestPoint.DAL.Migrations
                     LastName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(254)", maxLength: 254, nullable: false),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    GoogleAuthenticated = table.Column<bool>(type: "bit", nullable: false),
                     Avatar = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     LoginId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),

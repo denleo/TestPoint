@@ -33,6 +33,7 @@ public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserQuery, GetCur
             LastName = user.LastName,
             Email = user.Email,
             EmailConfirmed = user.EmailConfirmed,
+            GoogleAuthenticated = user.GoogleAuthenticated,
             Base64Avatar = user.Avatar != null ? Convert.ToBase64String(user.Avatar) : null
         };
     }

@@ -37,15 +37,17 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, User>
             Login = new SystemLogin
             {
                 LoginType = LoginType.User,
-                Username = request.IsGoogleAccount ? $"{request.Email.Split('@')[0]} (google)" : request.Username,
-                PasswordHash = request.IsGoogleAccount ? null : PasswordHelper.ComputeHash(request.Password),
+                Username = request.IsGoogleAccount ? request.Email.Split('@')[0] : request.Username!,
+                PasswordHash = request.IsGoogleAccount ? null : PasswordHelper.ComputeHash(request.Password!),
                 PasswordReseted = false,
                 RegistryDate = DateTime.Now
             },
+            GoogleAuthenticated = request.IsGoogleAccount,
             Email = request.Email,
             EmailConfirmed = request.IsGoogleAccount,
             FirstName = request.FirstName,
-            LastName = request.LastName
+            LastName = request.LastName,
+            Avatar = request.GoogleAvatar
         };
 
         _uow.UserRepository.Add(newUser);

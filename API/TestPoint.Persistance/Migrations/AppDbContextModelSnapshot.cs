@@ -343,6 +343,10 @@ namespace TestPoint.DAL.Migrations
                         .HasColumnType("nvarchar(64)")
                         .HasColumnName("FirstName");
 
+                    b.Property<bool>("GoogleAuthenticated")
+                        .HasColumnType("bit")
+                        .HasColumnName("GoogleAuthenticated");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(64)

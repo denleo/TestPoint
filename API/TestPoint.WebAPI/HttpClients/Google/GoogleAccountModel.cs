@@ -1,4 +1,4 @@
-﻿namespace TestPoint.WebAPI.Models.Google;
+﻿namespace TestPoint.WebAPI.HttpClients.Google;
 
 public class GoogleAccountModel
 {

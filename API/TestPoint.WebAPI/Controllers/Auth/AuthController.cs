@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using System.Security.Claims;
@@ -11,9 +9,9 @@ using TestPoint.Application.Users.Commands.CreateUser;
 using TestPoint.Application.Users.Queries.CheckUserLogin;
 using TestPoint.Application.Users.Queries.GetUserByEmail;
 using TestPoint.Domain;
+using TestPoint.WebAPI.HttpClients.Google;
 using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 using TestPoint.WebAPI.Models.Admin;
-using TestPoint.WebAPI.Models.Google;
 using TestPoint.WebAPI.Models.User;
 
 namespace TestPoint.WebAPI.Controllers.Auth;
@@ -22,12 +20,12 @@ namespace TestPoint.WebAPI.Controllers.Auth;
 public class AuthController : BaseController
 {
     private readonly IJwtService _jwtService;
-    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly GoogleApiService _googleApiService;
 
-    public AuthController(IJwtService jwtService, IHttpClientFactory httpClientFactory)
+    public AuthController(IJwtService jwtService, GoogleApiService googleApiService)
     {
         _jwtService = jwtService;
-        _httpClientFactory = httpClientFactory;
+        _googleApiService = googleApiService;
     }
 
     [SwaggerOperation(Summary = "User login action")]
@@ -54,33 +52,21 @@ public class AuthController : BaseController
     [HttpPost("auth/google/user")]
     public async Task<ActionResult<string>> UserGoogleSignIn(string googleToken)
     {
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "https://www.googleapis.com/oauth2/v3/userinfo")
+        var userInfo = await _googleApiService.GetUserInfoAsync(googleToken);
+
+        if (userInfo is not null)
         {
-            Headers =
-            {
-                { HeaderNames.Authorization, $"Bearer {googleToken}" },
-            }
-        };
-
-        using var httpClient = _httpClientFactory.CreateClient();
-        var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
-
-        if (httpResponseMessage.IsSuccessStatusCode)
-        {
-            var content = await httpResponseMessage.Content.ReadAsStringAsync();
-
-            var userModel = JsonConvert.DeserializeObject<GoogleAccountModel>(content);
-
-            var existingUser = await Mediator.Send(new GetUserByEmailQuery(userModel.email));
+            var existingUser = await Mediator.Send(new GetUserByEmailQuery(userInfo.email));
 
             if (existingUser is null)
             {
                 var createUserCommand = new CreateUserCommand
                 {
                     IsGoogleAccount = true,
-                    Email = userModel.email,
-                    FirstName = userModel.given_name,
-                    LastName = userModel.family_name
+                    GoogleAvatar = await _googleApiService.FetchAvatarAsync(userInfo.picture),
+                    Email = userInfo.email,
+                    FirstName = userInfo.given_name,
+                    LastName = userInfo.family_name
                 };
 
                 existingUser = await Mediator.Send(createUserCommand);

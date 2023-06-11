@@ -6,6 +6,7 @@ public class User : AuditableEntity
     public string LastName { get; set; }
     public string Email { get; set; }
     public bool EmailConfirmed { get; set; }
+    public bool GoogleAuthenticated { get; set; }
     public byte[]? Avatar { get; set; }
 
     public SystemLogin Login { get; set; }
