@@ -1,0 +1,39 @@
+name: Deploy (to Linode)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  docker-push:
+    name: docker-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Docker login
+        env:
+          USER: ${{secrets.DOCKER_USERNAME}}
+          PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: docker login -u "$USER" -p "$PASSWORD"
+      - name: Build images
+        run: docker-compose build --no-cache
+      - name: Push images
+        run: docker-compose push
+  deploy:
+    name: deploy
+    needs: docker-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USER}}
+          password: ${{secrets.SSH_PASSWORD}}
+          script: |
+            cd ~/TestPoint
+            git pull
+            docker rmi --force denleo/testpoint-proxy:latest || true
+            docker rmi --force denleo/testpoint-client:latest || true
+            docker rmi --force denleo/testpoint-backend:latest || true
+            docker-compose -f docker-compose.prod.yml up -d --force-recreate

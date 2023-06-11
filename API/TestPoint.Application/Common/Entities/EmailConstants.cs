@@ -2,12 +2,12 @@
 
 public static class EmailConstants
 {
-    private static readonly string ProxyHost = Environment.GetEnvironmentVariable("PROXY_HOST")!;
-    private static readonly string ProxyPort = Environment.GetEnvironmentVariable("PROXY_HTTPS_PORT")!;
+    private static readonly string ServerHost = Environment.GetEnvironmentVariable("SERVER_HOST")!;
+    private static readonly string ServerPort = Environment.GetEnvironmentVariable("SERVER_HTTPS_PORT")!;
 
     public static string GetEmailConfirmation(string name, string emailConfirmationToken)
     {
-        var emailConfirmationUrl = $"https://{ProxyHost}:{ProxyPort}/api/user/email/verify/";
+        var emailConfirmationUrl = $"https://{ServerHost}:{ServerPort}/api/user/email/verify/";
 
         return $"<h3><b>Hello, {name}</b></h3>" +
                    $"<div>Follow the link to complete email confirmation: <a href='{emailConfirmationUrl + emailConfirmationToken}'>confirm email</a></div>" +
@@ -16,7 +16,7 @@ public static class EmailConstants
 
     public static string GetPasswordResetRequest(string name, string passwordResetToken)
     {
-        var passwordResetUrl = $"https://{ProxyHost}:{ProxyPort}/api/user/password/reset/";
+        var passwordResetUrl = $"https://{ServerHost}:{ServerPort}/api/user/password/reset/";
 
         return $"<h3><b>Hello, {name}</b></h3>" +
                    $"<div>The password reset request for your account was sent from the platform.</div>" +
@@ -33,7 +33,7 @@ public static class EmailConstants
 
     public static string GetNewTestAssignmentNotification(string name, string testName)
     {
-        var notPassedTestsUrl = $"https://{ProxyHost}:{ProxyPort}/tests";
+        var notPassedTestsUrl = $"https://{ServerHost}:{ServerPort}/tests";
 
         return $"<h3><b>Hello, {name}</b></h3>" +
                    $"<div>A new test was open to you: <b>{testName}</b></div>" +
