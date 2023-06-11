@@ -18,7 +18,6 @@ const ProfilePage = () => {
   const data = useSelector(userDataSelector);
   const dispatch = useDispatch();
   const notify = useNotificationStore((store) => store.notify);
-  const [fetchData, setFetchData] = useState(false);
 
   if (!data) return null;
   const { registryDate, email, firstName, lastName, username, base64Avatar } = data;
@@ -42,7 +41,7 @@ const ProfilePage = () => {
       password: "",
       repeatPassword: "",
     }),
-    [data, data.username, data.firstName, data.email, data.lastName, fetchData]
+    [data, data.username, data.firstName, data.email, data.lastName]
   );
 
   const submitForm = useCallback(
@@ -71,7 +70,6 @@ const ProfilePage = () => {
         <ProfileForm
           creationDate={creationDateString}
           avatar={base64Avatar ? `data:image/png;base64,${base64Avatar}` : emptyAccountImage}
-          fetchData={() => setFetchData(!fetchData)}
         />
       </Formik>
     </Box>

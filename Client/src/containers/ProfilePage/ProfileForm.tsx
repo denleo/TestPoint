@@ -1,18 +1,19 @@
-import React, { useState, useCallback, useRef, FC } from "react";
+import React, { useState, useCallback, useRef, FC, ChangeEvent } from "react";
 
 import EditIcon from "@mui/icons-material/Edit";
-import { Box, BoxProps, Collapse, Grid, styled, Typography, IconButton, alpha, Tooltip } from "@mui/material";
+import { Box, BoxProps, Collapse, Grid, styled, Typography, IconButton, alpha } from "@mui/material";
 import { Form, useFormikContext } from "formik";
 
 import { BLACK, WHITE } from "@/common/theme/colors";
 import { useNotificationStore, NotificationType } from "@/components/NotificationProvider/useNotificationStore";
 import { TextFieldFormik } from "@/components/TextFieldFormik";
-import { useDispatch } from "@/redux/hooks";
+import { useDispatch, useSelector } from "@/redux/hooks";
+import { isGoogleAuthenticatedSelector } from "@/redux/selectors";
 
 import { AccountActions } from "../../redux/userAccount/actions";
 import { useSidebarStore } from "../layout/useLayoutStore";
 
-import { defaultPassword, ProfileFormValues } from "./common";
+import { ProfileFormValues } from "./common";
 import { EmailConfirmedCheck } from "./EmailConfirmedCheck";
 import ProfileFormActions from "./ProfileFormActions";
 
@@ -39,10 +40,9 @@ const ButtonChangeImage = styled(IconButton)(() => ({
 interface Props {
   creationDate: string;
   avatar: string;
-  fetchData: () => void;
 }
 
-const ProfileForm: FC<Props> = ({ creationDate, avatar, fetchData }) => {
+const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
   const [isEdit, setEdit] = useState(false);
   const [isEditPassword, setEditPassword] = useState(false);
   const {
@@ -53,6 +53,7 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar, fetchData }) => {
   } = useFormikContext<ProfileFormValues>();
   const notify = useNotificationStore((store) => store.notify);
   const dispatch = useDispatch();
+  const isGoogleAuthenticated = useSelector(isGoogleAuthenticatedSelector);
 
   const imageInputRef = useRef<HTMLInputElement>(null);
 
@@ -81,7 +82,7 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar, fetchData }) => {
     }
   }, []);
 
-  const handleImageInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
       const fileName = file.name;
@@ -200,7 +201,6 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar, fetchData }) => {
               <Box sx={{ justifyContent: "flex-end", display: "flex" }}>
                 <ProfileFormActions
                   password
-                  fetchData={fetchData}
                   isEdit={isEditPassword}
                   toggleEditMode={openEditPasswordMode}
                   onReset={resetPasswordEdit}
@@ -211,7 +211,7 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar, fetchData }) => {
             <Grid item sx={{ position: "relative" }}>
               <TextFieldFormik
                 fullWidth
-                disabled={!isEdit}
+                disabled={isGoogleAuthenticated || !isEdit}
                 size="small"
                 name="email"
                 label="Email"
@@ -249,7 +249,7 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar, fetchData }) => {
               />
             </Grid>
             <Grid item sx={{ justifyContent: "flex-end", display: "flex" }}>
-              <ProfileFormActions fetchData={fetchData} isEdit={isEdit} toggleEditMode={toggleEditMode} />
+              <ProfileFormActions isEdit={isEdit} toggleEditMode={toggleEditMode} />
             </Grid>
           </Grid>
         </Grid>

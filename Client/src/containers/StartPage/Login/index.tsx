@@ -81,6 +81,11 @@ export const Login = () => {
     [setLoginTab]
   );
 
+  const finishLogin = useCallback(async () => {
+    await dispatch(AccountActions.getUserData());
+    navigate(from, { replace: true });
+  }, []);
+
   const submitLoginForm = useCallback(
     async (values: LoginUserFormValues) => {
       if (loginTab === LOGIN_TAB.USER) {
@@ -93,8 +98,7 @@ export const Login = () => {
         if ("error" in resultAction) {
           setError(new Error(resultAction.error.message));
         } else {
-          await dispatch(AccountActions.getUserData());
-          navigate(from, { replace: true });
+          await finishLogin();
         }
       } else {
         const resultAction = await dispatch(AccountActions.requestLoginAdmin(values));
@@ -162,7 +166,7 @@ export const Login = () => {
               )}
             </Grid>
             <Grid item xs={12}>
-              <ActionButtons withSignUp={isUser} />
+              <ActionButtons withSignUp={isUser} finishLogin={finishLogin} />
             </Grid>
           </Grid>
         </Formik>
