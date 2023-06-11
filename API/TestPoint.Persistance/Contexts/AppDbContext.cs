@@ -27,6 +27,7 @@ public sealed class AppDbContext : DbContext
             .ApplyConfiguration(new AnswerConfiguration())
             .ApplyConfiguration(new TestAssignmentConfiguration())
             .ApplyConfiguration(new TestCompletionConfiguration())
-            .ApplyConfiguration(new AnswerHistoryConfiguration());
+            .ApplyConfiguration(new AnswerHistoryConfiguration())
+            .ApplyConfiguration(new UserGoogleAccountMappingConfiguration());
     }
 }

@@ -1,26 +1,37 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 using TestPoint.Application.Users;
+using TestPoint.Application.Users.Commands.BindGoogleAccount;
 using TestPoint.Application.Users.Commands.ChangeAvatar;
 using TestPoint.Application.Users.Commands.ChangeContactInfo;
 using TestPoint.Application.Users.Commands.ChangePassword;
 using TestPoint.Application.Users.Commands.CreateUser;
+using TestPoint.Application.Users.Commands.UnbindGoogleAccount;
 using TestPoint.Application.Users.Queries.FilterUsers;
 using TestPoint.Application.Users.Queries.GetCurrentUser;
+using TestPoint.WebAPI.HttpClients.Google;
+using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 using TestPoint.WebAPI.Models.User;
 
 namespace TestPoint.WebAPI.Controllers.Membership;
 
 public class UserController : BaseController
 {
+    private readonly GoogleApiService _googleApi;
+
+    public UserController(GoogleApiService googleApiService)
+    {
+        _googleApi = googleApiService;
+    }
+
     [SwaggerOperation(Summary = "Create a new user")]
     [HttpPost("users"), AllowAnonymous]
     public async Task<IActionResult> CreateUser([FromBody] UserDto newUser)
     {
         var createUserCommand = new CreateUserCommand
         {
-            IsGoogleAccount = false,
             Username = newUser.Username,
             Password = newUser.Password,
             Email = newUser.Email,
@@ -103,5 +114,39 @@ public class UserController : BaseController
 
         var users = await Mediator.Send(filterUsersQuery);
         return users;
+    }
+
+    [SwaggerOperation(Summary = "Bind google account for the current user (roles:user)")]
+    [HttpPut("session/user/bind-google"), Authorize(Roles = "User")]
+    public async Task<IActionResult> BindGoogleAccount([FromBody] string googleToken)
+    {
+        var userInfo = await _googleApi.GetUserInfoAsync(googleToken);
+
+        if (userInfo is null)
+        {
+            return BadRequest(new ErrorResult(HttpStatusCode.BadRequest, "Google account can't be accessed."));
+        }
+
+        var bindGoogleAccountCommand = new BindGoogleAccountCommand
+        {
+            UserId = LoginId!.Value,
+            GoogleSub = userInfo.sub
+        };
+
+        await Mediator.Send(bindGoogleAccountCommand);
+        return Ok();
+    }
+
+    [SwaggerOperation(Summary = "Remove google authentication for the current user (roles:user)")]
+    [HttpDelete("session/user/unbind-google"), Authorize(Roles = "User")]
+    public async Task<IActionResult> UnbindGoogleAccount()
+    {
+        var unbindGoogleAccountCommand = new UnbindGoogleAccountCommand
+        {
+            UserId = LoginId!.Value
+        };
+
+        await Mediator.Send(unbindGoogleAccountCommand);
+        return Ok();
     }
 }

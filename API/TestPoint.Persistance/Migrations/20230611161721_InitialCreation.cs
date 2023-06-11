@@ -15,8 +15,8 @@ namespace TestPoint.DAL.Migrations
                 {
                     LoginId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LoginType = table.Column<byte>(type: "tinyint", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Username = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     PasswordReseted = table.Column<bool>(type: "bit", nullable: false),
                     RegistryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -56,7 +56,6 @@ namespace TestPoint.DAL.Migrations
                     LastName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(254)", maxLength: 254, nullable: false),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    GoogleAuthenticated = table.Column<bool>(type: "bit", nullable: false),
                     Avatar = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     LoginId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -116,6 +115,27 @@ namespace TestPoint.DAL.Migrations
                         column: x => x.AdministratorId,
                         principalTable: "Administrator",
                         principalColumn: "AdministratorId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserGoogleAccountMapping",
+                columns: table => new
+                {
+                    UserGoogleAccountMappingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GoogleSub = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserGoogleAccountMapping", x => x.UserGoogleAccountMappingId);
+                    table.ForeignKey(
+                        name: "FK_UserGoogleAccountMapping_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -333,6 +353,19 @@ namespace TestPoint.DAL.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserGoogleAccountMapping_UserId",
+                table: "UserGoogleAccountMapping",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UQ_UserGoogleAccountMapping_UserId_GoogleSub",
+                table: "UserGoogleAccountMapping",
+                columns: new[] { "UserId", "GoogleSub" },
+                unique: true,
+                filter: "[GoogleSub] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserGroup_AdministratorId",
                 table: "UserGroup",
                 column: "AdministratorId");
@@ -356,6 +389,9 @@ namespace TestPoint.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "AnswerHistory");
+
+            migrationBuilder.DropTable(
+                name: "UserGoogleAccountMapping");
 
             migrationBuilder.DropTable(
                 name: "UserUserGroupBridge");

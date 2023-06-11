@@ -31,11 +31,6 @@ public class ResetUserPasswordHandler : IRequestHandler<ResetUserPasswordCommand
             throw new EntityNotFoundException($"User with {request.UserId} id does not exist.");
         }
 
-        if (user.GoogleAuthenticated)
-        {
-            throw new ActionNotAllowedException("Can not reset password for google authenticated account.");
-        }
-
         var timeout = _domainSettings.PasswordResetTimeout;
         if (user.Login.PasswordReseted && timeout > 0 && DateTime.Now <= user.Login.UpdatedAt!.Value.AddHours(timeout))
         {

@@ -5,9 +5,8 @@ using System.Net;
 using System.Security.Claims;
 using TestPoint.Application.Admins.Queries.CheckAdminLogin;
 using TestPoint.Application.Interfaces.Services;
-using TestPoint.Application.Users.Commands.CreateUser;
+using TestPoint.Application.Users.Queries.CheckGoogleUserLogin;
 using TestPoint.Application.Users.Queries.CheckUserLogin;
-using TestPoint.Application.Users.Queries.GetUserByEmail;
 using TestPoint.Domain;
 using TestPoint.WebAPI.HttpClients.Google;
 using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
@@ -20,12 +19,12 @@ namespace TestPoint.WebAPI.Controllers.Auth;
 public class AuthController : BaseController
 {
     private readonly IJwtService _jwtService;
-    private readonly GoogleApiService _googleApiService;
+    private readonly GoogleApiService _googleApi;
 
     public AuthController(IJwtService jwtService, GoogleApiService googleApiService)
     {
         _jwtService = jwtService;
-        _googleApiService = googleApiService;
+        _googleApi = googleApiService;
     }
 
     [SwaggerOperation(Summary = "User login action")]
@@ -50,32 +49,21 @@ public class AuthController : BaseController
 
     [SwaggerOperation(Summary = "User google sign in action")]
     [HttpPost("auth/google/user")]
-    public async Task<ActionResult<string>> UserGoogleSignIn(string googleToken)
+    public async Task<ActionResult<string>> UserGoogleSignIn([FromBody] string googleToken)
     {
-        var userInfo = await _googleApiService.GetUserInfoAsync(googleToken);
+        var googleUserInfo = await _googleApi.GetUserInfoAsync(googleToken);
 
-        if (userInfo is not null)
+        if (googleUserInfo is not null)
         {
-            var existingUser = await Mediator.Send(new GetUserByEmailQuery(userInfo.email));
+            var testPointUser = await Mediator.Send(new CheckGoogleUserLoginQuery(googleUserInfo.sub));
 
-            if (existingUser is null)
+            if (testPointUser is not null)
             {
-                var createUserCommand = new CreateUserCommand
-                {
-                    IsGoogleAccount = true,
-                    GoogleAvatar = await _googleApiService.FetchAvatarAsync(userInfo.picture),
-                    Email = userInfo.email,
-                    FirstName = userInfo.given_name,
-                    LastName = userInfo.family_name
-                };
-
-                existingUser = await Mediator.Send(createUserCommand);
+                return _jwtService.CreateToken(CreateClaims(testPointUser.UserId, testPointUser.Username, LoginType.User));
             }
-
-            return _jwtService.CreateToken(CreateClaims(existingUser.Id, existingUser.Login.Username, LoginType.User));
         }
 
-        return Unauthorized(new ErrorResult(HttpStatusCode.Unauthorized, "Google account can't be accessed."));
+        return Unauthorized(new ErrorResult(HttpStatusCode.Unauthorized, "Google authorization failed."));
     }
 
     [SwaggerOperation(Summary = "Admin login action")]

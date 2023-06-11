@@ -20,6 +20,6 @@ public class UserRepository : RepositoryBase<User, Guid>, IUserRepository
 
     protected override IQueryable<User> GetInclusions()
     {
-        return DbSet.Include(x => x.Login);
+        return DbSet.Include(x => x.Login).Include(x => x.GoogleAccountMapping);
     }
 }

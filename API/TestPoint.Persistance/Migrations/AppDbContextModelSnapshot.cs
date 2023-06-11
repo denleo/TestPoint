@@ -162,6 +162,7 @@ namespace TestPoint.DAL.Migrations
                         .HasColumnName("LoginType");
 
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)")
                         .HasColumnName("PasswordHash");
@@ -179,8 +180,8 @@ namespace TestPoint.DAL.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)")
                         .HasColumnName("Username");
 
                     b.HasKey("Id");
@@ -343,10 +344,6 @@ namespace TestPoint.DAL.Migrations
                         .HasColumnType("nvarchar(64)")
                         .HasColumnName("FirstName");
 
-                    b.Property<bool>("GoogleAuthenticated")
-                        .HasColumnType("bit")
-                        .HasColumnName("GoogleAuthenticated");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -369,6 +366,40 @@ namespace TestPoint.DAL.Migrations
                         .IsUnique();
 
                     b.ToTable("User", (string)null);
+                });
+
+            modelBuilder.Entity("TestPoint.Domain.UserGoogleAccountMapping", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserGoogleAccountMappingId");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GoogleSub")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("GoogleSub");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId", "GoogleSub")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_UserGoogleAccountMapping_UserId_GoogleSub")
+                        .HasFilter("[GoogleSub] IS NOT NULL");
+
+                    b.ToTable("UserGoogleAccountMapping", (string)null);
                 });
 
             modelBuilder.Entity("TestPoint.Domain.UserGroup", b =>
@@ -510,6 +541,15 @@ namespace TestPoint.DAL.Migrations
                     b.Navigation("Login");
                 });
 
+            modelBuilder.Entity("TestPoint.Domain.UserGoogleAccountMapping", b =>
+                {
+                    b.HasOne("TestPoint.Domain.User", null)
+                        .WithOne("GoogleAccountMapping")
+                        .HasForeignKey("TestPoint.Domain.UserGoogleAccountMapping", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TestPoint.Domain.UserGroup", b =>
                 {
                     b.HasOne("TestPoint.Domain.Administrator", null)
@@ -552,6 +592,12 @@ namespace TestPoint.DAL.Migrations
             modelBuilder.Entity("TestPoint.Domain.TestCompletion", b =>
                 {
                     b.Navigation("Answers");
+                });
+
+            modelBuilder.Entity("TestPoint.Domain.User", b =>
+                {
+                    b.Navigation("GoogleAccountMapping")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

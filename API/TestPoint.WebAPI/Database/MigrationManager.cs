@@ -129,7 +129,8 @@ public static class MigrationManager
                     PasswordHash = "i7phShT1JsaP7dLz05tc1FzmSiixX5pIuexRMQlrerdq2qtiVIMEQNnHfJ8U+CUlRHouGETIuUL+BYMD4hGOsw==OxoaYEtzmx3EyLg3Oex6qzZzMeKgPcUJLNQViqKphZs=",
                     PasswordReseted = false,
                     RegistryDate = DateTime.Now
-                }
+                },
+                GoogleAccountMapping = new UserGoogleAccountMapping()
             },
             new User
             {
@@ -145,7 +146,8 @@ public static class MigrationManager
                     PasswordHash = "i7phShT1JsaP7dLz05tc1FzmSiixX5pIuexRMQlrerdq2qtiVIMEQNnHfJ8U+CUlRHouGETIuUL+BYMD4hGOsw==OxoaYEtzmx3EyLg3Oex6qzZzMeKgPcUJLNQViqKphZs=",
                     PasswordReseted = false,
                     RegistryDate = DateTime.Now
-                }
+                },
+                GoogleAccountMapping = new UserGoogleAccountMapping()
             },
             new User
             {
@@ -161,7 +163,8 @@ public static class MigrationManager
                     PasswordHash = "i7phShT1JsaP7dLz05tc1FzmSiixX5pIuexRMQlrerdq2qtiVIMEQNnHfJ8U+CUlRHouGETIuUL+BYMD4hGOsw==OxoaYEtzmx3EyLg3Oex6qzZzMeKgPcUJLNQViqKphZs=",
                     PasswordReseted = false,
                     RegistryDate = DateTime.Now
-                }
+                },
+                GoogleAccountMapping = new UserGoogleAccountMapping()
             },
             new User
             {
@@ -177,7 +180,8 @@ public static class MigrationManager
                     PasswordHash = "i7phShT1JsaP7dLz05tc1FzmSiixX5pIuexRMQlrerdq2qtiVIMEQNnHfJ8U+CUlRHouGETIuUL+BYMD4hGOsw==OxoaYEtzmx3EyLg3Oex6qzZzMeKgPcUJLNQViqKphZs=",
                     PasswordReseted = false,
                     RegistryDate = DateTime.Now
-                }
+                },
+                GoogleAccountMapping = new UserGoogleAccountMapping()
             },
             new User
             {
@@ -193,7 +197,8 @@ public static class MigrationManager
                     PasswordHash = "i7phShT1JsaP7dLz05tc1FzmSiixX5pIuexRMQlrerdq2qtiVIMEQNnHfJ8U+CUlRHouGETIuUL+BYMD4hGOsw==OxoaYEtzmx3EyLg3Oex6qzZzMeKgPcUJLNQViqKphZs=",
                     PasswordReseted = false,
                     RegistryDate = DateTime.Now
-                }
+                },
+                GoogleAccountMapping = new UserGoogleAccountMapping()
             },
             new User
             {
@@ -209,7 +214,8 @@ public static class MigrationManager
                     PasswordHash = "i7phShT1JsaP7dLz05tc1FzmSiixX5pIuexRMQlrerdq2qtiVIMEQNnHfJ8U+CUlRHouGETIuUL+BYMD4hGOsw==OxoaYEtzmx3EyLg3Oex6qzZzMeKgPcUJLNQViqKphZs=",
                     PasswordReseted = false,
                     RegistryDate = DateTime.Now
-                }
+                },
+                GoogleAccountMapping = new UserGoogleAccountMapping()
             },
             new User
             {
@@ -225,7 +231,8 @@ public static class MigrationManager
                     PasswordHash = "i7phShT1JsaP7dLz05tc1FzmSiixX5pIuexRMQlrerdq2qtiVIMEQNnHfJ8U+CUlRHouGETIuUL+BYMD4hGOsw==OxoaYEtzmx3EyLg3Oex6qzZzMeKgPcUJLNQViqKphZs=",
                     PasswordReseted = false,
                     RegistryDate = DateTime.Now
-                }
+                },
+                GoogleAccountMapping = new UserGoogleAccountMapping()
             },
             new User
             {
@@ -241,7 +248,8 @@ public static class MigrationManager
                     PasswordHash = "i7phShT1JsaP7dLz05tc1FzmSiixX5pIuexRMQlrerdq2qtiVIMEQNnHfJ8U+CUlRHouGETIuUL+BYMD4hGOsw==OxoaYEtzmx3EyLg3Oex6qzZzMeKgPcUJLNQViqKphZs=",
                     PasswordReseted = false,
                     RegistryDate = DateTime.Now
-                }
+                },
+                GoogleAccountMapping = new UserGoogleAccountMapping()
             },
             new User
             {
@@ -257,7 +265,8 @@ public static class MigrationManager
                     PasswordHash = "i7phShT1JsaP7dLz05tc1FzmSiixX5pIuexRMQlrerdq2qtiVIMEQNnHfJ8U+CUlRHouGETIuUL+BYMD4hGOsw==OxoaYEtzmx3EyLg3Oex6qzZzMeKgPcUJLNQViqKphZs=",
                     PasswordReseted = false,
                     RegistryDate = DateTime.Now
-                }
+                },
+                GoogleAccountMapping = new UserGoogleAccountMapping()
             },
             new User
             {
@@ -273,7 +282,8 @@ public static class MigrationManager
                     PasswordHash = "i7phShT1JsaP7dLz05tc1FzmSiixX5pIuexRMQlrerdq2qtiVIMEQNnHfJ8U+CUlRHouGETIuUL+BYMD4hGOsw==OxoaYEtzmx3EyLg3Oex6qzZzMeKgPcUJLNQViqKphZs=",
                     PasswordReseted = false,
                     RegistryDate = DateTime.Now
-                }
+                },
+                GoogleAccountMapping = new UserGoogleAccountMapping()
             }
         };
 

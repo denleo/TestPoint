@@ -38,24 +38,4 @@ public class GoogleApiService
         var content = await response.Content.ReadAsStringAsync();
         return JsonConvert.DeserializeObject<GoogleAccountModel>(content);
     }
-
-    public async Task<byte[]?> FetchAvatarAsync(string uri)
-    {
-        var httpRequest = new HttpRequestMessage(HttpMethod.Get, uri);
-
-        var response = await _httpClient.SendAsync(httpRequest);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger.LogWarning($"Failed to fetch google account avatar. {response.ReasonPhrase}");
-            return null;
-        }
-
-        var stream = response.Content.ReadAsStream();
-        using var ms = new MemoryStream();
-        stream.CopyTo(ms);
-        var imageData = ms.ToArray();
-
-        return imageData;
-    }
 }
