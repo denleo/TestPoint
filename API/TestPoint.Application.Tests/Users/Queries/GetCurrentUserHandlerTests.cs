@@ -35,6 +35,10 @@ public class GetCurrentUserHandlerTests
                         CreatedAt = DateTime.MaxValue,
                         UpdatedAt = DateTime.MaxValue,
                         RegistryDate = DateTime.MaxValue
+                    },
+                    GoogleAccountMapping = new UserGoogleAccountMapping()
+                    {
+                        GoogleSub = "1231452112313221"
                     }
                 }
             }
