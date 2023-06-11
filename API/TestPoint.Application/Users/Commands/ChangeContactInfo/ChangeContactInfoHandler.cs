@@ -30,7 +30,7 @@ public class ChangeContactInfoHandler : IRequestHandler<ChangeContactInfoCommand
         {
             user.LastName = request.LastName;
         }
-        if (user.Email != request.Email)
+        if (user.Email != request.Email && !user.GoogleAuthenticated)
         {
             user.Email = request.Email;
             user.EmailConfirmed = false;

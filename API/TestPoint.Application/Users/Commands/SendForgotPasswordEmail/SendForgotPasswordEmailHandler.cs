@@ -23,11 +23,11 @@ public class SendForgotPasswordEmailHandler : IRequestHandler<SendForgotPassword
     public async Task<Unit> Handle(SendForgotPasswordEmailCommand request, CancellationToken cancellationToken)
     {
         var user = await _uow.UserRepository
-            .FindOneAsync(x => x.Login.Username == request.Username);
+            .FindOneAsync(x => x.Login.Username == request.Username && !x.GoogleAuthenticated);
 
         if (user == null)
         {
-            throw new EntityNotFoundException($"User with {request.Username} username does not exist.");
+            throw new EntityNotFoundException($"User with {request.Username} was not found.");
         }
 
         if (!user.EmailConfirmed)

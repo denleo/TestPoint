@@ -23,7 +23,12 @@ public class ChangeUserPasswordHandler : IRequestHandler<ChangeUserPasswordComma
             throw new EntityNotFoundException($"User with {request.UserId} id does not exist.");
         }
 
-        if (!PasswordHelper.VerifyPassword(request.OldPassword, user.Login.PasswordHash))
+        if (user.GoogleAuthenticated)
+        {
+            throw new ActionNotAllowedException("Can not change password for google authenticated account.");
+        }
+
+        if (!PasswordHelper.VerifyPassword(request.OldPassword, user.Login.PasswordHash!))
         {
             throw new ActionNotAllowedException("Old password is not equal to the current one.");
         }

@@ -12,7 +12,7 @@ using TestPoint.DAL.Contexts;
 namespace TestPoint.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230529204645_InitialCreation")]
+    [Migration("20230611122309_InitialCreation")]
     partial class InitialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -344,6 +344,10 @@ namespace TestPoint.DAL.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)")
                         .HasColumnName("FirstName");
+
+                    b.Property<bool>("GoogleAuthenticated")
+                        .HasColumnType("bit")
+                        .HasColumnName("GoogleAuthenticated");
 
                     b.Property<string>("LastName")
                         .IsRequired()

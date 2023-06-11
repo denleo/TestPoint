@@ -10,6 +10,7 @@ using TestPoint.DAL;
 using TestPoint.EmailService;
 using TestPoint.JwtService;
 using TestPoint.WebAPI.Database;
+using TestPoint.WebAPI.HttpClients;
 using TestPoint.WebAPI.Middlewares.CustomExceptionHandler;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,7 @@ builder.Services.AddDal(builder.Configuration);
 builder.Services.AddEmailService(builder.Configuration);
 builder.Services.AddJwtService(builder.Configuration);
 builder.Services.AddApplication(builder.Configuration);
+builder.Services.AddHttpClients(builder.Configuration);
 
 builder.Services.AddCors(setup =>
 {
@@ -37,8 +39,6 @@ builder.Services.AddCors(setup =>
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddHttpClient();
 
 builder.Services.Configure<FormOptions>(opt =>
 {

@@ -16,6 +16,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.LastName).HasColumnName("LastName").HasMaxLength(64).IsRequired();
         builder.Property(x => x.Email).HasColumnName("Email").HasMaxLength(254).IsRequired();
         builder.Property(x => x.EmailConfirmed).HasColumnName("EmailConfirmed").IsRequired();
+        builder.Property(x => x.GoogleAuthenticated).HasColumnName("GoogleAuthenticated").IsRequired();
         builder.Property(x => x.Avatar).HasColumnName("Avatar").IsRequired(false);
 
         builder.HasIndex(x => x.Email).IsUnique().HasDatabaseName("UQ_User_Email");
