@@ -30,7 +30,11 @@ export const ActionButtons: FC<Props> = ({ withSignUp, finishLogin }) => {
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async ({ access_token: accessToken }) => {
       try {
-        const authToken = await httpAction(`auth/google/user/?googleToken=${accessToken}`, undefined, "POST");
+        const authToken = await httpAction(`auth/google/user`, accessToken, "POST", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         setUserTokenToStorage(authToken);
         await finishLogin();
       } catch (error) {

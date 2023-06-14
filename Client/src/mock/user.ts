@@ -8,4 +8,5 @@ export const MOCK_USER: UserData = {
   firstName: "FirstName",
   lastName: "LastName",
   username: "maxtesting",
+  googleAuthEnabled: true,
 };

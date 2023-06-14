@@ -24,5 +24,5 @@ export const isAdminSelector = (state: { userAccount: AccountUserState }) => sta
 export const isEmailConfirmedSelector = (state: { userAccount: AccountUserState }) =>
   state.userAccount.userData?.emailConfirmed;
 
-export const isGoogleAuthenticatedSelector = (state: { userAccount: AccountUserState }) =>
-  state.userAccount.userData?.googleAuthenticated;
+export const isGoogleAuthEnabledSelector = (state: { userAccount: AccountUserState }) =>
+  state.userAccount.userData?.googleAuthEnabled;

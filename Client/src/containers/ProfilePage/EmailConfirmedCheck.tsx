@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { FC, useCallback } from "react";
+import React, { useCallback } from "react";
 
 import GppBadIcon from "@mui/icons-material/GppBad";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
@@ -8,7 +8,7 @@ import { AxiosError } from "axios";
 
 import { httpAction } from "@/api/httpAction";
 import { WHITE } from "@/common/theme/colors";
-import { useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
+import { NotificationType, useNotificationStore } from "@/components/NotificationProvider/useNotificationStore";
 
 import { useSelector } from "@redux/hooks";
 import { isEmailConfirmedSelector } from "@redux/selectors";
@@ -23,7 +23,7 @@ export const EmailConfirmedCheck = () => {
       await httpAction("session/user/email-verification", undefined, "POST");
       notify("Please, check your email for confirm.");
     } catch (error) {
-      notify(error instanceof AxiosError ? error.message : "Failed to confirm email.");
+      notify(error instanceof AxiosError ? error.message : "Failed to confirm email.", NotificationType.Error);
     }
   }, [notify]);
 

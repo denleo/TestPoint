@@ -10,7 +10,7 @@ export interface UserData {
   firstName: string;
   lastName: string;
   email: string;
-  googleAuthenticated?: true;
+  googleAuthEnabled?: boolean;
   base64Avatar?: string;
   registryDate: Date;
 }

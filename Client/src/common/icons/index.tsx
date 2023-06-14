@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import { SvgIcon, SvgIconProps } from "@mui/material";
+import { SvgIcon, SvgIconProps, createSvgIcon } from "@mui/material";
 
 type IconProps = SvgIconProps;
 
@@ -104,3 +104,37 @@ export const SVGSadFace = () => (
     </g>
   </svg>
 );
+
+const CreateGoogleIcon = createSvgIcon(
+  <>
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M23.04 12.2624C23.04 11.447 22.9668 10.6629 22.8309 9.91016H12V14.3586H18.1891C17.9225 15.7961 17.1123 17.014 15.8943 17.8295V20.7149H19.6109C21.7855 18.7129 23.04 15.7647 23.04 12.2624Z"
+      fill="#4285F4"
+    />
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M12 23.4986C15.105 23.4986 17.7081 22.4688 19.6109 20.7125L15.8943 17.827C14.8645 18.517 13.5472 18.9247 12 18.9247C9.00474 18.9247 6.46951 16.9018 5.56519 14.1836H1.72314V17.1631C3.61542 20.9215 7.50451 23.4986 12 23.4986Z"
+      fill="#34A853"
+    />
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M5.56523 14.1855C5.33523 13.4955 5.20455 12.7584 5.20455 12.0005C5.20455 11.2425 5.33523 10.5055 5.56523 9.81548V6.83594H1.72318C0.944318 8.38844 0.5 10.1448 0.5 12.0005C0.5 13.8562 0.944318 15.6125 1.72318 17.165L5.56523 14.1855Z"
+      fill="#FBBC05"
+    />
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M12 5.07386C13.6884 5.07386 15.2043 5.65409 16.3961 6.79364L19.6945 3.49523C17.7029 1.63955 15.0997 0.5 12 0.5C7.50451 0.5 3.61542 3.07705 1.72314 6.83545L5.56519 9.815C6.46951 7.09682 9.00474 5.07386 12 5.07386Z"
+      fill="#EA4335"
+    />
+  </>,
+  "Google logo"
+);
+
+export const IconGoogle = ({ ...props }) => {
+  return <CreateGoogleIcon viewBox="0 0 24 24" {...props} />;
+};

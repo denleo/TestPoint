@@ -7,12 +7,13 @@ import { Form, useFormikContext } from "formik";
 import { BLACK, WHITE } from "@/common/theme/colors";
 import { useNotificationStore, NotificationType } from "@/components/NotificationProvider/useNotificationStore";
 import { TextFieldFormik } from "@/components/TextFieldFormik";
-import { useDispatch, useSelector } from "@/redux/hooks";
-import { isGoogleAuthenticatedSelector } from "@/redux/selectors";
+import { useDispatch } from "@/redux/hooks";
 
+import { useBreakpoint } from "../../api/hooks/useBreakPoint";
 import { AccountActions } from "../../redux/userAccount/actions";
 import { useSidebarStore } from "../layout/useLayoutStore";
 
+import { BindGoogleButton } from "./BindGoogleButton";
 import { ProfileFormValues } from "./common";
 import { EmailConfirmedCheck } from "./EmailConfirmedCheck";
 import ProfileFormActions from "./ProfileFormActions";
@@ -45,15 +46,16 @@ interface Props {
 const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
   const [isEdit, setEdit] = useState(false);
   const [isEditPassword, setEditPassword] = useState(false);
+
   const {
     setFieldValue,
     resetForm,
-    validateForm,
     values: { password, oldPassword },
   } = useFormikContext<ProfileFormValues>();
+
   const notify = useNotificationStore((store) => store.notify);
   const dispatch = useDispatch();
-  const isGoogleAuthenticated = useSelector(isGoogleAuthenticatedSelector);
+  const xlUp = useBreakpoint("xl");
 
   const imageInputRef = useRef<HTMLInputElement>(null);
 
@@ -126,8 +128,26 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
 
   return (
     <Form id="profile">
-      <Grid container sx={{ maxWidth: 900 }} spacing={4} pb={3}>
-        <Grid item xs={12} mb={4} sx={{ display: "flex", alignItems: "flex-end", justifyContent: "space-around" }}>
+      <Grid
+        container
+        spacing={4}
+        pb={3}
+        sx={{
+          backgroundColor: alpha(WHITE, 0.82),
+          borderRadius: 2,
+          p: 2,
+          maxWidth: 900,
+          width: "100%",
+          m: xlUp ? 3 : 0,
+        }}
+      >
+        <Grid
+          item
+          xs={12}
+          mb={4}
+          pr={2}
+          sx={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}
+        >
           <Typography variant="h2">Personal Information</Typography>
           <Typography variant="caption">{`account was created on ${creationDate} 🚀`}</Typography>
         </Grid>
@@ -144,12 +164,7 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
           </ImageBox>
         </Grid>
         <Grid item xs>
-          <Grid
-            container
-            direction="column"
-            spacing={1}
-            sx={{ backgroundColor: alpha(WHITE, 0.82), borderRadius: 2, p: 2 }}
-          >
+          <Grid container direction="column" spacing={1} sx={{ p: 2 }}>
             <Grid item sx={{ pb: 3 }}>
               <TextFieldFormik
                 fullWidth
@@ -162,44 +177,42 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
                   minHeight: 71,
                 }}
               />
-              {!isGoogleAuthenticated && (
-                <Collapse in={isEditPassword}>
-                  <TextFieldFormik
-                    fullWidth
-                    autoFocus
-                    size="small"
-                    type="password"
-                    name="oldPassword"
-                    label="Old Password"
-                    color="secondary"
-                    sx={{
-                      minHeight: 71,
-                    }}
-                  />
-                  <TextFieldFormik
-                    fullWidth
-                    size="small"
-                    type="password"
-                    name="password"
-                    label="Password"
-                    color="secondary"
-                    sx={{
-                      minHeight: 71,
-                    }}
-                  />
-                  <TextFieldFormik
-                    fullWidth
-                    size="small"
-                    type="password"
-                    name="repeatPassword"
-                    label="Repeat password"
-                    color="secondary"
-                    sx={{
-                      minHeight: 71,
-                    }}
-                  />
-                </Collapse>
-              )}
+              <Collapse in={isEditPassword}>
+                <TextFieldFormik
+                  fullWidth
+                  autoFocus
+                  size="small"
+                  type="password"
+                  name="oldPassword"
+                  label="Old Password"
+                  color="secondary"
+                  sx={{
+                    minHeight: 71,
+                  }}
+                />
+                <TextFieldFormik
+                  fullWidth
+                  size="small"
+                  type="password"
+                  name="password"
+                  label="Password"
+                  color="secondary"
+                  sx={{
+                    minHeight: 71,
+                  }}
+                />
+                <TextFieldFormik
+                  fullWidth
+                  size="small"
+                  type="password"
+                  name="repeatPassword"
+                  label="Repeat password"
+                  color="secondary"
+                  sx={{
+                    minHeight: 71,
+                  }}
+                />
+              </Collapse>
               <Box sx={{ justifyContent: "flex-end", display: "flex" }}>
                 <ProfileFormActions
                   password
@@ -213,7 +226,7 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
             <Grid item sx={{ position: "relative" }}>
               <TextFieldFormik
                 fullWidth
-                disabled={isGoogleAuthenticated || !isEdit}
+                disabled={!isEdit}
                 size="small"
                 name="email"
                 label="Email"
@@ -254,6 +267,12 @@ const ProfileForm: FC<Props> = ({ creationDate, avatar }) => {
               <ProfileFormActions isEdit={isEdit} toggleEditMode={toggleEditMode} />
             </Grid>
           </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h6" display="inline-flex">
+            Connected accounts:{" "}
+          </Typography>
+          <BindGoogleButton />
         </Grid>
       </Grid>
     </Form>

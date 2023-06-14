@@ -58,7 +58,7 @@ const ProfilePage = () => {
   );
 
   return (
-    <Box width="100%" height="100%" display="flex" justifyContent="center">
+    <Box display="flex" justifyContent="center" alignItems="center">
       <Formik
         validateOnBlur
         validateOnChange
